@@ -5,6 +5,7 @@ local.properties
 
 # Gradle
 .gradle
+.gradle-cache
 build
 jacoco.exec
 
@@ -31,3 +32,6 @@ docs/**/*
 !.idea/inspectionProfiles/Project_Default.xml
 
 annotator-out/
+
+# Ignore build log files
+*.log
