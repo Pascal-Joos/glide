@@ -1,4 +1,0 @@
-/home/nima/Developer/nullness-benchmarks/glide/library/src/main/java/com/bumptech/glide/RequestManager.java:116: error: [NullAway] initializer method does not guarantee @NonNull field requestOptions (line 93) is initialized along all control-flow paths (remember to check for exceptions or early returns).
-  RequestManager(
-  ^
-    (see http://t.uber.com/nullaway )
