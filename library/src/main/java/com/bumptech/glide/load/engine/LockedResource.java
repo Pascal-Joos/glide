@@ -24,6 +24,32 @@ final class LockedResource<Z> implements Resource<Z>, FactoryPools.Poolable {
               return new LockedResource<Object>();
             }
           });
+
+  @SuppressWarnings("rawtypes")
+  private static final Resource EMPTY_RESOURCE =
+      new Resource() {
+        @NonNull
+        @Override
+        public Class getResourceClass() {
+          throw new IllegalStateException("Uninitialized LockedResource");
+        }
+
+        @Override
+        public Object get() {
+          throw new IllegalStateException("Uninitialized LockedResource");
+        }
+
+        @Override
+        public int getSize() {
+          throw new IllegalStateException("Uninitialized LockedResource");
+        }
+
+        @Override
+        public void recycle() {
+          throw new IllegalStateException("Uninitialized LockedResource");
+        }
+      };
+
   private final StateVerifier stateVerifier = StateVerifier.newInstance();
   private Resource<Z> toWrap;
   private boolean isLocked;
@@ -39,7 +65,11 @@ final class LockedResource<Z> implements Resource<Z>, FactoryPools.Poolable {
 
   @SuppressWarnings("WeakerAccess")
   @Synthetic
-  LockedResource() {}
+  LockedResource() {
+    // Initialize toWrap to a non-null placeholder to satisfy NullAway; real value is set in init().
+    //noinspection unchecked
+    this.toWrap = (Resource<Z>) EMPTY_RESOURCE;
+  }
 
   private void init(Resource<Z> toWrap) {
     isRecycled = false;
