@@ -49,9 +49,8 @@ public final class DefaultOnHeaderDecodedListener implements OnHeaderDecodedList
     this.requestedHeight = requestedHeight;
     decodeFormat = options.get(Downsampler.DECODE_FORMAT);
     strategy = options.get(DownsampleStrategy.OPTION);
-    isHardwareConfigAllowed =
-        options.get(Downsampler.ALLOW_HARDWARE_CONFIG) != null
-            && options.get(Downsampler.ALLOW_HARDWARE_CONFIG);
+    Boolean allowHardwareConfig = options.get(Downsampler.ALLOW_HARDWARE_CONFIG);
+    isHardwareConfigAllowed = allowHardwareConfig != null && allowHardwareConfig;
     preferredColorSpace = options.get(Downsampler.PREFERRED_COLOR_SPACE);
   }
 
@@ -90,10 +89,12 @@ public final class DefaultOnHeaderDecodedListener implements OnHeaderDecodedList
     if (requestedHeight == Target.SIZE_ORIGINAL) {
       targetHeight = size.getHeight();
     }
-
+    DownsampleStrategy nonNullStrategy =
+        strategy != null ? strategy : DownsampleStrategy.CENTER_INSIDE;
     float scaleFactor =
-        strategy.getScaleFactor(size.getWidth(), size.getHeight(), targetWidth, targetHeight);
-
+        nonNullStrategy.getScaleFactor(
+            size.getWidth(), size.getHeight(), targetWidth, targetHeight);
+    nonNullStrategy.getScaleFactor(size.getWidth(), size.getHeight(), targetWidth, targetHeight);
     int resizeWidth = Math.round(scaleFactor * size.getWidth());
     int resizeHeight = Math.round(scaleFactor * size.getHeight());
     if (Log.isLoggable(TAG, Log.VERBOSE)) {
