@@ -699,15 +699,17 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
   private void onLoadFailed(@Nullable GlideException e, int maxLogLevel) {
     stateVerifier.throwIfRecycled();
     synchronized (requestLock) {
-      e.setOrigin(requestOrigin);
-      int logLevel = glideContext.getLogLevel();
-      if (logLevel <= maxLogLevel) {
-        Log.w(
-            GLIDE_TAG,
-            "Load failed for [" + model + "] with dimensions [" + width + "x" + height + "]",
-            e);
-        if (logLevel <= Log.INFO) {
-          e.logRootCauses(GLIDE_TAG);
+      if (e != null) {
+        e.setOrigin(requestOrigin);
+        int logLevel = glideContext.getLogLevel();
+        if (logLevel <= maxLogLevel) {
+          Log.w(
+              GLIDE_TAG,
+              "Load failed for [" + model + "] with dimensions [" + width + "x" + height + "]",
+              e);
+          if (logLevel <= Log.INFO) {
+            e.logRootCauses(GLIDE_TAG);
+          }
         }
       }
 
@@ -722,10 +724,12 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
         boolean anyListenerHandledUpdatingTarget = false;
         if (requestListeners != null) {
           for (RequestListener<R> listener : requestListeners) {
-            anyListenerHandledUpdatingTarget |=
-                listener.onLoadFailed(e, model, target, isFirstReadyResource());
+            if (listener.onLoadFailed(e, model, target, isFirstReadyResource())) {
+              anyListenerHandledUpdatingTarget = true;
+            }
           }
         }
+
         anyListenerHandledUpdatingTarget |=
             targetListener != null
                 && targetListener.onLoadFailed(e, model, target, isFirstReadyResource());
@@ -736,66 +740,64 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
       } finally {
         isCallingCallbacks = false;
       }
-
-      GlideTrace.endSectionAsync(TAG, cookie);
     }
   }
 
   @Override
-  public boolean isEquivalentTo(@Nullable Request o) {
-    if (!(o instanceof SingleRequest)) {
-      return false;
-    }
+  public boolean equals(Object o) {
+    if (o instanceof SingleRequest) {
+      SingleRequest<?> other = (SingleRequest<?>) o;
+      int localOverrideWidth;
+      int localOverrideHeight;
+      Object localModel;
+      Class<?> localTranscodeClass;
+      BaseRequestOptions<?> localRequestOptions;
+      Priority localPriority;
+      int localListenerCount;
+      synchronized (requestLock) {
+        localOverrideWidth = overrideWidth;
+        localOverrideHeight = overrideHeight;
+        localModel = model;
+        localTranscodeClass = transcodeClass;
+        localRequestOptions = requestOptions;
+        localPriority = priority;
+        localListenerCount = requestListeners != null ? requestListeners.size() : 0;
+      }
 
-    int localOverrideWidth;
-    int localOverrideHeight;
-    Object localModel;
-    Class<?> localTranscodeClass;
-    BaseRequestOptions<?> localRequestOptions;
-    Priority localPriority;
-    int localListenerCount;
-    synchronized (requestLock) {
-      localOverrideWidth = overrideWidth;
-      localOverrideHeight = overrideHeight;
-      localModel = model;
-      localTranscodeClass = transcodeClass;
-      localRequestOptions = requestOptions;
-      localPriority = priority;
-      localListenerCount = requestListeners != null ? requestListeners.size() : 0;
-    }
+      int otherLocalOverrideWidth;
+      int otherLocalOverrideHeight;
+      Object otherLocalModel;
+      Class<?> otherLocalTranscodeClass;
+      BaseRequestOptions<?> otherLocalRequestOptions;
+      Priority otherLocalPriority;
+      int otherLocalListenerCount;
+      synchronized (other.requestLock) {
+        otherLocalOverrideWidth = other.overrideWidth;
+        otherLocalOverrideHeight = other.overrideHeight;
+        otherLocalModel = other.model;
+        otherLocalTranscodeClass = other.transcodeClass;
+        otherLocalRequestOptions = other.requestOptions;
+        otherLocalPriority = other.priority;
+        otherLocalListenerCount =
+            other.requestListeners != null ? other.requestListeners.size() : 0;
+      }
 
-    SingleRequest<?> other = (SingleRequest<?>) o;
-    int otherLocalOverrideWidth;
-    int otherLocalOverrideHeight;
-    Object otherLocalModel;
-    Class<?> otherLocalTranscodeClass;
-    BaseRequestOptions<?> otherLocalRequestOptions;
-    Priority otherLocalPriority;
-    int otherLocalListenerCount;
-    synchronized (other.requestLock) {
-      otherLocalOverrideWidth = other.overrideWidth;
-      otherLocalOverrideHeight = other.overrideHeight;
-      otherLocalModel = other.model;
-      otherLocalTranscodeClass = other.transcodeClass;
-      otherLocalRequestOptions = other.requestOptions;
-      otherLocalPriority = other.priority;
-      otherLocalListenerCount = other.requestListeners != null ? other.requestListeners.size() : 0;
+      // If there's ever a case where synchronization matters for these values, something else has
+      // gone wrong. It indicates that we'er comparing at least one recycled object, which has to be
+      // protected against via other means. None of these values changes aside from object re-use.
+      return localOverrideWidth == otherLocalOverrideWidth
+          && localOverrideHeight == otherLocalOverrideHeight
+          && Util.bothModelsNullEquivalentOrEquals(localModel, otherLocalModel)
+          && localTranscodeClass.equals(otherLocalTranscodeClass)
+          && Util.bothBaseRequestOptionsNullEquivalentOrEquals(
+              localRequestOptions, otherLocalRequestOptions)
+          && localPriority == otherLocalPriority
+          // We do not want to require that RequestListeners implement equals/hashcode, so we
+          // don't compare them using equals(). We can however, at least assert that the same
+          // amount of request listeners are present in both requests.
+          && localListenerCount == otherLocalListenerCount;
     }
-
-    // If there's ever a case where synchronization matters for these values, something else has
-    // gone wrong. It indicates that we'er comparing at least one recycled object, which has to be
-    // protected against via other means. None of these values changes aside from object re-use.
-    return localOverrideWidth == otherLocalOverrideWidth
-        && localOverrideHeight == otherLocalOverrideHeight
-        && Util.bothModelsNullEquivalentOrEquals(localModel, otherLocalModel)
-        && localTranscodeClass.equals(otherLocalTranscodeClass)
-        && Util.bothBaseRequestOptionsNullEquivalentOrEquals(
-            localRequestOptions, otherLocalRequestOptions)
-        && localPriority == otherLocalPriority
-        // We do not want to require that RequestListeners implement equals/hashcode, so we
-        // don't compare them using equals(). We can however, at least assert that the same
-        // amount of request listeners are present in both requests.
-        && localListenerCount == otherLocalListenerCount;
+    return false;
   }
 
   private void logV(String message) {
