@@ -109,9 +109,6 @@ public class DiskLruCacheWrapper implements DiskCache {
 
   @Override
   public void put(@Nullable Key key, Writer writer) {
-    if (key == null) {
-      return;
-    }
     // We want to make sure that puts block so that data is available when put completes. We may
     // actually not write any data if we find that data is written by the time we acquire the lock.
     String safeKey = safeKeyGenerator.getSafeKey(key);
