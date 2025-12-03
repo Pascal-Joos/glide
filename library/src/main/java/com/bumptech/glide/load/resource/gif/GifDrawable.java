@@ -160,7 +160,7 @@ public class GifDrawable extends Drawable
   }
 
   public Bitmap getFirstFrame() {
-    return com.bumptech.glide.util.Preconditions.checkNotNull(state.frameLoader.getFirstFrame());
+    return state.frameLoader.getFirstFrame();
   }
 
   // Public API.
