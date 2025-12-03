@@ -37,7 +37,7 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
   private volatile int loadDataListIndex;
   @Nullable private volatile DataCacheGenerator sourceCacheGenerator;
   @Nullable private volatile Object dataToCache;
-  @Nullable private volatile ModelLoader.LoadData<?> loadData;
+  private volatile ModelLoader.LoadData<?> loadData;
   @Nullable private volatile DataCacheKey originalKey;
 
   SourceGenerator(DecodeHelper<?> helper, FetcherReadyCallback cb) {
