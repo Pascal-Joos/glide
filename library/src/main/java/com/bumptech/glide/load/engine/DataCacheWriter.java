@@ -28,6 +28,9 @@ class DataCacheWriter<DataType> implements DiskCache.Writer {
 
   @Override
   public boolean write(@NonNull File file) {
+    if (encoder == null) {
+      return false;
+    }
     return encoder.encode(data, file, options);
   }
 }
