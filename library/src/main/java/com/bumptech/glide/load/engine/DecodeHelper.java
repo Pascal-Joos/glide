@@ -36,7 +36,7 @@ final class DecodeHelper<Transcode> {
   private DecodeJob.DiskCacheProvider diskCacheProvider;
   private Options options;
   @Nullable private Map<Class<?>, Transformation<?>> transformations;
-  @Nullable private Class<Transcode> transcodeClass;
+  private Class<Transcode> transcodeClass;
   private boolean isLoadDataSet;
   private boolean isCacheKeysSet;
   @Nullable private Key signature;
