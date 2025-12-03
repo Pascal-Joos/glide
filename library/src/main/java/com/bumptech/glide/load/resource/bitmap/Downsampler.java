@@ -283,7 +283,10 @@ public final class Downsampler {
     DecodeFormat decodeFormat = options.get(DECODE_FORMAT);
     PreferredColorSpace preferredColorSpace = options.get(PREFERRED_COLOR_SPACE);
     DownsampleStrategy downsampleStrategy = options.get(DownsampleStrategy.OPTION);
-    boolean fixBitmapToRequestedDimensions = options.get(FIX_BITMAP_SIZE_TO_REQUESTED_DIMENSIONS);
+    Boolean fixBitmapToRequestedDimensionsOption =
+        options.get(FIX_BITMAP_SIZE_TO_REQUESTED_DIMENSIONS);
+    boolean fixBitmapToRequestedDimensions =
+        fixBitmapToRequestedDimensionsOption != null && fixBitmapToRequestedDimensionsOption;
     boolean isHardwareConfigAllowed =
         options.get(ALLOW_HARDWARE_CONFIG) != null && options.get(ALLOW_HARDWARE_CONFIG);
 
