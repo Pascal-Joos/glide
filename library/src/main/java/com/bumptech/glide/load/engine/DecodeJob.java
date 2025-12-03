@@ -53,7 +53,7 @@ class DecodeJob<R>
   private final ReleaseManager releaseManager = new ReleaseManager();
 
   private GlideContext glideContext;
-  @Nullable private Key signature;
+  private Key signature;
   @Nullable private Priority priority;
   @Nullable private EngineKey loadKey;
   private int width;
@@ -616,15 +616,14 @@ class DecodeJob<R>
       final Key key;
       switch (encodeStrategy) {
         case SOURCE:
-          key =
-              new DataCacheKey(currentSourceKey, signature == null ? currentSourceKey : signature);
+          key = new DataCacheKey(currentSourceKey, signature);
           break;
         case TRANSFORMED:
           key =
               new ResourceCacheKey(
                   decodeHelper.getArrayPool(),
                   currentSourceKey,
-                  signature == null ? currentSourceKey : signature,
+                  signature,
                   width,
                   height,
                   appliedTransformation,
