@@ -35,12 +35,8 @@ public final class DrawableBytesTranscoder implements ResourceTranscoder<Drawabl
       @NonNull Resource<Drawable> toTranscode, @NonNull Options options) {
     Drawable drawable = toTranscode.get();
     if (drawable instanceof BitmapDrawable) {
-      BitmapResource bitmapResource =
-          BitmapResource.obtain(((BitmapDrawable) drawable).getBitmap(), bitmapPool);
-      if (bitmapResource == null) {
-        return null;
-      }
-      return bitmapBytesTranscoder.transcode(bitmapResource, options);
+      return bitmapBytesTranscoder.transcode(
+          BitmapResource.obtain(((BitmapDrawable) drawable).getBitmap(), bitmapPool), options);
     } else if (drawable instanceof GifDrawable) {
       return gifDrawableBytesTranscoder.transcode(toGifDrawableResource(toTranscode), options);
     }
