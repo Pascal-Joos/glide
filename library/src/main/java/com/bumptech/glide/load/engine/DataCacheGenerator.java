@@ -69,6 +69,9 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
       }
 
       loadData = null;
+      if (cacheFile == null) {
+        return false;
+      }
       boolean started = false;
       while (!started && hasNextModelLoader()) {
         ModelLoader<File, ?> modelLoader = modelLoaders.get(modelLoaderIndex++);
@@ -80,7 +83,6 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
           loadData.fetcher.loadData(helper.getPriority(), this);
         }
       }
-      return started;
     } finally {
       GlideTrace.endSection();
     }
