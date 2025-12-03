@@ -26,7 +26,7 @@ public final class ExceptionPassthroughInputStream extends InputStream {
   @GuardedBy("POOL")
   private static final Queue<ExceptionPassthroughInputStream> POOL = Util.createQueue(0);
 
-  private InputStream wrapped;
+  @Nullable private InputStream wrapped;
   @Nullable private IOException exception;
 
   @NonNull
@@ -57,32 +57,53 @@ public final class ExceptionPassthroughInputStream extends InputStream {
 
   void setInputStream(@NonNull InputStream toWrap) {
     wrapped = toWrap;
+    exception = null;
   }
 
   @Override
   public int available() throws IOException {
-    return wrapped.available();
+    InputStream localWrapped = wrapped;
+    if (localWrapped == null) {
+      throw new IllegalStateException("Stream is released");
+    }
+    return localWrapped.available();
   }
 
   @Override
   public void close() throws IOException {
-    wrapped.close();
+    InputStream localWrapped = wrapped;
+    if (localWrapped == null) {
+      throw new IllegalStateException("Stream is released");
+    }
+    localWrapped.close();
   }
 
   @Override
   public void mark(int readLimit) {
-    wrapped.mark(readLimit);
+    InputStream localWrapped = wrapped;
+    if (localWrapped == null) {
+      throw new IllegalStateException("Stream is released");
+    }
+    localWrapped.mark(readLimit);
   }
 
   @Override
   public boolean markSupported() {
-    return wrapped.markSupported();
+    InputStream localWrapped = wrapped;
+    if (localWrapped == null) {
+      throw new IllegalStateException("Stream is released");
+    }
+    return localWrapped.markSupported();
   }
 
   @Override
   public int read() throws IOException {
+    InputStream localWrapped = wrapped;
+    if (localWrapped == null) {
+      throw new IllegalStateException("Stream is released");
+    }
     try {
-      return wrapped.read();
+      return localWrapped.read();
     } catch (IOException e) {
       exception = e;
       throw e;
@@ -91,8 +112,12 @@ public final class ExceptionPassthroughInputStream extends InputStream {
 
   @Override
   public int read(byte[] buffer) throws IOException {
+    InputStream localWrapped = wrapped;
+    if (localWrapped == null) {
+      throw new IllegalStateException("Stream is released");
+    }
     try {
-      return wrapped.read(buffer);
+      return localWrapped.read(buffer);
     } catch (IOException e) {
       exception = e;
       throw e;
@@ -101,8 +126,12 @@ public final class ExceptionPassthroughInputStream extends InputStream {
 
   @Override
   public int read(byte[] buffer, int byteOffset, int byteCount) throws IOException {
+    InputStream localWrapped = wrapped;
+    if (localWrapped == null) {
+      throw new IllegalStateException("Stream is released");
+    }
     try {
-      return wrapped.read(buffer, byteOffset, byteCount);
+      return localWrapped.read(buffer, byteOffset, byteCount);
     } catch (IOException e) {
       exception = e;
       throw e;
@@ -111,13 +140,21 @@ public final class ExceptionPassthroughInputStream extends InputStream {
 
   @Override
   public synchronized void reset() throws IOException {
-    wrapped.reset();
+    InputStream localWrapped = wrapped;
+    if (localWrapped == null) {
+      throw new IllegalStateException("Stream is released");
+    }
+    localWrapped.reset();
   }
 
   @Override
   public long skip(long byteCount) throws IOException {
+    InputStream localWrapped = wrapped;
+    if (localWrapped == null) {
+      throw new IllegalStateException("Stream is released");
+    }
     try {
-      return wrapped.skip(byteCount);
+      return localWrapped.skip(byteCount);
     } catch (IOException e) {
       exception = e;
       throw e;
