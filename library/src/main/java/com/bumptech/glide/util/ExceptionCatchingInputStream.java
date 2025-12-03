@@ -22,13 +22,6 @@ import java.util.Queue;
 public class ExceptionCatchingInputStream extends InputStream {
 
   private static final Queue<ExceptionCatchingInputStream> QUEUE = Util.createQueue(0);
-  private static final InputStream EMPTY =
-      new InputStream() {
-        @Override
-        public int read() {
-          return -1;
-        }
-      };
 
   private InputStream wrapped;
   @Nullable private IOException exception;
@@ -54,7 +47,7 @@ public class ExceptionCatchingInputStream extends InputStream {
   }
 
   ExceptionCatchingInputStream() {
-    wrapped = EMPTY;
+    // Do nothing.
   }
 
   void setInputStream(@NonNull InputStream toWrap) {
@@ -141,7 +134,7 @@ public class ExceptionCatchingInputStream extends InputStream {
 
   public void release() {
     exception = null;
-    wrapped = EMPTY;
+    wrapped = null;
     synchronized (QUEUE) {
       QUEUE.offer(this);
     }
