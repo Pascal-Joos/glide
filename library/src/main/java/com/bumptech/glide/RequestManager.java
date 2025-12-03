@@ -91,7 +91,8 @@ public class RequestManager
   private final CopyOnWriteArrayList<RequestListener<Object>> defaultRequestListeners;
 
   @GuardedBy("this")
-  private RequestOptions requestOptions;
+  private RequestOptions requestOptions =
+      new com.bumptech.glide.request.RequestOptions().autoClone();
 
   private boolean pauseAllRequestsOnTrimMemoryModerate;
 
