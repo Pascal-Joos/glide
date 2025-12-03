@@ -62,7 +62,7 @@ class DecodeJob<R>
   private Options options;
   private Callback<R> callback;
   private int order;
-  @Nullable @Nullable private Stage stage;
+  private Stage stage;
   private RunReason runReason;
   private long startFetchTime;
   private boolean onlyRetrieveFromCache;
