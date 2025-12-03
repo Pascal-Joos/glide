@@ -34,7 +34,7 @@ final class DecodeHelper<Transcode> {
   private int height;
   private Class<?> resourceClass;
   private DecodeJob.DiskCacheProvider diskCacheProvider;
-  private Options options;
+  @Nullable private Options options;
   @Nullable private Map<Class<?>, Transformation<?>> transformations;
   private Class<Transcode> transcodeClass;
   private boolean isLoadDataSet;
@@ -111,6 +111,7 @@ final class DecodeHelper<Transcode> {
     return priority;
   }
 
+  @Nullable
   Options getOptions() {
     return options;
   }
@@ -217,7 +218,9 @@ final class DecodeHelper<Transcode> {
       //noinspection ForLoopReplaceableByForEach to improve perf
       for (int i = 0, size = modelLoaders.size(); i < size; i++) {
         ModelLoader<Object, ?> modelLoader = modelLoaders.get(i);
-        LoadData<?> current = modelLoader.buildLoadData(model, width, height, options);
+        LoadData<?> current =
+            modelLoader.buildLoadData(
+                model, width, height, options != null ? options : new Options());
         if (current != null) {
           loadData.add(current);
         }
