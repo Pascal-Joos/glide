@@ -178,6 +178,7 @@ class DecodeJob<R>
     deferredEncodeManager.clear();
     decodeHelper.clear();
     isCallbackNotified = false;
+    glideContext = null;
     signature = null;
     options = null;
     priority = null;
