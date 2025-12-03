@@ -701,7 +701,7 @@ class DecodeJob<R>
   private static class DeferredEncodeManager<Z> {
     @Nullable private Key key;
     @Nullable private ResourceEncoder<Z> encoder;
-    private LockedResource<Z> toEncode;
+    @Nullable private LockedResource<Z> toEncode;
 
     @Synthetic
     DeferredEncodeManager() {}

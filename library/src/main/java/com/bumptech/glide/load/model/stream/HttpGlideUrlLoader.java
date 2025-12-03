@@ -51,7 +51,8 @@ public class HttpGlideUrlLoader implements ModelLoader<GlideUrl, InputStream> {
         url = model;
       }
     }
-    int timeout = options.get(TIMEOUT);
+    Integer timeoutVal = options.get(TIMEOUT);
+    int timeout = timeoutVal != null ? timeoutVal : 0;
     return new LoadData<>(url, new HttpUrlFetcher(url, timeout));
   }
 
