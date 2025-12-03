@@ -14,7 +14,7 @@ public final class ByteArrayAdapter implements ArrayAdapterInterface<byte[]> {
 
   @Override
   public int getArrayLength(@Nullable byte[] array) {
-    return array == null ? 0 : array.length;
+    return array.length;
   }
 
   @Override
