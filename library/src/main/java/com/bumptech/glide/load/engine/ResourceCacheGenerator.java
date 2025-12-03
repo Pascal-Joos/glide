@@ -129,12 +129,8 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
 
   @Override
   public void onDataReady(@Nullable Object data) {
-    LoadData<?> local = loadData;
-    if (local == null) {
-      return;
-    }
     cb.onDataFetcherReady(
-        sourceKey, data, local.fetcher, DataSource.RESOURCE_DISK_CACHE, currentKey);
+        sourceKey, data, loadData.fetcher, DataSource.RESOURCE_DISK_CACHE, currentKey);
   }
 
   @Override
