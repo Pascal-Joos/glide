@@ -504,9 +504,6 @@ public final class Downsampler {
       orientedSourceHeight = sourceWidth;
     }
 
-    DownsampleStrategy nonNullDownsampleStrategy =
-        nonNullDownsampleStrategy == null ? DownsampleStrategy.DEFAULT : downsampleStrategy;
-
     final float exactScaleFactor =
         downsampleStrategy.getScaleFactor(
             orientedSourceWidth, orientedSourceHeight, targetWidth, targetHeight);
