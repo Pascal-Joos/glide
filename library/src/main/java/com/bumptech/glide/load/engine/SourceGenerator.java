@@ -37,7 +37,7 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
   private volatile int loadDataListIndex;
   @Nullable private volatile DataCacheGenerator sourceCacheGenerator;
   @Nullable private volatile Object dataToCache;
-  private volatile ModelLoader.LoadData<?> loadData;
+  @Nullable private volatile ModelLoader.LoadData<?> loadData;
   @Nullable private volatile DataCacheKey originalKey;
 
   SourceGenerator(DecodeHelper<?> helper, FetcherReadyCallback cb) {
@@ -92,7 +92,11 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
   }
 
   private void startNextLoad(final LoadData<?> toStart) {
-    loadData.fetcher.loadData(
+    final LoadData<?> loadDataLocal = loadData;
+    if (loadDataLocal == null) {
+      return;
+    }
+    loadDataLocal.fetcher.loadData(
         helper.getPriority(),
         new DataCallback<Object>() {
           @Override
@@ -131,12 +135,17 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
   private boolean cacheData(Object dataToCache) throws IOException {
     long startTime = LogTime.getLogTime();
     boolean isLoadingFromSourceData = false;
+    final LoadData<?> loadDataLocal = loadData;
+    if (loadDataLocal == null) {
+      throw new IllegalStateException("loadData must be non-null when caching data");
+    }
     try {
       DataRewinder<Object> rewinder = helper.getRewinder(dataToCache);
       Object data = rewinder.rewindAndGet();
       Encoder<Object> encoder = helper.getSourceEncoder(data);
       DataCacheWriter<Object> writer = new DataCacheWriter<>(encoder, data, helper.getOptions());
-      DataCacheKey newOriginalKey = new DataCacheKey(loadData.sourceKey, helper.getSignature());
+      DataCacheKey newOriginalKey =
+          new DataCacheKey(loadDataLocal.sourceKey, helper.getSignature());
       DiskCache diskCache = helper.getDiskCache();
       diskCache.put(newOriginalKey, writer);
       if (Log.isLoggable(TAG, Log.VERBOSE)) {
@@ -156,7 +165,8 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
       if (diskCache.get(newOriginalKey) != null) {
         originalKey = newOriginalKey;
         sourceCacheGenerator =
-            new DataCacheGenerator(Collections.singletonList(loadData.sourceKey), helper, this);
+            new DataCacheGenerator(
+                Collections.singletonList(loadDataLocal.sourceKey), helper, this);
         // We were able to write the data to cache.
         return true;
       } else {
@@ -174,17 +184,17 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
 
         isLoadingFromSourceData = true;
         cb.onDataFetcherReady(
-            loadData.sourceKey,
+            loadDataLocal.sourceKey,
             rewinder.rewindAndGet(),
-            loadData.fetcher,
-            loadData.fetcher.getDataSource(),
-            loadData.sourceKey);
+            loadDataLocal.fetcher,
+            loadDataLocal.fetcher.getDataSource(),
+            loadDataLocal.sourceKey);
       }
       // We failed to write the data to cache.
       return false;
     } finally {
       if (!isLoadingFromSourceData) {
-        loadData.fetcher.cleanup();
+        loadDataLocal.fetcher.cleanup();
       }
     }
   }
@@ -205,7 +215,7 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
       dataToCache = data;
       // We might be being called back on someone else's thread. Before doing anything, we should
       // reschedule to get back onto Glide's thread. Then once we're back on Glide's thread, we'll
-      // get called again and we can write the retrieved data to cache.
+      // call startNext() again to actually encode the data.
       cb.reschedule();
     } else {
       cb.onDataFetcherReady(
@@ -219,18 +229,16 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
 
   @SuppressWarnings("WeakerAccess")
   @Synthetic
-  void onLoadFailedInternal(LoadData<?> loadData, @NonNull Exception e) {
-    cb.onDataFetcherFailed(originalKey, e, loadData.fetcher, loadData.fetcher.getDataSource());
+  void onLoadFailedInternal(LoadData<?> loadData, Exception e) {
+    cb.onDataFetcherFailed(
+        loadData.sourceKey, e, loadData.fetcher, loadData.fetcher.getDataSource());
   }
 
   @Override
   public void reschedule() {
-    // We don't expect this to happen, although if we ever need it to we can delegate to our
-    // callback.
     throw new UnsupportedOperationException();
   }
 
-  // Called from source cache generator.
   @Override
   public void onDataFetcherReady(
       @Nullable Key sourceKey,
@@ -238,14 +246,18 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
       DataFetcher<?> fetcher,
       DataSource dataSource,
       @Nullable Key attemptedKey) {
-    // This data fetcher will be loading from a File and provide the wrong data source, so override
-    // with the data source of the original fetcher
-    cb.onDataFetcherReady(sourceKey, data, fetcher, loadData.fetcher.getDataSource(), sourceKey);
+    final LoadData<?> loadDataLocal = loadData;
+    DataSource currentDataSource =
+        loadDataLocal != null ? loadDataLocal.fetcher.getDataSource() : dataSource;
+    cb.onDataFetcherReady(sourceKey, data, fetcher, currentDataSource, sourceKey);
   }
 
   @Override
   public void onDataFetcherFailed(
       @Nullable Key sourceKey, Exception e, DataFetcher<?> fetcher, DataSource dataSource) {
-    cb.onDataFetcherFailed(sourceKey, e, fetcher, loadData.fetcher.getDataSource());
+    final LoadData<?> loadDataLocal = loadData;
+    DataSource currentDataSource =
+        loadDataLocal != null ? loadDataLocal.fetcher.getDataSource() : dataSource;
+    cb.onDataFetcherFailed(sourceKey, e, fetcher, currentDataSource);
   }
 }
