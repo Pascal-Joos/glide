@@ -46,8 +46,33 @@ public class ExceptionCatchingInputStream extends InputStream {
     }
   }
 
+  private static InputStream newNoOpStream() {
+    return new InputStream() {
+      @Override
+      public int read() {
+        return -1;
+      }
+
+      @Override
+      public int read(@NonNull byte[] b, int off, int len) {
+        return -1;
+      }
+
+      @Override
+      public int available() {
+        return 0;
+      }
+
+      @Override
+      public long skip(long n) {
+        return 0L;
+      }
+    };
+  }
+
   ExceptionCatchingInputStream() {
-    // Do nothing.
+    // Initialize wrapped to a non-null no-op InputStream to satisfy NullAway.
+    wrapped = newNoOpStream();
   }
 
   void setInputStream(@NonNull InputStream toWrap) {
@@ -134,7 +159,8 @@ public class ExceptionCatchingInputStream extends InputStream {
 
   public void release() {
     exception = null;
-    wrapped = null;
+    // Reset wrapped to a non-null no-op InputStream instead of null to satisfy NullAway.
+    wrapped = newNoOpStream();
     synchronized (QUEUE) {
       QUEUE.offer(this);
     }
