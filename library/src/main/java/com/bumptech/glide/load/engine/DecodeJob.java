@@ -69,7 +69,7 @@ class DecodeJob<R>
   @Nullable private Object model;
 
   @Nullable private Thread currentThread;
-  private Key currentSourceKey;
+  @Nullable private Key currentSourceKey;
   @Nullable private Key currentAttemptingKey;
   @Nullable private Object currentData;
   @Nullable private DataSource currentDataSource;
