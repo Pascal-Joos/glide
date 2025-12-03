@@ -116,7 +116,7 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
   }
 
   private boolean hasNextModelLoader() {
-    return modelLoaders != null && modelLoaderIndex < modelLoaders.size();
+    return modelLoaderIndex < modelLoaders.size();
   }
 
   @Override
