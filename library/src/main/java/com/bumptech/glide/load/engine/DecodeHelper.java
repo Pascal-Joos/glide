@@ -104,11 +104,7 @@ final class DecodeHelper<Transcode> {
   }
 
   <T> DataRewinder<T> getRewinder(T data) {
-    GlideContext localGlideContext = glideContext;
-    if (localGlideContext == null) {
-      throw new IllegalStateException("glideContext must be non-null to get a DataRewinder");
-    }
-    return localGlideContext.getRegistry().getRewinder(data);
+    return glideContext.getRegistry().getRewinder(data);
   }
 
   Priority getPriority() {
