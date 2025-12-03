@@ -180,6 +180,7 @@ class DecodeJob<R>
     isCallbackNotified = false;
     glideContext = null;
     signature = null;
+    options = null;
     priority = null;
     loadKey = null;
     callback = null;
