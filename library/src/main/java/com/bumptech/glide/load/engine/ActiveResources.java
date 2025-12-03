@@ -113,10 +113,6 @@ final class ActiveResources {
         return;
       }
     }
-    ResourceListener onResourceReleasedListener = listener;
-    if (onResourceReleasedListener == null) {
-      return;
-    }
 
     EngineResource<?> newResource =
         new EngineResource<>(
@@ -124,8 +120,8 @@ final class ActiveResources {
             /* isMemoryCacheable= */ true,
             /* isRecyclable= */ false,
             ref.key,
-            onResourceReleasedListener);
-    onResourceReleasedListener.onResourceReleased(ref.key, newResource);
+            listener);
+    listener.onResourceReleased(ref.key, newResource);
   }
 
   @SuppressWarnings("WeakerAccess")
