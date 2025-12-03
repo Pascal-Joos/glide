@@ -39,7 +39,11 @@ public class StreamGifDecoder implements ResourceDecoder<InputStream, GifDrawabl
 
   @Override
   public boolean handles(@NonNull InputStream source, @NonNull Options options) throws IOException {
-    return !options.get(GifOptions.DISABLE_ANIMATION)
+    Boolean disableAnimation = options.get(GifOptions.DISABLE_ANIMATION);
+    if (disableAnimation == null) {
+      disableAnimation = Boolean.FALSE;
+    }
+    return !disableAnimation
         && ImageHeaderParserUtils.getType(parsers, source, byteArrayPool) == ImageType.GIF;
   }
 
