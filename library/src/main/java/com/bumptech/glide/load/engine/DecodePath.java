@@ -7,6 +7,7 @@ import com.bumptech.glide.load.Options;
 import com.bumptech.glide.load.ResourceDecoder;
 import com.bumptech.glide.load.data.DataRewinder;
 import com.bumptech.glide.load.resource.transcode.ResourceTranscoder;
+import com.bumptech.glide.util.Preconditions;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,14 +67,11 @@ public class DecodePath<DataType, ResourceType, Transcode> {
   private Resource<ResourceType> decodeResource(
       DataRewinder<DataType> rewinder, int width, int height, @NonNull Options options)
       throws GlideException {
-    @Nullable List<Throwable> pooled = listPool != null ? listPool.acquire() : null;
-    List<Throwable> exceptions = pooled != null ? pooled : new ArrayList<Throwable>();
+    List<Throwable> exceptions = Preconditions.checkNotNull(listPool.acquire());
     try {
       return decodeResourceWithList(rewinder, width, height, options, exceptions);
     } finally {
-      if (listPool != null && pooled != null) {
-        listPool.release(pooled);
-      }
+      listPool.release(exceptions);
     }
   }
 
