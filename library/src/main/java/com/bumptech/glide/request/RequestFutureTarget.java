@@ -257,7 +257,7 @@ public class RequestFutureTarget<R> implements FutureTarget<R>, RequestListener<
   @Override
   public synchronized boolean onResourceReady(
       @NonNull R resource,
-      @NonNull Object model,
+      @Nullable Object model,
       Target<R> target,
       @NonNull DataSource dataSource,
       boolean isFirstResource) {
