@@ -52,7 +52,14 @@ public final class ExceptionPassthroughInputStream extends InputStream {
   }
 
   ExceptionPassthroughInputStream() {
-    // Do nothing.
+    this.wrapped =
+        new InputStream() {
+          @Override
+          public int read() throws IOException {
+            throw new IllegalStateException(
+                "ExceptionPassthroughInputStream used before being initialized with an InputStream");
+          }
+        };
   }
 
   void setInputStream(@NonNull InputStream toWrap) {
@@ -131,7 +138,6 @@ public final class ExceptionPassthroughInputStream extends InputStream {
 
   public void release() {
     exception = null;
-    wrapped = null;
     synchronized (POOL) {
       POOL.offer(this);
     }
