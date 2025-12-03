@@ -1121,27 +1121,24 @@ public class RequestBuilder<TranscodeType> extends BaseRequestOptions<RequestBui
       return mainRequest;
     }
 
-    RequestBuilder<TranscodeType> nonNullErrorBuilder =
-        com.bumptech.glide.util.Preconditions.checkNotNull(errorBuilder);
-    int errorOverrideWidth = nonNullErrorBuilder.getOverrideWidth();
-    int errorOverrideHeight = nonNullErrorBuilder.getOverrideHeight();
-    if (Util.isValidDimensions(overrideWidth, overrideHeight)
-        && !nonNullErrorBuilder.isValidOverride()) {
+    int errorOverrideWidth = errorBuilder.getOverrideWidth();
+    int errorOverrideHeight = errorBuilder.getOverrideHeight();
+    if (Util.isValidDimensions(overrideWidth, overrideHeight) && !errorBuilder.isValidOverride()) {
       errorOverrideWidth = requestOptions.getOverrideWidth();
       errorOverrideHeight = requestOptions.getOverrideHeight();
     }
 
     Request errorRequest =
-        nonNullErrorBuilder.buildRequestRecursive(
+        errorBuilder.buildRequestRecursive(
             requestLock,
             target,
             targetListener,
             errorRequestCoordinator,
-            nonNullErrorBuilder.transitionOptions,
-            nonNullErrorBuilder.getPriority(),
+            errorBuilder.transitionOptions,
+            errorBuilder.getPriority(),
             errorOverrideWidth,
             errorOverrideHeight,
-            nonNullErrorBuilder,
+            errorBuilder,
             callbackExecutor);
     errorRequestCoordinator.setRequests(mainRequest, errorRequest);
     return errorRequestCoordinator;
