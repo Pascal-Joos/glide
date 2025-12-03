@@ -102,7 +102,7 @@ class DecodeJob<R>
       boolean isScaleOnlyOrNoTransform,
       boolean onlyRetrieveFromCache,
       Options options,
-      Callback<R> callback,
+      @NonNull Callback<R> callback,
       int order) {
     decodeHelper.init(
         glideContext,
@@ -183,7 +183,6 @@ class DecodeJob<R>
     options = null;
     priority = null;
     loadKey = null;
-    callback = null;
     stage = null;
     currentGenerator = null;
     currentThread = null;
@@ -333,8 +332,12 @@ class DecodeJob<R>
   private void notifyFailed() {
     setNotifiedOrThrow();
     GlideException e = new GlideException("Failed to load resource", new ArrayList<>(throwables));
-    callback.onLoadFailed(e);
+    getCallback().onLoadFailed(e);
     onLoadFailed();
+  }
+
+  private Callback<R> getCallback() {
+    return callback;
   }
 
   private void notifyComplete(
@@ -342,7 +345,7 @@ class DecodeJob<R>
       @Nullable DataSource dataSource,
       boolean isLoadedFromAlternateCacheKey) {
     setNotifiedOrThrow();
-    callback.onResourceReady(resource, dataSource, isLoadedFromAlternateCacheKey);
+    getCallback().onResourceReady(resource, dataSource, isLoadedFromAlternateCacheKey);
   }
 
   private void setNotifiedOrThrow() {
