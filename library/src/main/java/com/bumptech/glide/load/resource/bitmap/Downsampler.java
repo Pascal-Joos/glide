@@ -284,8 +284,8 @@ public final class Downsampler {
     PreferredColorSpace preferredColorSpace = options.get(PREFERRED_COLOR_SPACE);
     DownsampleStrategy downsampleStrategy = options.get(DownsampleStrategy.OPTION);
     boolean fixBitmapToRequestedDimensions = options.get(FIX_BITMAP_SIZE_TO_REQUESTED_DIMENSIONS);
-    @Nullable Boolean allowHardwareConfig = options.get(ALLOW_HARDWARE_CONFIG);
-    boolean isHardwareConfigAllowed = Boolean.TRUE.equals(allowHardwareConfig);
+    boolean isHardwareConfigAllowed =
+        options.get(ALLOW_HARDWARE_CONFIG) != null && options.get(ALLOW_HARDWARE_CONFIG);
 
     try {
       Bitmap result =
