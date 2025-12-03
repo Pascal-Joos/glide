@@ -187,6 +187,9 @@ public final class LruArrayPool implements ArrayPool {
 
   @SuppressWarnings("unchecked")
   private <T> ArrayAdapterInterface<T> getAdapterFromObject(@Nullable T object) {
+    if (object == null) {
+      throw new NullPointerException("Array object must not be null");
+    }
     return (ArrayAdapterInterface<T>) getAdapterFromType(object.getClass());
   }
 
