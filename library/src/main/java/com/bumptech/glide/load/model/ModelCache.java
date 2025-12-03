@@ -76,7 +76,7 @@ public class ModelCache<A, B> {
 
     private int height;
     private int width;
-    private A model;
+    @Nullable private A model;
 
     @SuppressWarnings("unchecked")
     static <A> ModelKey<A> get(A model, int width, int height) {
@@ -111,7 +111,9 @@ public class ModelCache<A, B> {
       if (o instanceof ModelKey) {
         @SuppressWarnings("unchecked")
         ModelKey<A> other = (ModelKey<A>) o;
-        return width == other.width && height == other.height && model.equals(other.model);
+        return width == other.width
+            && height == other.height
+            && java.util.Objects.requireNonNull(model).equals(other.model);
       }
       return false;
     }
@@ -120,7 +122,7 @@ public class ModelCache<A, B> {
     public int hashCode() {
       int result = height;
       result = 31 * result + width;
-      result = 31 * result + model.hashCode();
+      result = 31 * result + java.util.Objects.requireNonNull(model).hashCode();
       return result;
     }
   }
