@@ -25,11 +25,12 @@ final class PreFillQueue {
     PreFillType result = keyList.get(keyIndex);
 
     Integer countForResult = bitmapsPerType.get(result);
-    if (countForResult == 1) {
+    int count = countForResult == null ? 0 : countForResult;
+    if (count <= 1) {
       bitmapsPerType.remove(result);
       keyList.remove(keyIndex);
     } else {
-      bitmapsPerType.put(result, countForResult - 1);
+      bitmapsPerType.put(result, count - 1);
     }
     bitmapsRemaining--;
 
