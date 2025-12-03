@@ -70,7 +70,7 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
   @Synthetic
   EngineResource<?> engineResource;
 
-  @Nullable private DecodeJob<R> decodeJob;
+  private DecodeJob<R> decodeJob;
 
   // Checked primarily on the main thread, but also on other threads in reschedule.
   private volatile boolean isCancelled;
