@@ -97,9 +97,6 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
       }
 
       loadData = null;
-      if (cacheFile == null) {
-        return false;
-      }
       boolean started = false;
       while (!started && hasNextModelLoader()) {
         ModelLoader<File, ?> modelLoader = modelLoaders.get(modelLoaderIndex++);
