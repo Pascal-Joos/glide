@@ -546,6 +546,9 @@ class DecodeJob<R>
   private <Data, ResourceType> Resource<R> runLoadPath(
       Data data, @Nullable DataSource dataSource, @Nullable LoadPath<Data, ResourceType, R> path)
       throws GlideException {
+    if (path == null) {
+      throw new GlideException("Expected to receive a non-null LoadPath");
+    }
     Options options = getOptionsWithHardwareConfig(dataSource);
     DataRewinder<Data> rewinder = glideContext.getRegistry().getRewinder(data);
     try {
