@@ -389,11 +389,11 @@ class DecodeJob<R>
 
   @Override
   public void onDataFetcherReady(
-      Key sourceKey,
+      @Nullable Key sourceKey,
       @Nullable Object data,
       DataFetcher<?> fetcher,
       DataSource dataSource,
-      Key attemptedKey) {
+      @Nullable Key attemptedKey) {
     this.currentSourceKey = sourceKey;
     this.currentData = data;
     this.currentFetcher = fetcher;
