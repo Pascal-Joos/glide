@@ -868,7 +868,7 @@ public class RequestBuilder<TranscodeType> extends BaseRequestOptions<RequestBui
   // equivalent. See #2663 for additional context.
   private boolean isSkipMemoryCacheWithCompletePreviousRequest(
       BaseRequestOptions<?> options, @Nullable Request previous) {
-    return !options.isMemoryCacheable() && previous.isComplete();
+    return !options.isMemoryCacheable() && previous != null && previous.isComplete();
   }
 
   /**
