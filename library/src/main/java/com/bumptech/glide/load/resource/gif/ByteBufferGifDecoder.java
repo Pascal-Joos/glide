@@ -78,8 +78,9 @@ public class ByteBufferGifDecoder implements ResourceDecoder<ByteBuffer, GifDraw
 
   @Override
   public boolean handles(@NonNull ByteBuffer source, @NonNull Options options) throws IOException {
-    return !options.get(GifOptions.DISABLE_ANIMATION)
-        && ImageHeaderParserUtils.getType(parsers, source) == ImageType.GIF;
+    Boolean disableAnimation = options.get(GifOptions.DISABLE_ANIMATION);
+    boolean disabled = disableAnimation != null && disableAnimation;
+    return !disabled && ImageHeaderParserUtils.getType(parsers, source) == ImageType.GIF;
   }
 
   @Nullable
