@@ -14,7 +14,6 @@ import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Synthetic;
 import com.bumptech.glide.util.pool.FactoryPools.Poolable;
 import com.bumptech.glide.util.pool.StateVerifier;
-import com.uber.nullaway.annotations.Initializer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -318,7 +317,6 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     pool.release(this);
   }
 
-  @Initializer
   @Override
   public void onResourceReady(
       Resource<R> resource,
