@@ -82,9 +82,9 @@ final class DecodeHelper<Transcode> {
     glideContext = null;
     model = null;
     signature = null;
-    resourceClass = null;
+    resourceClass = Object.class;
     transcodeClass = null;
-    options = null;
+    options = new Options();
     priority = null;
     transformations = null;
     diskCacheStrategy = null;
