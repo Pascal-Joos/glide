@@ -65,7 +65,8 @@ public class DrawableTransformation implements Transformation<Drawable> {
       transformedBitmapResource.recycle();
       return resource;
     } else {
-      return newDrawableResource(context, transformedBitmapResource);
+      Resource<Drawable> newResource = newDrawableResource(context, transformedBitmapResource);
+      return newResource != null ? newResource : resource;
     }
   }
 
