@@ -504,8 +504,11 @@ public final class Downsampler {
       orientedSourceHeight = sourceWidth;
     }
 
+    DownsampleStrategy effectiveStrategy =
+        downsampleStrategy != null ? downsampleStrategy : DownsampleStrategy.DEFAULT;
+
     final float exactScaleFactor =
-        downsampleStrategy.getScaleFactor(
+        effectiveStrategy.getScaleFactor(
             orientedSourceWidth, orientedSourceHeight, targetWidth, targetHeight);
 
     if (exactScaleFactor <= 0f) {
@@ -527,7 +530,7 @@ public final class Downsampler {
     }
 
     SampleSizeRounding rounding =
-        downsampleStrategy.getSampleSizeRounding(
+        effectiveStrategy.getSampleSizeRounding(
             orientedSourceWidth, orientedSourceHeight, targetWidth, targetHeight);
     if (rounding == null) {
       throw new IllegalArgumentException("Cannot round with null rounding");
@@ -608,7 +611,7 @@ public final class Downsampler {
     }
 
     double adjustedScaleFactor =
-        downsampleStrategy.getScaleFactor(
+        effectiveStrategy.getScaleFactor(
             powerOfTwoWidth, powerOfTwoHeight, targetWidth, targetHeight);
 
     // Density scaling is only supported if inBitmap is null prior to KitKat. Avoid setting
