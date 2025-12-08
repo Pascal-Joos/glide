@@ -845,12 +845,14 @@ public class RequestBuilder<TranscodeType> extends BaseRequestOptions<RequestBui
       // triggering RequestListeners and Targets. If the request is failed, beginning again will
       // restart the request, giving it another chance to complete. If the request is already
       // running, we can let it continue running without interruption.
-      if (!Preconditions.checkNotNull(previous).isRunning()) {
+      Request nonNullPrevious = Preconditions.checkNotNull(previous);
+      if (!nonNullPrevious.isRunning()) {
         // Use the previous request rather than the new one to allow for optimizations like skipping
         // setting placeholders, tracking and un-tracking Targets, and obtaining View dimensions
         // that are done in the individual Request.
-        previous.begin();
+        nonNullPrevious.begin();
       }
+
       return target;
     }
 
@@ -861,14 +863,12 @@ public class RequestBuilder<TranscodeType> extends BaseRequestOptions<RequestBui
     return target;
   }
 
-  // If the caller is using skipMemoryCache and the previous request is finished, calling begin on
-  // the previous request will complete from memory because it will just use the resource that had
-  // already been loaded. If the previous request isn't complete, we can wait for it to finish
   // because the previous request must also be using skipMemoryCache for the requests to be
   // equivalent. See #2663 for additional context.
   private boolean isSkipMemoryCacheWithCompletePreviousRequest(
       BaseRequestOptions<?> options, @Nullable Request previous) {
-    return !options.isMemoryCacheable() && previous.isComplete();
+    Request nonNullPrevious = Preconditions.checkNotNull(previous);
+    return !options.isMemoryCacheable() && nonNullPrevious.isComplete();
   }
 
   /**
