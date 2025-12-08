@@ -84,7 +84,7 @@ final class DecodeHelper<Transcode> {
     signature = null;
     resourceClass = Object.class;
     transcodeClass = null;
-    options = null;
+
     priority = null;
     transformations = null;
     diskCacheStrategy = null;
