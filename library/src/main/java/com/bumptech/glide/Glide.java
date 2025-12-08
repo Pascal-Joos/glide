@@ -138,7 +138,13 @@ public class Glide implements ComponentCallbacks2 {
       }
     }
 
-    return glide;
+    Glide result = glide;
+    if (result == null) {
+      throw new IllegalStateException(
+          "Glide must be initialized before calling Glide.get(Context)");
+    }
+
+    return result;
   }
 
   @GuardedBy("Glide.class")
