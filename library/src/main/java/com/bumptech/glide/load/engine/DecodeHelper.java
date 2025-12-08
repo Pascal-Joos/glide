@@ -100,6 +100,9 @@ final class DecodeHelper<Transcode> {
   }
 
   DiskCacheStrategy getDiskCacheStrategy() {
+    if (diskCacheStrategy == null) {
+      return DiskCacheStrategy.AUTOMATIC;
+    }
     return diskCacheStrategy;
   }
 
