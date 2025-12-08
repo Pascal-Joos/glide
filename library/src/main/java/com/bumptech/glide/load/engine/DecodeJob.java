@@ -184,7 +184,7 @@ class DecodeJob<R>
     decodeHelper.clear();
     isCallbackNotified = false;
     signature = null;
-    options = null;
+    options = new Options();
     priority = null;
     loadKey = null;
     callback = null;
