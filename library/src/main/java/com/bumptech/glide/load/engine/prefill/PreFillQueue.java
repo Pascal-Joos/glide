@@ -25,11 +25,15 @@ final class PreFillQueue {
     PreFillType result = keyList.get(keyIndex);
 
     Integer countForResult = bitmapsPerType.get(result);
-    if (countForResult == 1) {
+    if (countForResult == null) {
+      throw new IllegalStateException("Received null count for PreFillType: " + result);
+    }
+    int count = countForResult;
+    if (count == 1) {
       bitmapsPerType.remove(result);
       keyList.remove(keyIndex);
     } else {
-      bitmapsPerType.put(result, countForResult - 1);
+      bitmapsPerType.put(result, count - 1);
     }
     bitmapsRemaining--;
 
