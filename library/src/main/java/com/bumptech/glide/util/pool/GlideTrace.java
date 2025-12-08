@@ -9,8 +9,7 @@ public final class GlideTrace {
   // Enable this locally to see tracing statements.
   private static final boolean TRACING_ENABLED = false;
 
-  @Nullable
-  private static final AtomicInteger COOKIE_CREATOR = TRACING_ENABLED ? new AtomicInteger() : null;
+  private static final AtomicInteger COOKIE_CREATOR = new AtomicInteger();
 
   /** Maximum length of a systrace tag. */
   private static final int MAX_LENGTH = 127;
