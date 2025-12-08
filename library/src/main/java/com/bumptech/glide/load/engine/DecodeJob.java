@@ -716,6 +716,9 @@ class DecodeJob<R>
     }
 
     void encode(DiskCacheProvider diskCacheProvider, Options options) {
+      if (encoder == null) {
+        return;
+      }
       GlideTrace.beginSection("DecodeJob.encode");
       try {
         diskCacheProvider
