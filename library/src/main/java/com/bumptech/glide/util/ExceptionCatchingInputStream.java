@@ -23,7 +23,7 @@ public class ExceptionCatchingInputStream extends InputStream {
 
   private static final Queue<ExceptionCatchingInputStream> QUEUE = Util.createQueue(0);
 
-  private InputStream wrapped;
+  @Nullable private InputStream wrapped;
   @Nullable private IOException exception;
 
   @NonNull
@@ -56,21 +56,33 @@ public class ExceptionCatchingInputStream extends InputStream {
 
   @Override
   public int available() throws IOException {
+    if (wrapped == null) {
+      throw new IllegalStateException("Stream not initialized");
+    }
     return wrapped.available();
   }
 
   @Override
   public void close() throws IOException {
+    if (wrapped == null) {
+      throw new IllegalStateException("Stream not initialized");
+    }
     wrapped.close();
   }
 
   @Override
   public void mark(int readLimit) {
+    if (wrapped == null) {
+      throw new IllegalStateException("Stream not initialized");
+    }
     wrapped.mark(readLimit);
   }
 
   @Override
   public boolean markSupported() {
+    if (wrapped == null) {
+      throw new IllegalStateException("Stream not initialized");
+    }
     return wrapped.markSupported();
   }
 
@@ -78,6 +90,9 @@ public class ExceptionCatchingInputStream extends InputStream {
   public int read(byte[] buffer) {
     int read;
     try {
+      if (wrapped == null) {
+        throw new IllegalStateException("Stream not initialized");
+      }
       read = wrapped.read(buffer);
     } catch (IOException e) {
       exception = e;
@@ -90,6 +105,9 @@ public class ExceptionCatchingInputStream extends InputStream {
   public int read(byte[] buffer, int byteOffset, int byteCount) {
     int read;
     try {
+      if (wrapped == null) {
+        throw new IllegalStateException("Stream not initialized");
+      }
       read = wrapped.read(buffer, byteOffset, byteCount);
     } catch (IOException e) {
       exception = e;
@@ -100,6 +118,9 @@ public class ExceptionCatchingInputStream extends InputStream {
 
   @Override
   public synchronized void reset() throws IOException {
+    if (wrapped == null) {
+      throw new IllegalStateException("Stream not initialized");
+    }
     wrapped.reset();
   }
 
@@ -107,6 +128,9 @@ public class ExceptionCatchingInputStream extends InputStream {
   public long skip(long byteCount) {
     long skipped;
     try {
+      if (wrapped == null) {
+        throw new IllegalStateException("Stream not initialized");
+      }
       skipped = wrapped.skip(byteCount);
     } catch (IOException e) {
       exception = e;
@@ -119,6 +143,9 @@ public class ExceptionCatchingInputStream extends InputStream {
   public int read() {
     int result;
     try {
+      if (wrapped == null) {
+        throw new IllegalStateException("Stream not initialized");
+      }
       result = wrapped.read();
     } catch (IOException e) {
       exception = e;
