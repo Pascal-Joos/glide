@@ -43,6 +43,7 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
   SourceGenerator(DecodeHelper<?> helper, FetcherReadyCallback cb) {
     this.helper = helper;
     this.cb = cb;
+    this.loadData = createDefaultLoadData();
   }
 
   // Concurrent access isn't supported.
@@ -77,7 +78,6 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
     }
     sourceCacheGenerator = null;
 
-    loadData = null;
     boolean started = false;
     while (!started && hasNextModelLoader()) {
       loadData = helper.getLoadData().get(loadDataListIndex++);
@@ -195,6 +195,40 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
     if (local != null) {
       local.fetcher.cancel();
     }
+  }
+
+  private static ModelLoader.LoadData<?> createDefaultLoadData() {
+    return new ModelLoader.LoadData<>(
+        new Key() {
+          @Override
+          public void updateDiskCacheKey(@NonNull java.security.MessageDigest messageDigest) {}
+        },
+        new DataFetcher<Object>() {
+          @Override
+          public void loadData(
+              @NonNull com.bumptech.glide.Priority priority,
+              @NonNull DataCallback<? super Object> callback) {
+            callback.onLoadFailed(new IllegalStateException("Default LoadData should not be used"));
+          }
+
+          @Override
+          public void cleanup() {}
+
+          @Override
+          public void cancel() {}
+
+          @NonNull
+          @Override
+          public Class<Object> getDataClass() {
+            return Object.class;
+          }
+
+          @NonNull
+          @Override
+          public DataSource getDataSource() {
+            return DataSource.LOCAL;
+          }
+        });
   }
 
   @SuppressWarnings("WeakerAccess")
