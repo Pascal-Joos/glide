@@ -53,11 +53,18 @@ public class LoadPath<Data, ResourceType, Transcode> {
       int height,
       DecodePath.DecodeCallback<ResourceType> decodeCallback)
       throws GlideException {
-    List<Throwable> throwables = Preconditions.checkNotNull(listPool.acquire());
+    List<Throwable> throwables;
+    if (listPool != null) {
+      throwables = Preconditions.checkNotNull(listPool.acquire());
+    } else {
+      throwables = new ArrayList<>();
+    }
     try {
       return loadWithExceptionList(rewinder, options, width, height, decodeCallback, throwables);
     } finally {
-      listPool.release(throwables);
+      if (listPool != null) {
+        listPool.release(throwables);
+      }
     }
   }
 
