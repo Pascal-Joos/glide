@@ -25,7 +25,7 @@ final class LockedResource<Z> implements Resource<Z>, FactoryPools.Poolable {
             }
           });
   private final StateVerifier stateVerifier = StateVerifier.newInstance();
-  private Resource<Z> toWrap;
+  @androidx.annotation.Nullable private Resource<Z> toWrap;
   private boolean isLocked;
   private boolean isRecycled;
 
@@ -67,18 +67,18 @@ final class LockedResource<Z> implements Resource<Z>, FactoryPools.Poolable {
   @NonNull
   @Override
   public Class<Z> getResourceClass() {
-    return toWrap.getResourceClass();
+    return Preconditions.checkNotNull(toWrap).getResourceClass();
   }
 
   @NonNull
   @Override
   public Z get() {
-    return toWrap.get();
+    return Preconditions.checkNotNull(toWrap).get();
   }
 
   @Override
   public int getSize() {
-    return toWrap.getSize();
+    return Preconditions.checkNotNull(toWrap).getSize();
   }
 
   @Override
@@ -87,7 +87,7 @@ final class LockedResource<Z> implements Resource<Z>, FactoryPools.Poolable {
 
     this.isRecycled = true;
     if (!isLocked) {
-      toWrap.recycle();
+      Preconditions.checkNotNull(toWrap).recycle();
       release();
     }
   }
