@@ -75,7 +75,10 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
         ModelLoader<File, ?> modelLoader = modelLoaders.get(modelLoaderIndex++);
         loadData =
             modelLoader.buildLoadData(
-                cacheFile, helper.getWidth(), helper.getHeight(), helper.getOptions());
+                Objects.requireNonNull(cacheFile),
+                helper.getWidth(),
+                helper.getHeight(),
+                helper.getOptions());
         if (loadData != null && helper.hasLoadPath(loadData.fetcher.getDataClass())) {
           started = true;
           loadData.fetcher.loadData(helper.getPriority(), this);
