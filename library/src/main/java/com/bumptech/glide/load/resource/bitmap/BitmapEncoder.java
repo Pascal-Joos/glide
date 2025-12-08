@@ -73,7 +73,8 @@ public class BitmapEncoder implements ResourceEncoder<Bitmap> {
         "encode: [%dx%d] %s", bitmap.getWidth(), bitmap.getHeight(), format);
     try {
       long start = LogTime.getLogTime();
-      int quality = options.get(COMPRESSION_QUALITY);
+      Integer qualityOption = options.get(COMPRESSION_QUALITY);
+      int quality = qualityOption != null ? qualityOption : 90;
 
       boolean success = false;
       OutputStream os = null;
