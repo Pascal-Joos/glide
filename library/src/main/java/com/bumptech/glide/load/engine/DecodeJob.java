@@ -711,7 +711,7 @@ class DecodeJob<R>
   private static class DeferredEncodeManager<Z> {
     @Nullable private Key key;
     @Nullable private ResourceEncoder<Z> encoder;
-    private LockedResource<Z> toEncode;
+    @Nullable private LockedResource<Z> toEncode;
 
     @Synthetic
     DeferredEncodeManager() {}
@@ -726,16 +726,18 @@ class DecodeJob<R>
     }
 
     void encode(DiskCacheProvider diskCacheProvider, Options options) {
-      if (encoder == null) {
+      ResourceEncoder<Z> localEncoder = encoder;
+      LockedResource<Z> localToEncode = toEncode;
+      if (localEncoder == null || localToEncode == null) {
         return;
       }
       GlideTrace.beginSection("DecodeJob.encode");
       try {
         diskCacheProvider
             .getDiskCache()
-            .put(key, new DataCacheWriter<>(encoder, toEncode, options));
+            .put(key, new DataCacheWriter<>(localEncoder, localToEncode, options));
       } finally {
-        toEncode.unlock();
+        localToEncode.unlock();
         GlideTrace.endSection();
       }
     }
