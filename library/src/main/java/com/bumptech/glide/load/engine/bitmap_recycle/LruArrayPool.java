@@ -187,8 +187,9 @@ public final class LruArrayPool implements ArrayPool {
   }
 
   @SuppressWarnings("unchecked")
-  private <T> ArrayAdapterInterface<T> getAdapterFromObject(@Nullable T object) {
-    return (ArrayAdapterInterface<T>) getAdapterFromType(object.getClass());
+  private <T> ArrayAdapterInterface<T> getAdapterFromObject(T object) {
+    return (ArrayAdapterInterface<T>)
+        getAdapterFromType(com.bumptech.glide.util.Preconditions.checkNotNull(object).getClass());
   }
 
   @SuppressWarnings("unchecked")
