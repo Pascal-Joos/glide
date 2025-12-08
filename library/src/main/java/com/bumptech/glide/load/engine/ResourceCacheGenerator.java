@@ -97,6 +97,9 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
       }
 
       loadData = null;
+      if (cacheFile == null) {
+        return false;
+      }
       boolean started = false;
       while (!started && hasNextModelLoader()) {
         ModelLoader<File, ?> modelLoader = modelLoaders.get(modelLoaderIndex++);
@@ -116,7 +119,7 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
   }
 
   private boolean hasNextModelLoader() {
-    return modelLoaders != null && modelLoaderIndex < modelLoaders.size();
+    return cacheFile != null && modelLoaders != null && modelLoaderIndex < modelLoaders.size();
   }
 
   @Override
@@ -139,8 +142,9 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
   @Override
   public void onLoadFailed(@NonNull Exception e) {
     LoadData<?> local = loadData;
-    if (local != null) {
-      cb.onDataFetcherFailed(currentKey, e, local.fetcher, DataSource.RESOURCE_DISK_CACHE);
+    if (local == null) {
+      return;
     }
+    cb.onDataFetcherFailed(currentKey, e, local.fetcher, DataSource.RESOURCE_DISK_CACHE);
   }
 }
