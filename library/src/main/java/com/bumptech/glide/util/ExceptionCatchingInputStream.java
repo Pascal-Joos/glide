@@ -47,7 +47,8 @@ public class ExceptionCatchingInputStream extends InputStream {
   }
 
   ExceptionCatchingInputStream() {
-    // Do nothing.
+    // Explicitly initialize wrapped to make NullAway aware this field is set in the constructor.
+    wrapped = null;
   }
 
   void setInputStream(@NonNull InputStream toWrap) {

@@ -52,7 +52,8 @@ public final class ExceptionPassthroughInputStream extends InputStream {
   }
 
   ExceptionPassthroughInputStream() {
-    // Do nothing.
+    // Initialize to a non-null dummy stream so NullAway sees wrapped as initialized.
+    wrapped = new java.io.ByteArrayInputStream(new byte[0]);
   }
 
   void setInputStream(@NonNull InputStream toWrap) {
