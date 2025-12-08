@@ -111,6 +111,9 @@ final class DecodeHelper<Transcode> {
   }
 
   Priority getPriority() {
+    if (priority == null) {
+      return Priority.NORMAL;
+    }
     return priority;
   }
 
