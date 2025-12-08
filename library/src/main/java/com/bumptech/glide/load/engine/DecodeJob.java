@@ -104,6 +104,9 @@ class DecodeJob<R>
       Options options,
       Callback<R> callback,
       int order) {
+    if (model == null) {
+      throw new IllegalArgumentException("Model must be non-null");
+    }
     decodeHelper.init(
         glideContext,
         model,
