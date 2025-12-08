@@ -699,9 +699,11 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
   private void onLoadFailed(@Nullable GlideException e, int maxLogLevel) {
     stateVerifier.throwIfRecycled();
     synchronized (requestLock) {
-      e.setOrigin(requestOrigin);
+      if (e != null) {
+        e.setOrigin(requestOrigin);
+      }
       int logLevel = glideContext.getLogLevel();
-      if (logLevel <= maxLogLevel) {
+      if (logLevel <= maxLogLevel && e != null) {
         Log.w(
             GLIDE_TAG,
             "Load failed for [" + model + "] with dimensions [" + width + "x" + height + "]",
@@ -718,26 +720,21 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
 
       isCallingCallbacks = true;
       try {
-        // TODO: what if this is a thumbnail request?
-        boolean anyListenerHandledUpdatingTarget = false;
         if (requestListeners != null) {
           for (RequestListener<R> listener : requestListeners) {
-            anyListenerHandledUpdatingTarget |=
-                listener.onLoadFailed(e, model, target, isFirstReadyResource());
+            if (listener.onLoadFailed(e, model, target, isFirstReadyResource())) {
+              return;
+            }
           }
         }
-        anyListenerHandledUpdatingTarget |=
-            targetListener != null
-                && targetListener.onLoadFailed(e, model, target, isFirstReadyResource());
 
-        if (!anyListenerHandledUpdatingTarget) {
+        if (targetListener == null
+            || !targetListener.onLoadFailed(e, model, target, isFirstReadyResource())) {
           setErrorPlaceholder();
         }
       } finally {
         isCallingCallbacks = false;
       }
-
-      GlideTrace.endSectionAsync(TAG, cookie);
     }
   }
 
