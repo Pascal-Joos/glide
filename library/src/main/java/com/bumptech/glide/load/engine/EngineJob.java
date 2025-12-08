@@ -115,6 +115,7 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     this.engineResourceFactory = engineResourceFactory;
   }
 
+  @Initializer
   @VisibleForTesting
   synchronized EngineJob<R> init(
       Key key,
@@ -130,6 +131,7 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     return this;
   }
 
+  @Initializer
   public synchronized void start(DecodeJob<R> decodeJob) {
     this.decodeJob = decodeJob;
     GlideExecutor executor =
@@ -307,7 +309,6 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
       throw new IllegalArgumentException();
     }
     cbs.clear();
-    key = null;
     engineResource = null;
     resource = null;
     hasLoadFailed = false;
@@ -315,7 +316,6 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     hasResource = false;
     isLoadedFromAlternateCacheKey = false;
     decodeJob.release(/* isRemovedFromQueue= */ false);
-    decodeJob = null;
     exception = null;
     dataSource = null;
     pool.release(this);
@@ -435,7 +435,8 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
         synchronized (EngineJob.this) {
           if (cbs.contains(cb)) {
             // Acquire for this particular callback.
-            engineResource.acquire();
+            EngineResource<?> local = Preconditions.checkNotNull(engineResource);
+            local.acquire();
             callCallbackOnResourceReady(cb);
             removeCallback(cb);
           }
