@@ -86,7 +86,9 @@ public abstract class BitmapTransformation implements Transformation<Bitmap> {
     if (toTransform.equals(transformed)) {
       result = resource;
     } else {
-      result = BitmapResource.obtain(transformed, bitmapPool);
+      result =
+          com.bumptech.glide.util.Preconditions.checkNotNull(
+              BitmapResource.obtain(transformed, bitmapPool));
     }
     return result;
   }
