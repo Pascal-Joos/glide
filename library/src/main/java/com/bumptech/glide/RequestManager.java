@@ -148,7 +148,8 @@ public class RequestManager
 
     defaultRequestListeners =
         new CopyOnWriteArrayList<>(glide.getGlideContext().getDefaultRequestListeners());
-    setRequestOptions(glide.getGlideContext().getDefaultRequestOptions());
+    RequestOptions defaultRequestOptions = glide.getGlideContext().getDefaultRequestOptions();
+    this.requestOptions = defaultRequestOptions.clone().autoClone();
   }
 
   protected synchronized void setRequestOptions(@NonNull RequestOptions toSet) {
