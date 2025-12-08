@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Queue;
 
 /**
@@ -26,7 +27,7 @@ public final class ExceptionPassthroughInputStream extends InputStream {
   @GuardedBy("POOL")
   private static final Queue<ExceptionPassthroughInputStream> POOL = Util.createQueue(0);
 
-  private InputStream wrapped;
+  @Nullable private InputStream wrapped;
   @Nullable private IOException exception;
 
   @NonNull
@@ -62,28 +63,28 @@ public final class ExceptionPassthroughInputStream extends InputStream {
 
   @Override
   public int available() throws IOException {
-    return wrapped.available();
+    return Objects.requireNonNull(wrapped).available();
   }
 
   @Override
   public void close() throws IOException {
-    wrapped.close();
+    Objects.requireNonNull(wrapped).close();
   }
 
   @Override
   public void mark(int readLimit) {
-    wrapped.mark(readLimit);
+    Objects.requireNonNull(wrapped).mark(readLimit);
   }
 
   @Override
   public boolean markSupported() {
-    return wrapped.markSupported();
+    return Objects.requireNonNull(wrapped).markSupported();
   }
 
   @Override
   public int read() throws IOException {
     try {
-      return wrapped.read();
+      return Objects.requireNonNull(wrapped).read();
     } catch (IOException e) {
       exception = e;
       throw e;
@@ -93,7 +94,7 @@ public final class ExceptionPassthroughInputStream extends InputStream {
   @Override
   public int read(byte[] buffer) throws IOException {
     try {
-      return wrapped.read(buffer);
+      return Objects.requireNonNull(wrapped).read(buffer);
     } catch (IOException e) {
       exception = e;
       throw e;
@@ -103,7 +104,7 @@ public final class ExceptionPassthroughInputStream extends InputStream {
   @Override
   public int read(byte[] buffer, int byteOffset, int byteCount) throws IOException {
     try {
-      return wrapped.read(buffer, byteOffset, byteCount);
+      return Objects.requireNonNull(wrapped).read(buffer, byteOffset, byteCount);
     } catch (IOException e) {
       exception = e;
       throw e;
@@ -112,13 +113,13 @@ public final class ExceptionPassthroughInputStream extends InputStream {
 
   @Override
   public synchronized void reset() throws IOException {
-    wrapped.reset();
+    Objects.requireNonNull(wrapped).reset();
   }
 
   @Override
   public long skip(long byteCount) throws IOException {
     try {
-      return wrapped.skip(byteCount);
+      return Objects.requireNonNull(wrapped).skip(byteCount);
     } catch (IOException e) {
       exception = e;
       throw e;
