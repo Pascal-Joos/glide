@@ -150,6 +150,9 @@ public final class DataUrlLoader<Model, Data> implements ModelLoader<Model, Data
 
             @Override
             public void close(@Nullable InputStream inputStream) throws IOException {
+              if (inputStream == null) {
+                return;
+              }
               inputStream.close();
             }
 
