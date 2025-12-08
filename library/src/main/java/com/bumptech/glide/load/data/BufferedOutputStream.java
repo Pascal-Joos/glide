@@ -13,6 +13,7 @@ import java.io.OutputStream;
 public final class BufferedOutputStream extends OutputStream {
   @NonNull private final OutputStream out;
   private byte[] buffer;
+  private boolean released;
   private ArrayPool arrayPool;
   private int index;
 
@@ -93,9 +94,9 @@ public final class BufferedOutputStream extends OutputStream {
   }
 
   private void release() {
-    if (buffer != null) {
+    if (!released) {
+      released = true;
       arrayPool.put(buffer);
-      buffer = null;
     }
   }
 }
