@@ -130,6 +130,8 @@ class DecodeJob<R>
     this.options = options;
     this.callback = callback;
     this.order = order;
+    this.stage = Stage.INITIALIZE;
+    this.currentSourceKey = signature;
     this.runReason = RunReason.INITIALIZE;
     this.model = model;
     return this;
