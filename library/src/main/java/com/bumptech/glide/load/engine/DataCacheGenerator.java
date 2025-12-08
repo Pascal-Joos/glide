@@ -9,6 +9,7 @@ import com.bumptech.glide.load.model.ModelLoader.LoadData;
 import com.bumptech.glide.util.pool.GlideTrace;
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Nullable;
 
 /**
@@ -87,7 +88,8 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
   }
 
   private boolean hasNextModelLoader() {
-    return modelLoaderIndex < modelLoaders.size();
+    List<ModelLoader<File, ?>> nonNullModelLoaders = Objects.requireNonNull(modelLoaders);
+    return modelLoaderIndex < nonNullModelLoaders.size();
   }
 
   @Override
