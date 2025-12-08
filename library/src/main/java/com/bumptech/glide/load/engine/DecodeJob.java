@@ -191,7 +191,7 @@ class DecodeJob<R>
     stage = Stage.INITIALIZE;
     currentGenerator = null;
     currentThread = null;
-    currentSourceKey = null;
+    currentSourceKey = signature;
     currentData = null;
     currentDataSource = null;
     currentFetcher = null;
