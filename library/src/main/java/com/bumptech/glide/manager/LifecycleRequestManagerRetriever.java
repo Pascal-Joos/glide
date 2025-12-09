@@ -10,7 +10,6 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.manager.RequestManagerRetriever.RequestManagerFactory;
 import com.bumptech.glide.util.Synthetic;
 import com.bumptech.glide.util.Util;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +43,7 @@ final class LifecycleRequestManagerRetriever {
       LifecycleLifecycle glideLifecycle = new LifecycleLifecycle(lifecycle);
       result =
           factory.build(
-              Nullability.castToNonnull(glide),
+              glide,
               glideLifecycle,
               new SupportRequestManagerTreeNode(childFragmentManager),
               context);
@@ -62,6 +61,9 @@ final class LifecycleRequestManagerRetriever {
               lifecycleToRequestManager.remove(lifecycle);
             }
           });
+      // This is a bit of hack, we're going to start the RequestManager, but not the
+      // corresponding Lifecycle. It's safe to start the RequestManager, but starting the
+      // Lifecycle might trigger memory leaks. See b/154405040
       if (isParentVisible) {
         result.onStart();
       }

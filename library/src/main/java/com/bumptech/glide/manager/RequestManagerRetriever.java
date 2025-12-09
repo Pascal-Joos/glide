@@ -21,7 +21,6 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.resource.bitmap.HardwareConfigState;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Util;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Collection;
 import java.util.Map;
 
@@ -61,13 +60,20 @@ public class RequestManagerRetriever implements Handler.Callback {
 
   @NonNull
   private RequestManager getApplicationManager(@NonNull Context context) {
+    // Either an application context or we're on a background thread.
     if (applicationManager == null) {
       synchronized (this) {
         if (applicationManager == null) {
+          // Normally pause/resume is taken care of by the fragment we add to the fragment or
+          // activity. However, in this case since the manager attached to the application will not
+          // receive lifecycle events, we must force the manager to start resumed using
+          // ApplicationLifecycle.
+
+          // TODO(b/27524013): Factor out this Glide.get() call.
           Glide glide = Glide.get(context.getApplicationContext());
           applicationManager =
               factory.build(
-                  Nullability.castToNonnull(glide),
+                  glide,
                   new ApplicationLifecycle(),
                   new EmptyRequestManagerTreeNode(),
                   context.getApplicationContext());
