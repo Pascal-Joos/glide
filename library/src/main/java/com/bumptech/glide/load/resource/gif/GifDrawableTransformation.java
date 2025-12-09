@@ -9,6 +9,7 @@ import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapResource;
 import com.bumptech.glide.util.Preconditions;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.security.MessageDigest;
 
 /**
@@ -32,12 +33,7 @@ public class GifDrawableTransformation implements Transformation<GifDrawable> {
       int outHeight) {
     GifDrawable drawable = resource.get();
 
-    // The drawable needs to be initialized with the correct width and height in order for a view
-    // displaying it to end up with the right dimensions. Since our transformations may arbitrarily
-    // modify the dimensions of our GIF, here we create a stand in for a frame and pass it to the
-    // transformation to see what the final transformed dimensions will be so that our drawable can
-    // report the correct intrinsic width and height.
-    BitmapPool bitmapPool = Glide.get(context).getBitmapPool();
+    BitmapPool bitmapPool = Nullability.castToNonnull(Glide.get(context)).getBitmapPool();
     Bitmap firstFrame = drawable.getFirstFrame();
     Resource<Bitmap> bitmapResource = new BitmapResource(firstFrame, bitmapPool);
     Resource<Bitmap> transformed = wrapped.transform(context, bitmapResource, outWidth, outHeight);

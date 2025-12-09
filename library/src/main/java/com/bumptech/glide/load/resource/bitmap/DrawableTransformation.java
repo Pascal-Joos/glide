@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.security.MessageDigest;
 import javax.annotation.Nullable;
 
@@ -47,7 +48,7 @@ public class DrawableTransformation implements Transformation<Drawable> {
   @Override
   public Resource<Drawable> transform(
       @NonNull Context context, @NonNull Resource<Drawable> resource, int outWidth, int outHeight) {
-    BitmapPool bitmapPool = Glide.get(context).getBitmapPool();
+    BitmapPool bitmapPool = Nullability.castToNonnull(Glide.get(context)).getBitmapPool();
     Drawable drawable = resource.get();
     Resource<Bitmap> bitmapResourceToTransform =
         DrawableToBitmapConverter.convert(bitmapPool, drawable, outWidth, outHeight);
