@@ -36,7 +36,6 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.util.GlideSuppliers.GlideSupplier;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Util;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -514,8 +513,10 @@ public class Glide implements ComponentCallbacks2 {
 
   @NonNull
   private static RequestManagerRetriever getRetriever(@Nullable Context context) {
+    // Context could be null for other reasons (ie the user passes in null), but in practice it will
+    // only occur due to errors with the Fragment lifecycle.
     Preconditions.checkNotNull(context, DESTROYED_ACTIVITY_WARNING);
-    return Glide.get(Nullability.castToNonnull(context)).getRequestManagerRetriever();
+    return Glide.get(context).getRequestManagerRetriever();
   }
 
   /**
