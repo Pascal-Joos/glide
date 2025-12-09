@@ -114,14 +114,6 @@ final class ActiveResources {
       }
     }
 
-    ResourceListener listener;
-    synchronized (this) {
-      listener = this.listener;
-    }
-    if (listener == null) {
-      return;
-    }
-
     EngineResource<?> newResource =
         new EngineResource<>(
             ref.resource,
