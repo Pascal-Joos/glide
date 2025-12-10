@@ -238,9 +238,9 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     synchronized (this) {
       stateVerifier.throwIfRecycled();
       if (isCancelled) {
-        if (resource != null) {
-          resource.recycle();
-        }
+        // TODO: Seems like we might as well put this in the memory cache instead of just recycling
+        // it since we've gotten this far...
+        resource.recycle();
         release();
         return;
       } else if (cbs.isEmpty()) {
