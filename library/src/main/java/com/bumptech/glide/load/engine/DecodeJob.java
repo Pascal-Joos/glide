@@ -104,6 +104,9 @@ class DecodeJob<R>
       Options options,
       Callback<R> callback,
       int order) {
+    if (model == null) {
+      throw new NullPointerException("model must not be null");
+    }
     decodeHelper.init(
         glideContext,
         model,
@@ -208,6 +211,9 @@ class DecodeJob<R>
   }
 
   private int getPriority() {
+    if (priority == null) {
+      throw new NullPointerException("priority must not be null");
+    }
     return priority.ordinal();
   }
 
