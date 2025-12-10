@@ -23,7 +23,6 @@ import com.bumptech.glide.util.pool.FactoryPools.Poolable;
 import com.bumptech.glide.util.pool.GlideTrace;
 import com.bumptech.glide.util.pool.StateVerifier;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -551,8 +550,8 @@ class DecodeJob<R>
     DataRewinder<Data> rewinder = glideContext.getRegistry().getRewinder(data);
     try {
       // ResourceType in DecodeCallback below is required for compilation to work with gradle.
-      return Nullability.castToNonnull(path)
-          .load(rewinder, options, width, height, new DecodeCallback<ResourceType>(dataSource));
+      return path.load(
+          rewinder, options, width, height, new DecodeCallback<ResourceType>(dataSource));
     } finally {
       rewinder.cleanup();
     }
