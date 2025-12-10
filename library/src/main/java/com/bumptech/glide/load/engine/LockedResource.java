@@ -6,8 +6,6 @@ import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Synthetic;
 import com.bumptech.glide.util.pool.FactoryPools;
 import com.bumptech.glide.util.pool.StateVerifier;
-import edu.ucr.cs.riple.annotator.util.Nullability;
-import javax.annotation.Nullable;
 
 /**
  * A resource that defers any calls to {@link Resource#recycle()} until after {@link #unlock()} is
@@ -27,7 +25,7 @@ final class LockedResource<Z> implements Resource<Z>, FactoryPools.Poolable {
             }
           });
   private final StateVerifier stateVerifier = StateVerifier.newInstance();
-  @Nullable private Resource<Z> toWrap;
+  private Resource<Z> toWrap;
   private boolean isLocked;
   private boolean isRecycled;
 
@@ -69,18 +67,18 @@ final class LockedResource<Z> implements Resource<Z>, FactoryPools.Poolable {
   @NonNull
   @Override
   public Class<Z> getResourceClass() {
-    return toWrap != null ? toWrap.getResourceClass() : Object.class;
+    return toWrap.getResourceClass();
   }
 
   @NonNull
   @Override
   public Z get() {
-    return toWrap == null ? null : Nullability.castToNonnull(toWrap.get());
+    return toWrap.get();
   }
 
   @Override
   public int getSize() {
-    return toWrap != null ? Nullability.castToNonnull(toWrap.getSize()) : 0;
+    return toWrap.getSize();
   }
 
   @Override
@@ -88,8 +86,8 @@ final class LockedResource<Z> implements Resource<Z>, FactoryPools.Poolable {
     stateVerifier.throwIfRecycled();
 
     this.isRecycled = true;
-    if (!isLocked && toWrap != null) {
-      Nullability.castToNonnull(toWrap).recycle();
+    if (!isLocked) {
+      toWrap.recycle();
       release();
     }
   }
