@@ -151,6 +151,9 @@ final class DecodeHelper<Transcode> {
 
   @Nullable
   <Data> LoadPath<Data, ?, Transcode> getLoadPath(Class<Data> dataClass) {
+    if (glideContext == null) {
+      return null;
+    }
     return glideContext.getRegistry().getLoadPath(dataClass, resourceClass, transcodeClass);
   }
 
