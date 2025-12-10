@@ -90,6 +90,7 @@ public class RequestManager
   // the list each time a request is started.
   private final CopyOnWriteArrayList<RequestListener<Object>> defaultRequestListeners;
 
+  @Nullable
   @GuardedBy("this")
   private RequestOptions requestOptions;
 
@@ -156,7 +157,7 @@ public class RequestManager
   }
 
   private synchronized void updateRequestOptions(@NonNull RequestOptions toUpdate) {
-    requestOptions = requestOptions.apply(toUpdate);
+    requestOptions = toUpdate.clone().autoClone().apply(requestOptions);
   }
 
   /**
@@ -692,6 +693,7 @@ public class RequestManager
     return defaultRequestListeners;
   }
 
+  @Nullable
   synchronized RequestOptions getDefaultRequestOptions() {
     return requestOptions;
   }
