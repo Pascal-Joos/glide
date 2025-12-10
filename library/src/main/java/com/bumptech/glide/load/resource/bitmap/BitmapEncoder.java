@@ -14,7 +14,6 @@ import com.bumptech.glide.load.engine.bitmap_recycle.ArrayPool;
 import com.bumptech.glide.util.LogTime;
 import com.bumptech.glide.util.Util;
 import com.bumptech.glide.util.pool.GlideTrace;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -74,7 +73,7 @@ public class BitmapEncoder implements ResourceEncoder<Bitmap> {
         "encode: [%dx%d] %s", bitmap.getWidth(), bitmap.getHeight(), format);
     try {
       long start = LogTime.getLogTime();
-      int quality = Nullability.castToNonnull(options.get(COMPRESSION_QUALITY));
+      int quality = options.get(COMPRESSION_QUALITY);
 
       boolean success = false;
       OutputStream os = null;
