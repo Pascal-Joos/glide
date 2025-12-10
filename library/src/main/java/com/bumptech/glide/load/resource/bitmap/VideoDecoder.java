@@ -23,7 +23,6 @@ import com.bumptech.glide.load.ResourceDecoder;
 import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.request.target.Target;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
@@ -174,7 +173,7 @@ public class VideoDecoder<T> implements ResourceDecoder<T, Bitmap> {
   public Resource<Bitmap> decode(
       @NonNull T resource, int outWidth, int outHeight, @NonNull Options options)
       throws IOException {
-    long frameTimeMicros = Nullability.castToNonnull(options.get(TARGET_FRAME));
+    long frameTimeMicros = options.get(TARGET_FRAME);
     if (frameTimeMicros < 0 && frameTimeMicros != DEFAULT_FRAME) {
       throw new IllegalArgumentException(
           "Requested frame must be non-negative, or DEFAULT_FRAME, given: " + frameTimeMicros);
