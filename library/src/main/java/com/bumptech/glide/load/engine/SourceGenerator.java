@@ -81,10 +81,8 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
     boolean started = false;
     while (!started && hasNextModelLoader()) {
       loadData = helper.getLoadData().get(loadDataListIndex++);
-      DiskCacheStrategy diskCacheStrategy = helper.getDiskCacheStrategy();
       if (loadData != null
-          && ((diskCacheStrategy != null
-                  && diskCacheStrategy.isDataCacheable(loadData.fetcher.getDataSource()))
+          && (helper.getDiskCacheStrategy().isDataCacheable(loadData.fetcher.getDataSource())
               || helper.hasLoadPath(loadData.fetcher.getDataClass()))) {
         started = true;
         startNextLoad(loadData);
@@ -203,21 +201,19 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
   @Synthetic
   void onDataReadyInternal(LoadData<?> loadData, @Nullable Object data) {
     DiskCacheStrategy diskCacheStrategy = helper.getDiskCacheStrategy();
-    if (diskCacheStrategy == null
-        || data == null
-        || !diskCacheStrategy.isDataCacheable(loadData.fetcher.getDataSource())) {
+    if (data != null && diskCacheStrategy.isDataCacheable(loadData.fetcher.getDataSource())) {
+      dataToCache = data;
+      // We might be being called back on someone else's thread. Before doing anything, we should
+      // reschedule to get back onto Glide's thread. Then once we're back on Glide's thread, we'll
+      // get called again and we can write the retrieved data to cache.
+      cb.reschedule();
+    } else {
       cb.onDataFetcherReady(
           loadData.sourceKey,
           data,
           loadData.fetcher,
           loadData.fetcher.getDataSource(),
           originalKey);
-    } else {
-      dataToCache = data;
-      // We might be being called back on someone else's thread. Before doing anything, we should
-      // reschedule to get back onto Glide's thread. Then once we're back on Glide's thread, we'll
-      // get called again and we can write the retrieved data to cache.
-      cb.reschedule();
     }
   }
 
