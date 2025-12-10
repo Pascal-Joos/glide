@@ -9,6 +9,7 @@ import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapResource;
 import com.bumptech.glide.util.Preconditions;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.security.MessageDigest;
 
 /**
@@ -39,7 +40,8 @@ public class GifDrawableTransformation implements Transformation<GifDrawable> {
     // report the correct intrinsic width and height.
     BitmapPool bitmapPool = Glide.get(context).getBitmapPool();
     Bitmap firstFrame = drawable.getFirstFrame();
-    Resource<Bitmap> bitmapResource = new BitmapResource(firstFrame, bitmapPool);
+    Resource<Bitmap> bitmapResource =
+        new BitmapResource(Nullability.castToNonnull(firstFrame), bitmapPool);
     Resource<Bitmap> transformed = wrapped.transform(context, bitmapResource, outWidth, outHeight);
     if (!bitmapResource.equals(transformed)) {
       bitmapResource.recycle();
