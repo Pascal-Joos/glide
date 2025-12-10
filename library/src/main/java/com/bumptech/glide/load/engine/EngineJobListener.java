@@ -5,7 +5,8 @@ import javax.annotation.Nullable;
 
 interface EngineJobListener {
 
-  void onEngineJobComplete(EngineJob<?> engineJob, Key key, @Nullable EngineResource<?> resource);
+  void onEngineJobComplete(
+      EngineJob<?> engineJob, @Nullable Key key, @Nullable EngineResource<?> resource);
 
-  void onEngineJobCancelled(EngineJob<?> engineJob, Key key);
+  void onEngineJobCancelled(EngineJob<?> engineJob, @Nullable Key key);
 }

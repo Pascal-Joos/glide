@@ -44,7 +44,7 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
   private final GlideExecutor animationExecutor;
   private final AtomicInteger pendingCallbacks = new AtomicInteger();
 
-  private Key key;
+  @Nullable private Key key;
   private boolean isCacheable;
   private boolean useUnlimitedSourceGeneratorPool;
   private boolean useAnimationPool;
@@ -522,7 +522,7 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     public <R> EngineResource<R> build(
         @Nullable Resource<R> resource,
         boolean isMemoryCacheable,
-        Key key,
+        @Nullable Key key,
         ResourceListener listener) {
       return new EngineResource<>(
           resource, isMemoryCacheable, /* isRecyclable= */ true, key, listener);
