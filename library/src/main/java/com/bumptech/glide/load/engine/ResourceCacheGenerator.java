@@ -93,8 +93,6 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
           sourceKey = sourceId;
           modelLoaders = helper.getModelLoaders(cacheFile);
           modelLoaderIndex = 0;
-        } else {
-          modelLoaders = null;
         }
       }
 
@@ -102,9 +100,6 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
       boolean started = false;
       while (!started && hasNextModelLoader()) {
         ModelLoader<File, ?> modelLoader = modelLoaders.get(modelLoaderIndex++);
-        if (cacheFile == null) {
-          continue;
-        }
         loadData =
             modelLoader.buildLoadData(
                 cacheFile, helper.getWidth(), helper.getHeight(), helper.getOptions());
@@ -121,7 +116,7 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
   }
 
   private boolean hasNextModelLoader() {
-    return modelLoaders != null && modelLoaderIndex < modelLoaders.size();
+    return modelLoaderIndex < modelLoaders.size();
   }
 
   @Override
