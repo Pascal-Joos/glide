@@ -28,6 +28,7 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.util.LogTime;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Util;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -283,7 +284,8 @@ public final class Downsampler {
     DecodeFormat decodeFormat = options.get(DECODE_FORMAT);
     PreferredColorSpace preferredColorSpace = options.get(PREFERRED_COLOR_SPACE);
     DownsampleStrategy downsampleStrategy = options.get(DownsampleStrategy.OPTION);
-    boolean fixBitmapToRequestedDimensions = options.get(FIX_BITMAP_SIZE_TO_REQUESTED_DIMENSIONS);
+    boolean fixBitmapToRequestedDimensions =
+        Nullability.castToNonnull(options.get(FIX_BITMAP_SIZE_TO_REQUESTED_DIMENSIONS));
     boolean isHardwareConfigAllowed =
         options.get(ALLOW_HARDWARE_CONFIG) != null && options.get(ALLOW_HARDWARE_CONFIG);
 
