@@ -10,6 +10,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.manager.RequestManagerRetriever.RequestManagerFactory;
 import com.bumptech.glide.util.Synthetic;
 import com.bumptech.glide.util.Util;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -43,7 +44,7 @@ final class LifecycleRequestManagerRetriever {
       LifecycleLifecycle glideLifecycle = new LifecycleLifecycle(lifecycle);
       result =
           factory.build(
-              glide,
+              Nullability.castToNonnull(glide),
               glideLifecycle,
               new SupportRequestManagerTreeNode(childFragmentManager),
               context);

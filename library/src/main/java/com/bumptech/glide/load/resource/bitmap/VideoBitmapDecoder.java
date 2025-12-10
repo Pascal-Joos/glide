@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.ParcelFileDescriptor;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 
 /**
  * An {@link com.bumptech.glide.load.ResourceDecoder} that can decode a thumbnail frame {@link
@@ -18,7 +19,7 @@ public class VideoBitmapDecoder extends VideoDecoder<ParcelFileDescriptor> {
 
   @SuppressWarnings("unused")
   public VideoBitmapDecoder(Context context) {
-    this(Glide.get(context).getBitmapPool());
+    this(Nullability.castToNonnull(Glide.get(context)).getBitmapPool());
   }
 
   // Public API
