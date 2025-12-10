@@ -14,6 +14,7 @@ import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.load.model.ModelLoader.LoadData;
 import com.bumptech.glide.util.LogTime;
 import com.bumptech.glide.util.Synthetic;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.util.Collections;
 
@@ -37,7 +38,7 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
   private volatile int loadDataListIndex;
   @Nullable private volatile DataCacheGenerator sourceCacheGenerator;
   @Nullable private volatile Object dataToCache;
-  private volatile ModelLoader.LoadData<?> loadData;
+  @Nullable private volatile ModelLoader.LoadData<?> loadData;
   @Nullable private volatile DataCacheKey originalKey;
 
   SourceGenerator(DecodeHelper<?> helper, FetcherReadyCallback cb) {
@@ -92,23 +93,26 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
   }
 
   private void startNextLoad(final LoadData<?> toStart) {
-    loadData.fetcher.loadData(
-        helper.getPriority(),
-        new DataCallback<Object>() {
-          @Override
-          public void onDataReady(@Nullable Object data) {
-            if (isCurrentRequest(toStart)) {
-              onDataReadyInternal(toStart, data);
+    LoadData<?> local = loadData;
+    if (local != null) {
+      local.fetcher.loadData(
+          helper.getPriority(),
+          new DataCallback<Object>() {
+            @Override
+            public void onDataReady(Object data) {
+              if (isCurrentRequest(toStart)) {
+                onDataReadyInternal(toStart, data);
+              }
             }
-          }
 
-          @Override
-          public void onLoadFailed(@NonNull Exception e) {
-            if (isCurrentRequest(toStart)) {
-              onLoadFailedInternal(toStart, e);
+            @Override
+            public void onLoadFailed(@NonNull Exception e) {
+              if (isCurrentRequest(toStart)) {
+                onLoadFailedInternal(toStart, e);
+              }
             }
-          }
-        });
+          });
+    }
   }
 
   // We want reference equality explicitly to make sure we ignore results from old requests.
@@ -136,7 +140,12 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
       Object data = rewinder.rewindAndGet();
       Encoder<Object> encoder = helper.getSourceEncoder(data);
       DataCacheWriter<Object> writer = new DataCacheWriter<>(encoder, data, helper.getOptions());
-      DataCacheKey newOriginalKey = new DataCacheKey(loadData.sourceKey, helper.getSignature());
+      LoadData<?> localLoadData = loadData;
+      if (localLoadData == null) {
+        return false;
+      }
+      DataCacheKey newOriginalKey =
+          new DataCacheKey(Nullability.castToNonnull(loadData).sourceKey, helper.getSignature());
       DiskCache diskCache = helper.getDiskCache();
       diskCache.put(newOriginalKey, writer);
       if (Log.isLoggable(TAG, Log.VERBOSE)) {
@@ -156,7 +165,8 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
       if (diskCache.get(newOriginalKey) != null) {
         originalKey = newOriginalKey;
         sourceCacheGenerator =
-            new DataCacheGenerator(Collections.singletonList(loadData.sourceKey), helper, this);
+            new DataCacheGenerator(
+                Collections.singletonList(localLoadData.sourceKey), helper, this);
         // We were able to write the data to cache.
         return true;
       } else {
@@ -174,17 +184,20 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
 
         isLoadingFromSourceData = true;
         cb.onDataFetcherReady(
-            loadData.sourceKey,
+            localLoadData.sourceKey,
             rewinder.rewindAndGet(),
-            loadData.fetcher,
-            loadData.fetcher.getDataSource(),
-            loadData.sourceKey);
+            localLoadData.fetcher,
+            localLoadData.fetcher.getDataSource(),
+            localLoadData.sourceKey);
       }
       // We failed to write the data to cache.
       return false;
     } finally {
       if (!isLoadingFromSourceData) {
-        loadData.fetcher.cleanup();
+        LoadData<?> local = loadData;
+        if (local != null) {
+          Nullability.castToNonnull(loadData).fetcher.cleanup();
+        }
       }
     }
   }
@@ -240,12 +253,22 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
       @Nullable Key attemptedKey) {
     // This data fetcher will be loading from a File and provide the wrong data source, so override
     // with the data source of the original fetcher
-    cb.onDataFetcherReady(sourceKey, data, fetcher, loadData.fetcher.getDataSource(), sourceKey);
+    LoadData<?> local = loadData;
+    if (local != null) {
+      cb.onDataFetcherReady(
+          sourceKey,
+          data,
+          fetcher,
+          Nullability.castToNonnull(loadData).fetcher.getDataSource(),
+          sourceKey);
+    }
   }
 
   @Override
   public void onDataFetcherFailed(
       @Nullable Key sourceKey, Exception e, DataFetcher<?> fetcher, DataSource dataSource) {
-    cb.onDataFetcherFailed(sourceKey, e, fetcher, loadData.fetcher.getDataSource());
+    LoadData<?> local = loadData;
+    cb.onDataFetcherFailed(
+        sourceKey, e, fetcher, local != null ? local.fetcher.getDataSource() : null);
   }
 }
