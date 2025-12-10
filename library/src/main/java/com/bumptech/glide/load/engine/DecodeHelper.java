@@ -16,7 +16,6 @@ import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.load.model.ModelLoader.LoadData;
 import com.bumptech.glide.load.resource.UnitTransformation;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ final class DecodeHelper<Transcode> {
   private int height;
   private Class<?> resourceClass;
   private DecodeJob.DiskCacheProvider diskCacheProvider;
-  @Nullable private Options options;
+  private Options options;
   @Nullable private Map<Class<?>, Transformation<?>> transformations;
   private Class<Transcode> transcodeClass;
   private boolean isLoadDataSet;
@@ -112,7 +111,6 @@ final class DecodeHelper<Transcode> {
     return priority;
   }
 
-  @Nullable
   Options getOptions() {
     return options;
   }
@@ -219,8 +217,7 @@ final class DecodeHelper<Transcode> {
       //noinspection ForLoopReplaceableByForEach to improve perf
       for (int i = 0, size = modelLoaders.size(); i < size; i++) {
         ModelLoader<Object, ?> modelLoader = modelLoaders.get(i);
-        LoadData<?> current =
-            modelLoader.buildLoadData(model, width, height, Nullability.castToNonnull(options));
+        LoadData<?> current = modelLoader.buildLoadData(model, width, height, options);
         if (current != null) {
           loadData.add(current);
         }
