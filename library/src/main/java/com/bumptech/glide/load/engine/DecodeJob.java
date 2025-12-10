@@ -23,6 +23,7 @@ import com.bumptech.glide.util.pool.FactoryPools.Poolable;
 import com.bumptech.glide.util.pool.GlideTrace;
 import com.bumptech.glide.util.pool.StateVerifier;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -589,7 +590,9 @@ class DecodeJob<R>
     Resource<Z> transformed = decoded;
     if (dataSource != DataSource.RESOURCE_DISK_CACHE) {
       appliedTransformation = decodeHelper.getTransformation(resourceSubClass);
-      transformed = appliedTransformation.transform(glideContext, decoded, width, height);
+      transformed =
+          appliedTransformation.transform(
+              Nullability.castToNonnull(glideContext), decoded, width, height);
     }
     // TODO: Make this the responsibility of the Transformation.
     if (!decoded.equals(transformed)) {
