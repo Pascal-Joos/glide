@@ -109,7 +109,7 @@ final class ActiveResources {
     synchronized (this) {
       activeEngineResources.remove(ref.key);
 
-      if (!ref.isCacheable || ref.resource == null) {
+      if (!ref.isCacheable || ref.resource == null || listener == null) {
         return;
       }
     }
