@@ -197,7 +197,7 @@ final class DecodeHelper<Transcode> {
     return glideContext.getRegistry().getModelLoaders(file);
   }
 
-  boolean isSourceKey(Key key) {
+  boolean isSourceKey(@Nullable Key key) {
     List<LoadData<?>> loadData = getLoadData();
     //noinspection ForLoopReplaceableByForEach to improve perf
     for (int i = 0, size = loadData.size(); i < size; i++) {
