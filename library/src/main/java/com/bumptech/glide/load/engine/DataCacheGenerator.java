@@ -60,8 +60,9 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
         // and the actions it performs are much more expensive than a single allocation.
         @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
         Key originalKey = new DataCacheKey(sourceId, helper.getSignature());
-        cacheFile = helper.getDiskCache().get(originalKey);
-        if (cacheFile != null) {
+        File local = helper.getDiskCache().get(originalKey);
+        if (local != null) {
+          cacheFile = local;
           this.sourceKey = sourceId;
           modelLoaders = helper.getModelLoaders(cacheFile);
           modelLoaderIndex = 0;
@@ -72,9 +73,12 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
       boolean started = false;
       while (!started && hasNextModelLoader()) {
         ModelLoader<File, ?> modelLoader = modelLoaders.get(modelLoaderIndex++);
-        loadData =
-            modelLoader.buildLoadData(
-                cacheFile, helper.getWidth(), helper.getHeight(), helper.getOptions());
+        File local = cacheFile;
+        if (local != null) {
+          loadData =
+              modelLoader.buildLoadData(
+                  local, helper.getWidth(), helper.getHeight(), helper.getOptions());
+        }
         if (loadData != null && helper.hasLoadPath(loadData.fetcher.getDataClass())) {
           started = true;
           loadData.fetcher.loadData(helper.getPriority(), this);
@@ -100,11 +104,17 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
 
   @Override
   public void onDataReady(@Nullable Object data) {
-    cb.onDataFetcherReady(sourceKey, data, loadData.fetcher, DataSource.DATA_DISK_CACHE, sourceKey);
+    LoadData<?> local = loadData;
+    if (local != null) {
+      cb.onDataFetcherReady(sourceKey, data, local.fetcher, DataSource.DATA_DISK_CACHE, sourceKey);
+    }
   }
 
   @Override
   public void onLoadFailed(@NonNull Exception e) {
-    cb.onDataFetcherFailed(sourceKey, e, loadData.fetcher, DataSource.DATA_DISK_CACHE);
+    LoadData<?> local = loadData;
+    if (local != null) {
+      cb.onDataFetcherFailed(sourceKey, e, local.fetcher, DataSource.DATA_DISK_CACHE);
+    }
   }
 }
