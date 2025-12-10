@@ -23,6 +23,7 @@ import com.bumptech.glide.util.pool.FactoryPools.Poolable;
 import com.bumptech.glide.util.pool.GlideTrace;
 import com.bumptech.glide.util.pool.StateVerifier;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +107,7 @@ class DecodeJob<R>
       int order) {
     decodeHelper.init(
         glideContext,
-        model,
+        Nullability.castToNonnull(model),
         signature,
         width,
         height,
