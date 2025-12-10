@@ -5,7 +5,6 @@ import androidx.core.util.Pools.Pool;
 import com.bumptech.glide.load.Options;
 import com.bumptech.glide.load.data.DataRewinder;
 import com.bumptech.glide.util.Preconditions;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,7 +53,7 @@ public class LoadPath<Data, ResourceType, Transcode> {
       int height,
       DecodePath.DecodeCallback<ResourceType> decodeCallback)
       throws GlideException {
-    List<Throwable> throwables = Nullability.castToNonnull(listPool.acquire());
+    List<Throwable> throwables = Preconditions.checkNotNull(listPool.acquire());
     try {
       return loadWithExceptionList(rewinder, options, width, height, decodeCallback, throwables);
     } finally {
