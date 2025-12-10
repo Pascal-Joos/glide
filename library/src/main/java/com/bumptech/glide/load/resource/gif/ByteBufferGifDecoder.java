@@ -23,6 +23,7 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.UnitTransformation;
 import com.bumptech.glide.util.LogTime;
 import com.bumptech.glide.util.Util;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
@@ -78,7 +79,7 @@ public class ByteBufferGifDecoder implements ResourceDecoder<ByteBuffer, GifDraw
 
   @Override
   public boolean handles(@NonNull ByteBuffer source, @NonNull Options options) throws IOException {
-    return !options.get(GifOptions.DISABLE_ANIMATION)
+    return !Nullability.castToNonnull(options.get(GifOptions.DISABLE_ANIMATION))
         && ImageHeaderParserUtils.getType(parsers, source) == ImageType.GIF;
   }
 
