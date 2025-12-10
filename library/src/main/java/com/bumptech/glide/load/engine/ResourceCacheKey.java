@@ -16,7 +16,7 @@ final class ResourceCacheKey implements Key {
   private static final LruCache<Class<?>, byte[]> RESOURCE_CLASS_BYTES = new LruCache<>(50);
   private final ArrayPool arrayPool;
   private final Key sourceKey;
-  @Nullable private final Key signature;
+  private final Key signature;
   private final int width;
   private final int height;
   private final Class<?> decodedResourceClass;
@@ -51,7 +51,7 @@ final class ResourceCacheKey implements Key {
           && Util.bothNullOrEqual(transformation, other.transformation)
           && decodedResourceClass.equals(other.decodedResourceClass)
           && sourceKey.equals(other.sourceKey)
-          && (signature == null ? other.signature == null : signature.equals(other.signature))
+          && signature.equals(other.signature)
           && options.equals(other.options);
     }
     return false;
@@ -60,7 +60,7 @@ final class ResourceCacheKey implements Key {
   @Override
   public int hashCode() {
     int result = sourceKey.hashCode();
-    result = 31 * result + (signature == null ? 1 : signature.hashCode());
+    result = 31 * result + signature.hashCode();
     result = 31 * result + width;
     result = 31 * result + height;
     if (transformation != null) {
@@ -76,9 +76,7 @@ final class ResourceCacheKey implements Key {
   public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
     byte[] dimensions = arrayPool.getExact(8, byte[].class);
     ByteBuffer.wrap(dimensions).putInt(width).putInt(height).array();
-    if (signature != null) {
-      signature.updateDiskCacheKey(messageDigest);
-    }
+    signature.updateDiskCacheKey(messageDigest);
     sourceKey.updateDiskCacheKey(messageDigest);
     messageDigest.update(dimensions);
     if (transformation != null) {
