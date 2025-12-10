@@ -23,6 +23,7 @@ import com.bumptech.glide.util.pool.FactoryPools.Poolable;
 import com.bumptech.glide.util.pool.GlideTrace;
 import com.bumptech.glide.util.pool.StateVerifier;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -62,14 +63,14 @@ class DecodeJob<R>
   private Options options;
   private Callback<R> callback;
   private int order;
-  private Stage stage;
+  @Nullable private Stage stage;
   private RunReason runReason;
   private long startFetchTime;
   private boolean onlyRetrieveFromCache;
   @Nullable private Object model;
 
   @Nullable private Thread currentThread;
-  private Key currentSourceKey;
+  @Nullable private Key currentSourceKey;
   @Nullable private Key currentAttemptingKey;
   @Nullable private Object currentData;
   @Nullable private DataSource currentDataSource;
@@ -292,7 +293,7 @@ class DecodeJob<R>
 
   @Nullable
   private DataFetcherGenerator getNextGenerator() {
-    switch (stage) {
+    switch (Nullability.castToNonnull(stage)) {
       case RESOURCE_CACHE:
         return new ResourceCacheGenerator(decodeHelper, this);
       case DATA_CACHE:
@@ -313,7 +314,7 @@ class DecodeJob<R>
     while (!isCancelled
         && currentGenerator != null
         && !(isStarted = currentGenerator.startNext())) {
-      stage = getNextStage(stage);
+      stage = getNextStage(Nullability.castToNonnull(stage));
       currentGenerator = getNextGenerator();
 
       if (stage == Stage.SOURCE) {
@@ -607,7 +608,8 @@ class DecodeJob<R>
     }
 
     Resource<Z> result = transformed;
-    boolean isFromAlternateCacheKey = !decodeHelper.isSourceKey(currentSourceKey);
+    boolean isFromAlternateCacheKey =
+        !decodeHelper.isSourceKey(Nullability.castToNonnull(currentSourceKey));
     if (diskCacheStrategy.isResourceCacheable(
         isFromAlternateCacheKey, dataSource, encodeStrategy)) {
       if (encoder == null) {
@@ -616,13 +618,13 @@ class DecodeJob<R>
       final Key key;
       switch (encodeStrategy) {
         case SOURCE:
-          key = new DataCacheKey(currentSourceKey, signature);
+          key = new DataCacheKey(Nullability.castToNonnull(currentSourceKey), signature);
           break;
         case TRANSFORMED:
           key =
               new ResourceCacheKey(
                   decodeHelper.getArrayPool(),
-                  currentSourceKey,
+                  Nullability.castToNonnull(currentSourceKey),
                   signature,
                   width,
                   height,
