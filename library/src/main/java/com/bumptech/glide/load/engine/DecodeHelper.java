@@ -16,6 +16,7 @@ import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.load.model.ModelLoader.LoadData;
 import com.bumptech.glide.load.resource.UnitTransformation;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -213,11 +214,13 @@ final class DecodeHelper<Transcode> {
     if (!isLoadDataSet) {
       isLoadDataSet = true;
       loadData.clear();
-      List<ModelLoader<Object, ?>> modelLoaders = glideContext.getRegistry().getModelLoaders(model);
+      List<ModelLoader<Object, ?>> modelLoaders =
+          glideContext.getRegistry().getModelLoaders(Nullability.castToNonnull(model));
       //noinspection ForLoopReplaceableByForEach to improve perf
       for (int i = 0, size = modelLoaders.size(); i < size; i++) {
         ModelLoader<Object, ?> modelLoader = modelLoaders.get(i);
-        LoadData<?> current = modelLoader.buildLoadData(model, width, height, options);
+        LoadData<?> current =
+            modelLoader.buildLoadData(Nullability.castToNonnull(model), width, height, options);
         if (current != null) {
           loadData.add(current);
         }
