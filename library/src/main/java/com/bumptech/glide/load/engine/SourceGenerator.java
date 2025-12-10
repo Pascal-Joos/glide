@@ -14,6 +14,7 @@ import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.load.model.ModelLoader.LoadData;
 import com.bumptech.glide.util.LogTime;
 import com.bumptech.glide.util.Synthetic;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.util.Collections;
 
@@ -93,10 +94,10 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
 
   private void startNextLoad(final LoadData<?> toStart) {
     loadData.fetcher.loadData(
-        helper.getPriority(),
+        Nullability.castToNonnull(helper.getPriority()),
         new DataCallback<Object>() {
           @Override
-          public void onDataReady(@Nullable Object data) {
+          public void onDataReady(Object data) {
             if (isCurrentRequest(toStart)) {
               onDataReadyInternal(toStart, data);
             }
