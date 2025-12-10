@@ -1,0 +1,30 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based solely on the provided snippet:
+
+@Override
+public void onLoadFailed(@NonNull Exception e) {
+    cb.onDataFetcherFailed(sourceKey, e, loadData.fetcher, DataSource.DATA_DISK_CACHE);
+}
+
+we do not see:
+
+- where and how `loadData` is declared,
+- where and how `loadData` is initialized,
+- any control flow or lifecycle constraints that ensure `loadData` is non-null before onLoadFailed is called,
+- any annotations (e.g., @NonNull) on `loadData` or the containing field/parameter,
+- any preceding null checks on `loadData`.
+
+Because of this missing context, we cannot soundly conclude that `loadData` is never null at this call site, nor can we demonstrate a concrete path on which it must be null. Whether `loadData` can be null depends on external code: e.g., whether `onLoadFailed` is only ever invoked in states where `loadData` has been set, and whether any invariants or contracts guarantee that.
+
+Therefore, with the currently provided information, it is not possible to definitively determine if `loadData` can be null at this expression. Additional surrounding code and class context are required.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the declaration of loadData (field or local variable), including its type and any annotations (e.g., @NonNull/@Nullable).]]></request>
+        <request><![CDATA[Provide the enclosing class and the full method where onLoadFailed is implemented, including how and when onLoadFailed is registered or called.]]></request>
+        <request><![CDATA[Provide any initialization code or methods where loadData is assigned, and any control flow (state machine, callbacks) that lead to onLoadFailed being invoked.]]></request>
+    </requests>
+</response>
+```

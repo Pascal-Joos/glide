@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  void cancel() {
+      if (isDone()) {
+        return;
+      }
+
+      isCancelled = true;
+      decodeJob.cancel();
+      engineJobListener.onEngineJobCancelled(this, Nullability.castToNonnull(key));
+  }
+  ```
+    ]]>
+  </code>
+</response>

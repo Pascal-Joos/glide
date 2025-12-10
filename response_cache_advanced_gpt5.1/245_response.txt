@@ -1,0 +1,24 @@
+<response>
+  <reason><![CDATA[
+The return value of `drawable.getFirstFrame()` is exactly whatever is returned by `state.frameLoader.getFirstFrame()`:
+
+```java
+public Bitmap getFirstFrame() {
+    return state.frameLoader.getFirstFrame();
+}
+```
+
+There is no null-check, default value, or other logic in `GifDrawable.getFirstFrame()` itself. Whether the result is null depends entirely on the implementation of `frameLoader.getFirstFrame()` and any methods it may call. That implementation has not been provided.
+
+Without seeing the declaration and implementation of `frameLoader.getFirstFrame()`, we cannot determine if it is guaranteed to be non-null or if it can return null. The fact that callers immediately dereference the result (e.g., `drawable.getFirstFrame().prepareToDraw()` and `Nullability.castToNonnull(firstFrame)`) suggests the authors *expect* it to be non-null, but this is not a guarantee without the actual method definition.
+
+Therefore, to make a confident determination, we need the implementation of the following method:
+
+- `state.frameLoader.getFirstFrame()`
+
+]]></reason>
+  <success>false</success>
+  <methods>
+    <method>com.bumptech.glide.load.resource.gif.GifFrameLoader#getFirstFrame</method>
+  </methods>
+</response>

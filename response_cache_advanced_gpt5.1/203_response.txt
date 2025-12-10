@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    @Nullable
+    public V removeLast() {
+      final int valueSize = size();
+      if (values == null) {
+        return null;
+      }
+      return valueSize > 0 ? values.remove(valueSize - 1) : null;
+    }
+  ```
+    ]]>
+  </code>
+</response>

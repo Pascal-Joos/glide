@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  int getCurrentSize() {
+      int currentSize = 0;
+      for (Class<?> type : sortedSizes.keySet()) {
+        for (Integer size : sortedSizes.get(type).keySet()) {
+          ArrayAdapterInterface<?> adapter = getAdapterFromType(type);
+          currentSize += size * Nullability.castToNonnull(sortedSizes.get(type).get(size)) * adapter.getElementSizeInBytes();
+        }
+      }
+      return currentSize;
+  }
+  ```
+    ]]>
+  </code>
+</response>

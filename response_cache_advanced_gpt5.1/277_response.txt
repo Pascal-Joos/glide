@@ -1,0 +1,18 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the body of the method, the only dereference of `wrapped` is in `wrapped.mark(readLimit);`, and this call is guarded by an explicit null check:
+
+    if (wrapped != null) {
+        wrapped.mark(readLimit);
+    }
+
+On any execution path where the call `wrapped.mark(readLimit);` is actually reached, the condition `wrapped != null` must have evaluated to true. Therefore, at the point of dereference, `wrapped` cannot be null.
+
+Even if `wrapped` might be null at method entry or could become null along other code paths, the dereference in question is executed only when the runtime has just verified `wrapped` is non-null.
+
+Thus, the expression used at the dereference site (inside the `if` block) cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

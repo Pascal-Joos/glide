@@ -1,0 +1,10 @@
+```xml
+<response>
+    <reason><![CDATA[
+The method is explicitly annotated with @Initializer, and its behavior matches NullAway’s notion of an initializer method: it sets up a large number of fields in one shot and does not resemble a typical setter meant for repeated calls. Under NullAway’s definition, initializer methods are those that are guaranteed (by convention, framework, or annotation) to be called once during object setup before other methods, and whose field writes NullAway can trust without further verification.
+
+Given the presence of the @Initializer annotation and the fact that the method configures the core state of the object rather than updating a single property, it should be treated as an initializer method as defined above.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

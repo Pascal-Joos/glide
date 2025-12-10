@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @NonNull
+  @Override
+  public Z get() {
+    return toWrap == null ? null : toWrap.get();
+  }
+  ```
+    ]]>
+  </code>
+</response>

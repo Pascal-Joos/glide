@@ -1,0 +1,30 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shown method, there is no local assignment to `listener`, no null-check on `listener`, and no early return that depends on `listener` being non-null. The only control flow is:
+
+1. Enter synchronized block.
+2. Remove `ref.key` from `activeEngineResources`.
+3. If `!ref.isCacheable` OR `ref.resource == null`, return.
+4. Exit synchronized block.
+5. Construct `new EngineResource<>(..., listener)`.
+6. Call `listener.onResourceReleased(ref.key, newResource)`.
+
+None of these steps establish or verify that `listener` is non-null. The nullability of `listener` must therefore be determined by:
+
+- How the field/variable `listener` is declared (e.g., annotated with `@NonNull` / `@Nullable`),
+- How and where `listener` is initialized (e.g., via constructor injection),
+- Whether any part of the class ever assigns `null` to `listener`.
+
+Since this information is not present in the provided snippet, we cannot guarantee that `listener` is non-null at the call site. It is *possible* that, by design, the class ensures `listener` is always non-null (for example, it is a `final` field initialized in the constructor and never set to null), but that guarantee is not visible from this method alone.
+
+Therefore, based only on the given code, we cannot determine conclusively whether `listener` can be null.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[
+Provide the declaration of the `listener` field/variable (including any nullability annotations) and its initialization (e.g., constructor or setter code) so we can determine if it can ever be null at runtime.
+        ]]></request>
+    </requests>
+</response>
+```

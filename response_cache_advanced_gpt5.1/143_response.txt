@@ -1,0 +1,26 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the single method body provided, there is no visible initialization or null-check of `toEncode` before it is used in two places:
+
+1. It is passed as an argument to `new DataCacheWriter<>(encoder, toEncode, options)`.
+2. It is dereferenced in `toEncode.unlock()` in the `finally` block.
+
+The method itself does not assign `toEncode`, nor does it perform any null checks. Whether `toEncode` can be null depends entirely on:
+
+- How and where `toEncode` is declared (field, parameter, local) and initialized.
+- Whether the class or calling code guarantees that `toEncode` is non-null before `encode` is invoked.
+- Any invariants or contracts (e.g., constructor requirements) that ensure `toEncode` is always initialized to a non-null value.
+
+Since none of that surrounding context is provided, we cannot soundly conclude that `toEncode` is always non-null, nor that it can definitely be null. The method as shown does not itself prevent `toEncode` from being null.
+
+Therefore, with the given information alone, the nullability of `toEncode` at `toEncode.unlock();` cannot be determined.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show the declaration of `toEncode` (field/parameter/local) and its type.]]></request>
+        <request><![CDATA[Show the constructor(s) or any methods where `toEncode` is assigned before `encode` is called.]]></request>
+        <request><![CDATA[Provide any annotations or documentation about `toEncode` (e.g., @NonNull/@Nullable).]]></request>
+    </requests>
+</response>
+```

@@ -1,0 +1,25 @@
+<response>
+    <reason><![CDATA[
+The `runLoadPath` method is called only from `decodeFromFetcher` in the provided call chain:
+
+```java
+private <Data> Resource<R> decodeFromFetcher(Data data, DataSource dataSource)
+    throws GlideException {
+  LoadPath<Data, ?, R> path = decodeHelper.getLoadPath((Class<Data>) data.getClass());
+  return runLoadPath(data, dataSource, path);
+}
+```
+
+Here, `path` is assigned from `decodeHelper.getLoadPath(...)` and then passed directly to `runLoadPath` with no null-checks or substitution. Inside `runLoadPath`, `path` is used immediately:
+
+```java
+return path.load(
+    rewinder, options, width, height, new DecodeCallback<ResourceType>(dataSource));
+```
+
+There is no null-check on `path` before calling `path.load(...)`. If `path` were ever null, this would result in a `NullPointerException` at runtime. Given Glide is a widely used library and this is core decoding logic, such an unsafe dereference strongly indicates that, in practice, `decodeHelper.getLoadPath(...)` is expected to never return null for the code paths that reach `runLoadPath`.
+
+From the rest of the provided call chain (`decodeFromData` → `decodeFromFetcher` → `runLoadPath`), the only null-guard present is on `data`, not on `path`. There is no evidence anywhere in the chain that a null `LoadPath` is allowed or handled, and `runLoadPath` would crash if it were null. Therefore, based strictly on usage patterns in the shown call chain, `path` is treated as non-null and is not expected to be null in practice.
+    ]]></reason>
+    <value>NO</value>
+</response>

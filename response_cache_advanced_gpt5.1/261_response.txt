@@ -1,0 +1,24 @@
+```xml
+<response>
+    <reason><![CDATA[
+The provided code snippet only shows the use of the variable `wrapped`:
+
+  read = wrapped.read(buffer);
+
+but does not show where or how `wrapped` is declared, initialized, or validated. To determine whether `wrapped` can be null at this call site, we would need to know:
+
+- How `wrapped` is assigned (e.g., via constructor, setter, field initialization).
+- Whether there are any null checks on `wrapped` before this method is called.
+- Whether any framework or calling code guarantees that `wrapped` is never null.
+
+From the snippet alone, there is no information ensuring non-nullity (such as `Objects.requireNonNull(wrapped)` or explicit checks), nor any evidence that it might be null (such as a conditional assignment or optional-like usage). Because the nullability entirely depends on code and contracts not included in the snippet, it is not possible to conclude definitively if `wrapped` can or cannot be null at this line.
+
+Therefore, with the current information, the nullability of `wrapped` at `wrapped.read(buffer)` cannot be determined.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show where and how the `wrapped` variable is declared and initialized (e.g., the field declaration, constructor(s), and any setter methods).]]></request>
+        <request><![CDATA[Indicate whether any external framework, dependency injection container, or calling code guarantees a non-null `wrapped` (e.g., annotations like @NonNull, @NotNull, or DI configuration).]]></request>
+    </requests>
+</response>
+```

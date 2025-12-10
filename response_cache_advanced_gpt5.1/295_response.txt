@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public int read(byte[] buffer, int byteOffset, int byteCount) throws IOException {
+    try {
+      InputStream localWrapped = wrapped;
+      if (localWrapped == null) {
+        throw new IOException("Stream is closed");
+      }
+      return localWrapped.read(buffer, byteOffset, byteCount);
+    } catch (IOException e) {
+      exception = e;
+      throw e;
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

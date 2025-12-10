@@ -1,0 +1,27 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void startNextLoad(final LoadData<?> toStart) {
+      loadData.fetcher.loadData(
+          Nullability.castToNonnull(helper.getPriority()),
+          new DataCallback<Object>() {
+            @Override
+            public void onDataReady( Object data) {
+              if (isCurrentRequest(toStart)) {
+                onDataReadyInternal(toStart, data);
+              }
+            }
+
+            @Override
+            public void onLoadFailed(@NonNull Exception e) {
+              if (isCurrentRequest(toStart)) {
+                onLoadFailedInternal(toStart, e);
+              }
+            }
+          });
+  }
+  ```
+    ]]>
+  </code>
+</response>

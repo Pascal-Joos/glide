@@ -1,0 +1,35 @@
+```xml
+<response>
+    <reason><![CDATA[
+Only the single method body that uses `glideContext` is provided:
+
+    List<Class<?>> getRegisteredResourceClasses() {
+        return glideContext
+            .getRegistry()
+            .getRegisteredResourceClasses(model.getClass(), resourceClass, transcodeClass);
+    }
+
+From this snippet alone we cannot see:
+
+- Where or how `glideContext` is declared (field, parameter, local).
+- How/where it is initialized.
+- Whether there are prior null checks on `glideContext`.
+- Whether the constructor or factory methods that create the containing object (or method caller) guarantee `glideContext` is never null.
+- Any annotations (@NonNull/@Nullable) or framework contracts that might guarantee non-nullability.
+- The semantics of the type of `glideContext` and whether its API/contract forbids null instances in this context.
+
+Without the surrounding code (declaration, initialization, and usage patterns), there is no way to soundly conclude that `glideContext` is definitely non-null or definitely might be null. The method as shown simply dereferences `glideContext` with no local null check, which means:
+
+- If `glideContext` can ever be null according to the broader code, this line can throw a NullPointerException.
+- If `glideContext` is guaranteed to be non-null by construction or invariant, then it cannot be null here—but that guarantee is not visible in the snippet.
+
+Therefore, with the information given, the nullability of `glideContext` at this line cannot be determined.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the declaration of `glideContext` (its type, where it is defined: field/parameter/local) and any annotations on it (e.g., @NonNull/@Nullable).]]></request>
+        <request><![CDATA[Provide the class constructor(s) or factory methods showing how `glideContext` is initialized, including any null checks or invariants.]]></request>
+        <request><![CDATA[If `glideContext` is a parameter, show all call sites of `getRegisteredResourceClasses()` and any guarantees they provide about `glideContext` being non-null.]]></request>
+    </requests>
+</response>
+```

@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private synchronized void updateRequestOptions(@NonNull RequestOptions toUpdate) {
+      requestOptions = toUpdate.clone().autoClone().apply(requestOptions);
+  }
+  ```
+    ]]>
+  </code>
+</response>

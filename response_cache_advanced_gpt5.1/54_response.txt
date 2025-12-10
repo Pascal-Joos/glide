@@ -1,0 +1,28 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings({"WeakerAccess", "SynchronizeOnNonFinalField"})
+  @Synthetic
+  void cleanupActiveReference(@NonNull ResourceWeakReference ref) {
+    synchronized (this) {
+      activeEngineResources.remove(ref.key);
+
+      if (!ref.isCacheable || ref.resource == null || listener == null) {
+        return;
+      }
+    }
+
+    EngineResource<?> newResource =
+        new EngineResource<>(
+            ref.resource,
+            /* isMemoryCacheable= */ true,
+            /* isRecyclable= */ false,
+            ref.key,
+            listener);
+    listener.onResourceReleased(ref.key, newResource);
+  }
+  ```
+    ]]>
+  </code>
+</response>

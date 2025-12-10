@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  <Data> LoadPath<Data, ?, Transcode> getLoadPath(Class<Data> dataClass) {
+    return glideContext.getRegistry().getLoadPath(dataClass, Nullability.castToNonnull(resourceClass), transcodeClass);
+  }
+  ```
+    ]]>
+  </code>
+</response>

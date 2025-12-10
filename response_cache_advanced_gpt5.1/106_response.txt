@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
+    sourceKey.updateDiskCacheKey(messageDigest);
+    if (signature != null) {
+      signature.updateDiskCacheKey(messageDigest);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

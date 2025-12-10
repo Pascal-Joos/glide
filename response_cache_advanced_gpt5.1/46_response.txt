@@ -1,0 +1,37 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void write(@NonNull byte[] b, int initialOffset, int length) throws IOException {
+      int writtenSoFar = 0;
+      do {
+        int remainingToWrite = length - writtenSoFar;
+        int currentOffset = initialOffset + writtenSoFar;
+        // If we still need to write at least the buffer size worth of bytes, we might as well do so
+        // directly and avoid the overhead of copying to the buffer first.
+        if (buffer == null) {
+          out.write(b, currentOffset, remainingToWrite);
+          return;
+        }
+        if (index == 0 && remainingToWrite >= buffer.length) {
+          out.write(b, currentOffset, remainingToWrite);
+          return;
+        }
+  
+        byte[] localBuffer = buffer;
+        int remainingSpaceInBuffer = localBuffer.length - index;
+        int totalBytesToWriteToBuffer = Math.min(remainingToWrite, remainingSpaceInBuffer);
+  
+        System.arraycopy(b, currentOffset, localBuffer, index, totalBytesToWriteToBuffer);
+  
+        index += totalBytesToWriteToBuffer;
+        writtenSoFar += totalBytesToWriteToBuffer;
+  
+        maybeFlushBuffer();
+      } while (writtenSoFar < length);
+  }
+  ```
+    ]]>
+  </code>
+</response>

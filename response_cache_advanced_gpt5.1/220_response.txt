@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public int hashCode() {
+      int result = height;
+      result = 31 * result + width;
+      result = 31 * result + (model == null ? 1 : model.hashCode());
+      return result;
+}
+  ```
+    ]]>
+  </code>
+</response>

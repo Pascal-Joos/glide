@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public int getSize() {
+    return toWrap != null ? toWrap.getSize() : 0;
+  }
+  ```
+    ]]>
+  </code>
+</response>

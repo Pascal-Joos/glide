@@ -1,0 +1,75 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private boolean cacheData(Object dataToCache) throws IOException {
+            long startTime = LogTime.getLogTime();
+            boolean isLoadingFromSourceData = false;
+            try {
+              DataRewinder<Object> rewinder = helper.getRewinder(dataToCache);
+              Object data = rewinder.rewindAndGet();
+              Encoder<Object> encoder = helper.getSourceEncoder(data);
+              DataCacheWriter<Object> writer = new DataCacheWriter<>(encoder, data, helper.getOptions());
+              LoadData<?> localLoadData = loadData;
+              if (localLoadData == null) {
+                return false;
+              }
+              DataCacheKey newOriginalKey = new DataCacheKey(Nullability.castToNonnull(loadData).sourceKey, helper.getSignature());
+              DiskCache diskCache = helper.getDiskCache();
+              diskCache.put(newOriginalKey, writer);
+              if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                Log.v(
+                    TAG,
+                    "Finished encoding source to cache"
+                        + ", key: "
+                        + newOriginalKey
+                        + ", data: "
+                        + dataToCache
+                        + ", encoder: "
+                        + encoder
+                        + ", duration: "
+                        + LogTime.getElapsedMillis(startTime));
+              }
+        
+              if (diskCache.get(newOriginalKey) != null) {
+                originalKey = newOriginalKey;
+                sourceCacheGenerator =
+                    new DataCacheGenerator(Collections.singletonList(localLoadData.sourceKey), helper, this);
+                // We were able to write the data to cache.
+                return true;
+              } else {
+                if (Log.isLoggable(TAG, Log.DEBUG)) {
+                  Log.d(
+                      TAG,
+                      "Attempt to write: "
+                          + originalKey
+                          + ", data: "
+                          + dataToCache
+                          + " to the disk"
+                          + " cache failed, maybe the disk cache is disabled?"
+                          + " Trying to decode the data directly...");
+                }
+        
+                isLoadingFromSourceData = true;
+                cb.onDataFetcherReady(
+                    localLoadData.sourceKey,
+                    rewinder.rewindAndGet(),
+                    localLoadData.fetcher,
+                    localLoadData.fetcher.getDataSource(),
+                    localLoadData.sourceKey);
+              }
+              // We failed to write the data to cache.
+              return false;
+            } finally {
+              if (!isLoadingFromSourceData) {
+                LoadData<?> local = loadData;
+                if (local != null) {
+                  Nullability.castToNonnull(loadData).fetcher.cleanup();
+                }
+              }
+            }
+          }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public boolean handles(@NonNull ByteBuffer source, @NonNull Options options) throws IOException {
+    return !Nullability.castToNonnull(options.get(GifOptions.DISABLE_ANIMATION))
+        && ImageHeaderParserUtils.getType(parsers, source) == ImageType.GIF;
+  }
+  ```
+    ]]>
+  </code>
+</response>

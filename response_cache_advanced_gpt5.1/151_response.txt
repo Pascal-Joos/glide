@@ -1,0 +1,44 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings({
+      "WeakerAccess",
+      "PMD.AvoidInstantiatingObjectsInLoops",
+      "PMD.AccessorMethodGeneration"
+    })
+    @Synthetic
+    void notifyCallbacksOfException() {
+      ResourceCallbacksAndExecutors copy;
+      Key localKey;
+      synchronized (this) {
+        stateVerifier.throwIfRecycled();
+        if (isCancelled) {
+          release();
+          return;
+        } else if (cbs.isEmpty()) {
+          throw new IllegalStateException("Received an exception without any callbacks to notify");
+        } else if (hasLoadFailed) {
+          throw new IllegalStateException("Already failed once");
+        }
+        hasLoadFailed = true;
+
+        localKey = key;
+
+        copy = cbs.copy();
+        // One for each callback below, plus one for ourselves so that we finish if a callback runs on
+        // another thread before we finish scheduling all of them.
+        incrementPendingCallbacks(copy.size() + 1);
+      }
+
+      engineJobListener.onEngineJobComplete(this, Nullability.castToNonnull(localKey), /* resource= */ null);
+
+      for (ResourceCallbackAndExecutor entry : copy) {
+        entry.executor.execute(new CallLoadFailed(entry.cb));
+      }
+      decrementPendingCallbacks();
+  }
+  ```
+    ]]>
+  </code>
+</response>

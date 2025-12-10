@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void decrementBitmapOfSize(Integer size) {
+      Integer current = sortedSizes.get(size);
+      if (Nullability.castToNonnull(current) == 1) {
+        sortedSizes.remove(size);
+      } else {
+        sortedSizes.put(size, current - 1);
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

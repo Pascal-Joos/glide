@@ -1,0 +1,8 @@
+```xml
+<response>
+    <reason><![CDATA[
+According to the definition, initializer methods are lifecycle or setup methods that are expected to be called once as part of object construction, typically by a framework (e.g., onCreate, init). The provided method is named `setInputStream`, has a typical "setter" shape (void return, one parameter, assigning directly to a field), and can reasonably be called multiple times to change the wrapped stream. The description explicitly states that setter methods are NOT initializer methods, even if they initialize fields. Therefore, this method should be treated as a setter, not as an initializer method for NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

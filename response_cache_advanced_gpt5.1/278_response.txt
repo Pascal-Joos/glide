@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void mark(int readLimit) {
+    if (wrapped != null) {
+      Nullability.castToNonnull(wrapped).mark(readLimit);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

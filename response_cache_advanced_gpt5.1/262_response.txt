@@ -1,0 +1,25 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public int read(byte[] buffer) {
+    int read;
+    try {
+      InputStream localWrapped = wrapped;
+      if (localWrapped == null) {
+        exception = new IOException("InputStream is null");
+        read = -1;
+      } else {
+        read = localWrapped.read(buffer);
+      }
+    } catch (IOException e) {
+      exception = e;
+      read = -1;
+    }
+    return read;
+  }
+  ```
+    ]]>
+  </code>
+</response>

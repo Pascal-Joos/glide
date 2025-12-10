@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void initialize() {
+    if (drawable instanceof BitmapDrawable) {
+      ((BitmapDrawable) drawable).getBitmap().prepareToDraw();
+    } else if (drawable instanceof GifDrawable) {
+      Bitmap firstFrame = ((GifDrawable) drawable).getFirstFrame();
+      if (firstFrame != null) {
+        firstFrame.prepareToDraw();
+      }
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

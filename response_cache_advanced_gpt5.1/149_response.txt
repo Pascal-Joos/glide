@@ -1,0 +1,15 @@
+```xml
+<response>
+    <reason><![CDATA[
+This method behaves like a reusable "reset"/configuration method rather than a one-time lifecycle initializer:
+
+- It returns `this`, which is characteristic of builder-style or pooling/reuse patterns where the same instance can be reconfigured multiple times.
+- The method is `synchronized` and only sets configuration fields, which suggests it may be called whenever the job is (re)used, not strictly once during object creation.
+- There is no framework-lifecycle contract (like those for Activities, Servlets, Processors, etc.) indicating it will be called exactly once before any other method.
+- Its name (`init`) alone is not sufficient; per the definition, what matters is that the method is *guaranteed* to be called once as part of object initialization and before any other method. This guarantee is not evident here.
+
+Given the definition and examples, this method should be treated more like a configuration/setter method, not a lifecycle initializer that NullAway can safely trust for one-time initialization.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

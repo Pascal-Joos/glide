@@ -1,0 +1,26 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within Glide's public API and implementation, Glide.get(context) is guaranteed to return a non-null singleton instance once Glide is initialized, and it either:
+
+1. Returns an existing, already-initialized Glide singleton, or
+2. Synchronously initializes one and then returns it, or
+3. Throws an exception if initialization cannot be completed (e.g., misconfiguration).
+
+It does not return null in any of these cases.
+
+Specifically:
+- Glide.get(Context) is annotated @NonNull in Glide’s source.
+- Internally it holds a static Glide instance that is lazily initialized. Access is typically guarded by checks that either:
+  - return the existing instance, or
+  - initialize it and then return it.
+- Failure scenarios lead to an exception (IllegalStateException or similar) rather than a null return.
+
+Given normal, correct usage (a valid Android Context, Glide properly integrated), there is no code path where Glide.get(context) evaluates to null. If Glide cannot be created, the method fails by throwing, not by returning null.
+
+Therefore, under the method contract and library guarantees, Glide.get(context) cannot be null at the call site:
+    BitmapPool bitmapPool = Glide.get(context).getBitmapPool();
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

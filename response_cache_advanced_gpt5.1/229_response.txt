@@ -1,0 +1,25 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, there is no local assignment to `downsampleStrategy`; it is only received as a parameter:
+
+    DownsampleStrategy downsampleStrategy,
+
+There are also no null checks or defensive assignments for `downsampleStrategy` anywhere in the body of `calculateScaling`. The first dereference is:
+
+    final float exactScaleFactor =
+        downsampleStrategy.getScaleFactor(
+            orientedSourceWidth, orientedSourceHeight, targetWidth, targetHeight);
+
+This means:
+
+- If the caller passes `null` for `downsampleStrategy`, then at this line a `NullPointerException` will be thrown.
+- The method itself does not prevent this; it assumes `downsampleStrategy` is non-null.
+
+Whether `downsampleStrategy` *can* be null therefore depends entirely on the contract at the call site(s). From the code shown, there is no guarantee inside `calculateScaling` that `downsampleStrategy` is non-null; the method does not enforce or check it.
+
+Since the question is about *possibility*, and we are not given any external guarantees (e.g., annotations like `@NonNull` on the parameter, or proof that all callers pass a non-null instance), the conservative and technically correct conclusion is that `downsampleStrategy` can be null at that line, causing a potential NPE.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

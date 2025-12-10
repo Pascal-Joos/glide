@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public boolean markSupported() {
+    if (wrapped == null) {
+      return false;
+    }
+    return Nullability.castToNonnull(wrapped).markSupported();
+  }
+  ```
+    ]]>
+  </code>
+</response>

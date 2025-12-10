@@ -1,0 +1,35 @@
+<response>
+    <reason><![CDATA[
+In the provided call chain, `calculateScaling` is only called from `decodeFromWrappedStreams`, which in turn is only called from `decode`.
+
+In `decode`, the argument passed to `decodeFromWrappedStreams` for this parameter is:
+```java
+DownsampleStrategy downsampleStrategy = options.get(DownsampleStrategy.OPTION);
+...
+decodeFromWrappedStreams(
+    imageReader,
+    bitmapFactoryOptions,
+    downsampleStrategy,
+    ...
+);
+```
+
+So the nullability of `downsampleStrategy` in `calculateScaling` depends entirely on whether `options.get(DownsampleStrategy.OPTION)` can return `null`.
+
+Inside `calculateScaling`, `downsampleStrategy` is used immediately and repeatedly without any null checks:
+```java
+final float exactScaleFactor =
+    downsampleStrategy.getScaleFactor(...);
+
+SampleSizeRounding rounding =
+    downsampleStrategy.getSampleSizeRounding(...);
+```
+If `downsampleStrategy` were `null`, this would cause a `NullPointerException` on the first call. There is no defensive code path to handle `null`.
+
+Given that `calculateScaling` is core internal code in Glide's `Downsampler`, and it's called every time decoding is performed with downsampling, a null here would crash image loading. In practice, libraries do not leave such a central code path vulnerable unless the value is guaranteed to be non-null at all call sites.
+
+Thus, for the code to work reliably, `options.get(DownsampleStrategy.OPTION)` must always provide a non-null `DownsampleStrategy` in this context (likely via a default value in `Options`). Since `decode` passes that value straight through without modification or null checks, the effective contract at this usage site is that `downsampleStrategy` is never null.
+
+Therefore, based on usage, `downsampleStrategy` is not intended to be null and is treated as non-null throughout the call chain.]]></reason>
+    <value>NO</value>
+</response>

@@ -1,0 +1,47 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+RequestManager getOrCreate(
+      Context context,
+      Glide glide,
+      final Lifecycle lifecycle,
+      FragmentManager childFragmentManager,
+      boolean isParentVisible) {
+    Util.assertMainThread();
+    RequestManager result = getOnly(lifecycle);
+    if (result == null) {
+      LifecycleLifecycle glideLifecycle = new LifecycleLifecycle(lifecycle);
+      result =
+          factory.build(
+              Nullability.castToNonnull(glide),
+              glideLifecycle,
+              new SupportRequestManagerTreeNode(childFragmentManager),
+              context);
+      lifecycleToRequestManager.put(lifecycle, result);
+      glideLifecycle.addListener(
+          new LifecycleListener() {
+            @Override
+            public void onStart() {}
+
+            @Override
+            public void onStop() {}
+
+            @Override
+            public void onDestroy() {
+              lifecycleToRequestManager.remove(lifecycle);
+            }
+          });
+      // This is a bit of hack, we're going to start the RequestManager, but not the
+      // corresponding Lifecycle. It's safe to start the RequestManager, but starting the
+      // Lifecycle might trigger memory leaks. See b/154405040
+      if (isParentVisible) {
+        result.onStart();
+      }
+    }
+    return result;
+}
+  ```
+    ]]>
+  </code>
+</response>

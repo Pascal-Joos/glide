@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
+    byte[] dimensions = arrayPool.getExact(8, byte[].class);
+    ByteBuffer.wrap(dimensions).putInt(width).putInt(height).array();
+    if (signature != null) {
+      signature.updateDiskCacheKey(messageDigest);
+    }
+    sourceKey.updateDiskCacheKey(messageDigest);
+    messageDigest.update(dimensions);
+    if (transformation != null) {
+      transformation.updateDiskCacheKey(messageDigest);
+    }
+    options.updateDiskCacheKey(messageDigest);
+    messageDigest.update(getResourceClassBytes());
+    arrayPool.put(dimensions);
+  }
+  ```
+    ]]>
+  </code>
+</response>

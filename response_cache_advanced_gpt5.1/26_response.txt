@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+GifFrameLoader(
+      Glide glide,
+      GifDecoder gifDecoder,
+      int width,
+      int height,
+      Transformation<Bitmap> transformation,
+      Bitmap firstFrame) {
+    this(
+        Nullability.castToNonnull(glide).getBitmapPool(),
+        Glide.with(glide.getContext()),
+        gifDecoder,
+        null /*handler*/,
+        getRequestBuilder(Glide.with(glide.getContext()), width, height),
+        transformation,
+        firstFrame);
+}
+  ```
+    ]]>
+  </code>
+</response>

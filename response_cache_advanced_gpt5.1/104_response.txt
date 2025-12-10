@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public boolean equals( Object o) {
+    if (o instanceof DataCacheKey) {
+      DataCacheKey other = (DataCacheKey) o;
+      return sourceKey.equals(other.sourceKey)
+          && (signature == null ? other.signature == null : signature.equals(other.signature));
+    }
+    return false;
+  }
+  ```
+    ]]>
+  </code>
+</response>

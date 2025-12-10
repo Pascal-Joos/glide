@@ -1,0 +1,24 @@
+```xml
+<response>
+    <reason><![CDATA[Based solely on the provided method
+
+    Key getSignature() {
+        return signature;
+    }
+
+there is no information about:
+
+- How `signature` is declared (e.g., `final`, annotated `@NonNull`, initialized at declaration).
+- Where and how `signature` is assigned.
+- Whether any constructor or setter guarantees a non-null value.
+- Any external contracts or framework guarantees that `signature` is never null.
+
+Without visibility into the class fields, constructors, setters, and invariants, it is impossible to determine if `signature` might be null at the point of `return signature;`. Therefore, we cannot conclude that it is always non-null or that it can definitely be null.]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show the declaration of the `signature` field (including annotations and initial value, if any).]]></request>
+        <request><![CDATA[Show all constructors and methods that assign a value to `signature`.]]></request>
+        <request><![CDATA[Indicate whether there is any documented contract (e.g., Javadoc, framework constraints) that `signature` is always non-null.]]></request>
+    </requests>
+</response>
+```

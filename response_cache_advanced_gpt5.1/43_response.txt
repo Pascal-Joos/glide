@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void maybeFlushBuffer() throws IOException {
+    if (buffer != null && index == buffer.length) {
+      flushBuffer();
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

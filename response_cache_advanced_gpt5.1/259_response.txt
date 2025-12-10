@@ -1,0 +1,32 @@
+<response>
+    <reason><![CDATA[
+The constructor `FixedSizeDrawable(Drawable wrapped, int width, int height)` is only shown being called from `ThumbnailImageViewTarget.setResource`:
+
+```java
+Drawable result = getDrawable(resource);
+if (layoutParams != null && layoutParams.width > 0 && layoutParams.height > 0) {
+  result = new FixedSizeDrawable(result, layoutParams.width, layoutParams.height);
+}
+```
+
+Whether `wrapped` can be null depends entirely on whether `getDrawable(resource)` can return null. The provided code does not show the implementation or contract of `getDrawable(T resource)`. Without that, we cannot tell if `result` (and thus `wrapped`) might be null in some call paths.
+
+Moreover, inside the `FixedSizeDrawable` constructor:
+
+```java
+this(new State(wrapped.getConstantState(), width, height), wrapped);
+```
+
+`wrapped.getConstantState()` is invoked unconditionally. If `wrapped` were null at runtime, this would throw a `NullPointerException`. That strongly suggests that in practice callers are expected to provide a non-null `Drawable`. However, the question is about whether it *can* receive null based on usage, not whether it would crash.
+
+To determine this from actual usage patterns, we must know:
+
+- The declaration/implementation of `getDrawable(T resource)` in `ThumbnailImageViewTarget` (and any overrides in subclasses, if applicable).
+
+Because this key method is not provided, it’s impossible to definitively conclude that `wrapped` can never be null across the codebase.
+    ]]></reason>
+    <success>false</success>
+    <methods>
+      <method>com.bumptech.glide.request.target.ThumbnailImageViewTarget#getDrawable</method>
+    </methods>
+</response>

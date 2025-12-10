@@ -1,0 +1,41 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is:
+
+    Transformation<Z> result = (Transformation<Z>) transformations.get(resourceClass);
+
+Here, `transformations` is (by usage) a `Map<Class<?>, Transformation<?>>`.
+
+Key points:
+
+1. `Map.get(key)` can legally return `null` if:
+   - The key is not present in the map, or
+   - The key is present but its value is `null` (unless the map implementation forbids null values, which is not guaranteed by the code shown).
+
+2. Immediately after this line, the code checks:
+
+       if (result == null) {
+         for (Entry<Class<?>, Transformation<?>> entry : transformations.entrySet()) {
+           if (entry.getKey().isAssignableFrom(resourceClass)) {
+             result = (Transformation<Z>) entry.getValue();
+             break;
+           }
+         }
+       }
+
+   This shows that the author of the code explicitly expects `result` to be possibly `null` after the initial `get`.
+
+3. There is no prior guarantee in the method that:
+   - `transformations` always contains `resourceClass` as a key, or
+   - `transformations.get(resourceClass)` always returns a non-null value.
+
+4. The later logic handles the case where `result` is still `null` even after the fallback search, by either:
+   - Throwing an exception (if `transformations.isEmpty()` and `isTransformationRequired` are true), or
+   - Returning `UnitTransformation.get()` as a default.
+
+Therefore, on this specific line, the value returned by `transformations.get(resourceClass)` (and therefore assigned to `result`) can definitely be `null`. The remainder of the method is designed to handle this possibility, but the actual expression itself is not null-safe by construction and has no guarantee to be non-null at that point.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

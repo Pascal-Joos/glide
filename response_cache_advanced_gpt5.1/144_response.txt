@@ -1,0 +1,9 @@
+```xml
+<response>
+    <reason><![CDATA[
+The method is explicitly annotated with @Initializer, which is precisely the mechanism NullAway uses to mark custom initializer methods beyond its built-in framework patterns (like Activity.onCreate or Servlet.init). By design, such a method is intended to be called once during object setup, prior to other methods, and it assigns the key fields of the object (key, encoder, toEncode). It is not a general-purpose setter (no per-field setters, no indication it is meant to be called repeatedly), but a single setup routine.
+
+Given the annotation and its usage (assigning core fields in one shot), this method matches NullAway’s definition of an initializer method.]]></reason>
+    <value>YES</value>
+</response>
+```

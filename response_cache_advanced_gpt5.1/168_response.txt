@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public synchronized void recycle() {
+    stateVerifier.throwIfRecycled();
+
+    this.isRecycled = true;
+    if (!isLocked && toWrap != null) {
+      toWrap.recycle();
+      release();
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

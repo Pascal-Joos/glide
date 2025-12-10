@@ -1,0 +1,17 @@
+```xml
+<response>
+    <reason><![CDATA[
+This method does not match NullAway's definition of an initializer method. It is a callback (`onDataFetcherReady`) that is invoked as part of a data loading or fetching process, not a one-time object construction or framework lifecycle initialization hook like `onCreate` or `init`. 
+
+The method:
+- Sets several "current*" fields based on the newly fetched data, indicating it is updating per-operation or per-request state rather than establishing the object's invariant once at creation time.
+- Is plausibly called multiple times over the lifetime of the object (e.g., for different fetch attempts, different keys, or when rescheduling), which aligns more with a setter or operational callback than with a one-time initializer.
+- Also triggers further processing (`decodeFromRetrievedData`) rather than just establishing initial, global object state.
+
+NullAway's initializer methods are assumed to be called exactly once before any other regular methods and are usually well-known framework lifecycle methods or DI/annotation-processor init hooks. This method does not fit that pattern and instead behaves like a normal callback that may be invoked multiple times.
+
+Therefore, it should not be treated as an initializer method under NullAway's definition.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

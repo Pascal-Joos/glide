@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void initialize() {
+    Bitmap firstFrame = drawable.getFirstFrame();
+    if (firstFrame != null) {
+      firstFrame.prepareToDraw();
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

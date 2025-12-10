@@ -1,0 +1,22 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shown method body, there is no assignment to `resource`, no null-check on it, and no other control flow that would prevent `resource.recycle()` from being called when `isCancelled` is true.
+
+To determine whether `resource` can be null at that point, we must know how `resource` is initialized and what its lifecycle is in the enclosing class or method calls. The snippet does not show:
+
+- Where and how `resource` is set
+- Whether `resource` is guaranteed to be non-null before `notifyCallbacksOfResult()` is invoked
+- Any class invariants or contracts ensuring `resource` is always initialized
+
+Because of this missing context, we cannot rule out that `resource` might be null when `isCancelled` is true. If there exist call paths where `notifyCallbacksOfResult()` can be called before `resource` is initialized (or after it's cleared), then `resource` could indeed be null here. Conversely, if the class invariant or constructor logic ensures `resource` is always non-null whenever this method can be called, then `resource` would not be null.
+
+Since that information is not provided in the excerpt, a definitive determination cannot be made from this code alone.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show where and how the field/variable `resource` is declared and all assignments to it.]]></request>
+        <request><![CDATA[Show the code paths that invoke `notifyCallbacksOfResult()` and any conditions or invariants documented for `resource` (e.g., in constructor or class comments).]]></request>
+    </requests>
+</response>
+```

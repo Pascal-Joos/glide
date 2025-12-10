@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Deprecated
+  public static LazyBitmapDrawableResource obtain(Context context, Bitmap bitmap) {
+    return (LazyBitmapDrawableResource)
+        obtain(
+            context.getResources(),
+            BitmapResource.obtain(bitmap, Nullability.castToNonnull(Glide.get(context)).getBitmapPool()));
+  }
+  ```
+    ]]>
+  </code>
+</response>
