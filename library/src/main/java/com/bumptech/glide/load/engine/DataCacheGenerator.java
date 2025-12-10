@@ -65,6 +65,8 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
           this.sourceKey = sourceId;
           modelLoaders = helper.getModelLoaders(cacheFile);
           modelLoaderIndex = 0;
+        } else {
+          modelLoaders = null;
         }
       }
 
@@ -87,7 +89,7 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
   }
 
   private boolean hasNextModelLoader() {
-    return modelLoaderIndex < modelLoaders.size();
+    return modelLoaders != null && modelLoaderIndex < modelLoaders.size();
   }
 
   @Override
