@@ -70,7 +70,7 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
   @Synthetic
   EngineResource<?> engineResource;
 
-  private DecodeJob<R> decodeJob;
+  @Nullable private DecodeJob<R> decodeJob;
 
   // Checked primarily on the main thread, but also on other threads in reschedule.
   private volatile boolean isCancelled;
@@ -210,7 +210,9 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     }
 
     isCancelled = true;
-    decodeJob.cancel();
+    if (decodeJob != null) {
+      decodeJob.cancel();
+    }
     engineJobListener.onEngineJobCancelled(this, key);
   }
 
@@ -311,7 +313,9 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     isCancelled = false;
     hasResource = false;
     isLoadedFromAlternateCacheKey = false;
-    decodeJob.release(/* isRemovedFromQueue= */ false);
+    if (decodeJob != null) {
+      decodeJob.release(/* isRemovedFromQueue= */ false);
+    }
     decodeJob = null;
     exception = null;
     dataSource = null;
