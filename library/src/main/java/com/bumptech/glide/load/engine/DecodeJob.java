@@ -23,7 +23,6 @@ import com.bumptech.glide.util.pool.FactoryPools.Poolable;
 import com.bumptech.glide.util.pool.GlideTrace;
 import com.bumptech.glide.util.pool.StateVerifier;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +62,7 @@ class DecodeJob<R>
   private Options options;
   private Callback<R> callback;
   private int order;
-  @Nullable private Stage stage;
+  private Stage stage;
   private RunReason runReason;
   private long startFetchTime;
   private boolean onlyRetrieveFromCache;
@@ -293,7 +292,7 @@ class DecodeJob<R>
 
   @Nullable
   private DataFetcherGenerator getNextGenerator() {
-    switch (Nullability.castToNonnull(stage)) {
+    switch (stage) {
       case RESOURCE_CACHE:
         return new ResourceCacheGenerator(decodeHelper, this);
       case DATA_CACHE:
@@ -355,7 +354,7 @@ class DecodeJob<R>
     isCallbackNotified = true;
   }
 
-  private Stage getNextStage(@Nullable Stage current) {
+  private Stage getNextStage(Stage current) {
     switch (current) {
       case INITIALIZE:
         return diskCacheStrategy.decodeCachedResource()
