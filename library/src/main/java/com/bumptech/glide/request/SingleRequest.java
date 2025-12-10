@@ -24,6 +24,7 @@ import com.bumptech.glide.util.LogTime;
 import com.bumptech.glide.util.Util;
 import com.bumptech.glide.util.pool.GlideTrace;
 import com.bumptech.glide.util.pool.StateVerifier;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -699,7 +700,7 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
   private void onLoadFailed(@Nullable GlideException e, int maxLogLevel) {
     stateVerifier.throwIfRecycled();
     synchronized (requestLock) {
-      e.setOrigin(requestOrigin);
+      Nullability.castToNonnull(e).setOrigin(requestOrigin);
       int logLevel = glideContext.getLogLevel();
       if (logLevel <= maxLogLevel) {
         Log.w(
