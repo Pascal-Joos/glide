@@ -11,6 +11,7 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.util.Util;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
+import javax.annotation.Nullable;
 
 /**
  * A simple {@link com.bumptech.glide.load.Transformation} for transforming {@link
@@ -64,6 +65,7 @@ import java.security.MessageDigest;
  */
 public abstract class BitmapTransformation implements Transformation<Bitmap> {
 
+  @Nullable
   @NonNull
   @Override
   public final Resource<Bitmap> transform(
