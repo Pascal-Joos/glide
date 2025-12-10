@@ -36,6 +36,7 @@ import com.bumptech.glide.signature.EmptySignature;
 import com.bumptech.glide.util.CachedHashCodeArrayMap;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Util;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Map;
 
 /**
@@ -1219,7 +1220,7 @@ public abstract class BaseRequestOptions<T extends BaseRequestOptions<T>> implem
    * for equality.
    */
   public final boolean isEquivalentTo(@Nullable BaseRequestOptions<?> other) {
-    return Float.compare(other.sizeMultiplier, sizeMultiplier) == 0
+    return Float.compare(Nullability.castToNonnull(other).sizeMultiplier, sizeMultiplier) == 0
         && errorId == other.errorId
         && Util.bothNullOrEqual(errorPlaceholder, other.errorPlaceholder)
         && placeholderId == other.placeholderId
