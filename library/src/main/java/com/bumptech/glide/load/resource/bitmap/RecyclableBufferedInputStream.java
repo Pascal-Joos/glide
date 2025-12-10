@@ -103,11 +103,7 @@ public class RecyclableBufferedInputStream extends FilterInputStream {
   // Public API.
   @SuppressWarnings("WeakerAccess")
   public synchronized void fixMarkLimit() {
-    byte[] localBuf = buf;
-    if (localBuf == null) {
-      throw streamClosed();
-    }
-    marklimit = localBuf.length;
+    marklimit = buf.length;
   }
 
   public synchronized void release() {
