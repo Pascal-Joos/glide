@@ -2,7 +2,6 @@ package com.bumptech.glide.util;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Queue;
@@ -24,7 +23,7 @@ public class ExceptionCatchingInputStream extends InputStream {
 
   private static final Queue<ExceptionCatchingInputStream> QUEUE = Util.createQueue(0);
 
-  @Nullable private InputStream wrapped;
+  private InputStream wrapped;
   @Nullable private IOException exception;
 
   @NonNull
@@ -57,42 +56,29 @@ public class ExceptionCatchingInputStream extends InputStream {
 
   @Override
   public int available() throws IOException {
-    if (wrapped == null) {
-      return 0;
-    }
-    return Nullability.castToNonnull(wrapped).available();
+    return wrapped.available();
   }
 
   @Override
   public void close() throws IOException {
-    if (wrapped != null) {
-      Nullability.castToNonnull(wrapped).close();
-    }
+    wrapped.close();
   }
 
   @Override
   public void mark(int readLimit) {
-    if (wrapped != null) {
-      Nullability.castToNonnull(wrapped).mark(readLimit);
-    }
+    wrapped.mark(readLimit);
   }
 
   @Override
   public boolean markSupported() {
-    return wrapped != null && Nullability.castToNonnull(wrapped).markSupported();
+    return wrapped.markSupported();
   }
 
   @Override
   public int read(byte[] buffer) {
     int read;
     try {
-      InputStream localWrapped = wrapped;
-      if (localWrapped == null) {
-        exception = new IOException("InputStream is null");
-        read = -1;
-      } else {
-        read = localWrapped.read(buffer);
-      }
+      read = wrapped.read(buffer);
     } catch (IOException e) {
       exception = e;
       read = -1;
@@ -104,12 +90,7 @@ public class ExceptionCatchingInputStream extends InputStream {
   public int read(byte[] buffer, int byteOffset, int byteCount) {
     int read;
     try {
-      InputStream localWrapped = wrapped;
-      if (localWrapped == null) {
-        read = -1;
-      } else {
-        read = Nullability.castToNonnull(wrapped).read(buffer, byteOffset, byteCount);
-      }
+      read = wrapped.read(buffer, byteOffset, byteCount);
     } catch (IOException e) {
       exception = e;
       read = -1;
@@ -119,19 +100,14 @@ public class ExceptionCatchingInputStream extends InputStream {
 
   @Override
   public synchronized void reset() throws IOException {
-    if (wrapped != null) {
-      Nullability.castToNonnull(wrapped).reset();
-    }
+    wrapped.reset();
   }
 
   @Override
   public long skip(long byteCount) {
-    if (wrapped == null) {
-      return 0;
-    }
     long skipped;
     try {
-      skipped = Nullability.castToNonnull(wrapped).skip(byteCount);
+      skipped = wrapped.skip(byteCount);
     } catch (IOException e) {
       exception = e;
       skipped = 0;
@@ -143,13 +119,7 @@ public class ExceptionCatchingInputStream extends InputStream {
   public int read() {
     int result;
     try {
-      InputStream localWrapped = wrapped;
-      if (localWrapped == null) {
-        exception = new IOException("InputStream is null");
-        result = -1;
-      } else {
-        result = Nullability.castToNonnull(localWrapped).read();
-      }
+      result = wrapped.read();
     } catch (IOException e) {
       exception = e;
       result = -1;
