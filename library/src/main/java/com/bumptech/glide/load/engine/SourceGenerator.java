@@ -43,6 +43,7 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
   SourceGenerator(DecodeHelper<?> helper, FetcherReadyCallback cb) {
     this.helper = helper;
     this.cb = cb;
+    this.loadData = null;
   }
 
   // Concurrent access isn't supported.
