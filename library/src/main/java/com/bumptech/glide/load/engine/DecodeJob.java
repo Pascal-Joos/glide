@@ -88,7 +88,7 @@ class DecodeJob<R>
   @Initializer
   DecodeJob<R> init(
       GlideContext glideContext,
-      @Nullable Object model,
+      @Nullable @NonNull Object model,
       EngineKey loadKey,
       Key signature,
       int width,
