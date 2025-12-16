@@ -79,9 +79,11 @@ final class DecodeHelper<Transcode> {
   }
 
   void clear() {
+    glideContext = null;
     model = null;
     signature = null;
     resourceClass = null;
+    transcodeClass = null;
     options = null;
     priority = null;
     transformations = null;
