@@ -312,7 +312,6 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     hasResource = false;
     isLoadedFromAlternateCacheKey = false;
     decodeJob.release(/* isRemovedFromQueue= */ false);
-    decodeJob = null;
     exception = null;
     dataSource = null;
     pool.release(this);
