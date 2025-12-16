@@ -179,7 +179,7 @@ class DecodeJob<R>
     decodeHelper.clear();
     isCallbackNotified = false;
     glideContext = null;
-    signature = null;
+    signature = Key.EMPTY_SIGNATURE;
     options = null;
     priority = null;
     loadKey = null;
