@@ -134,6 +134,7 @@ public class ExceptionCatchingInputStream extends InputStream {
 
   public void release() {
     exception = null;
+    wrapped = null;
     synchronized (QUEUE) {
       QUEUE.offer(this);
     }
