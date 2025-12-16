@@ -208,7 +208,7 @@ class DecodeJob<R>
   }
 
   private int getPriority() {
-    return priority.ordinal();
+    return priority != null ? priority.ordinal() : 0;
   }
 
   public void cancel() {
