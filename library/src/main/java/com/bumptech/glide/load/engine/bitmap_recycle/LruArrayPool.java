@@ -208,21 +208,12 @@ public final class LruArrayPool implements ArrayPool {
   }
 
   // VisibleForTesting
-  // VisibleForTesting
   int getCurrentSize() {
     int currentSize = 0;
     for (Class<?> type : sortedSizes.keySet()) {
-      Map<Integer, Integer> sizesForType = sortedSizes.get(type);
-      if (sizesForType == null) {
-        continue;
-      }
-      for (Integer size : sizesForType.keySet()) {
-        Integer count = sizesForType.get(size);
-        if (count == null) {
-          continue;
-        }
+      for (Integer size : sortedSizes.get(type).keySet()) {
         ArrayAdapterInterface<?> adapter = getAdapterFromType(type);
-        currentSize += size * count * adapter.getElementSizeInBytes();
+        currentSize += size * sortedSizes.get(type).get(size) * adapter.getElementSizeInBytes();
       }
     }
     return currentSize;
