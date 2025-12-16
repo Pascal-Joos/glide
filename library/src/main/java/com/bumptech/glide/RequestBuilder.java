@@ -1117,7 +1117,7 @@ public class RequestBuilder<TranscodeType> extends BaseRequestOptions<RequestBui
             requestOptions,
             callbackExecutor);
 
-    if (errorRequestCoordinator == null) {
+    if (errorRequestCoordinator == null || errorBuilder == null) {
       return mainRequest;
     }
 
