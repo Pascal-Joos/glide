@@ -104,6 +104,8 @@ class DecodeJob<R>
       Options options,
       Callback<R> callback,
       int order) {
+    this.stage = null;
+    this.currentSourceKey = null;
     decodeHelper.init(
         glideContext,
         model,
