@@ -469,7 +469,7 @@ public final class Downsampler {
       ImageReader imageReader,
       DecodeCallbacks decodeCallbacks,
       BitmapPool bitmapPool,
-      @Nullable @NonNull DownsampleStrategy downsampleStrategy,
+      @Nullable DownsampleStrategy downsampleStrategy,
       int degreesToRotate,
       int sourceWidth,
       int sourceHeight,
