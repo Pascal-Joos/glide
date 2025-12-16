@@ -52,13 +52,7 @@ public final class ExceptionPassthroughInputStream extends InputStream {
   }
 
   ExceptionPassthroughInputStream() {
-    this.wrapped =
-        new InputStream() {
-          @Override
-          public int read() throws IOException {
-            throw new IOException("InputStream not initialized");
-          }
-        };
+    // Do nothing.
   }
 
   void setInputStream(@NonNull InputStream toWrap) {
