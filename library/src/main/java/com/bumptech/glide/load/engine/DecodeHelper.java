@@ -115,7 +115,11 @@ final class DecodeHelper<Transcode> {
     return options;
   }
 
+  @androidx.annotation.NonNull
   Key getSignature() {
+    if (signature == null) {
+      throw new NullPointerException("signature is null");
+    }
     return signature;
   }
 
