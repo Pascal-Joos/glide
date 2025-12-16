@@ -124,6 +124,11 @@ public class Glide implements ComponentCallbacks2 {
    *
    * @return the singleton
    */
+  /**
+   * Get the singleton.
+   *
+   * @return the singleton
+   */
   @NonNull
   // Double checked locking is safe here.
   @SuppressWarnings("GuardedBy")
@@ -136,6 +141,10 @@ public class Glide implements ComponentCallbacks2 {
           checkAndInitializeGlide(context, annotationGeneratedModule);
         }
       }
+    }
+
+    if (glide == null) {
+      throw new IllegalStateException("Glide must be initialized before calling get(context)");
     }
 
     return glide;
