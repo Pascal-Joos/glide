@@ -184,7 +184,7 @@ class DecodeJob<R>
     priority = null;
     loadKey = null;
     callback = null;
-    stage = Stage.INITIALIZE;
+    stage = null;
     currentGenerator = null;
     currentThread = null;
     currentSourceKey = null;
