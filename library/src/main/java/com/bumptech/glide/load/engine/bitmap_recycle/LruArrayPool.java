@@ -3,6 +3,7 @@ package com.bumptech.glide.load.engine.bitmap_recycle;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Synthetic;
 import java.util.HashMap;
 import java.util.Map;
@@ -151,15 +152,12 @@ public final class LruArrayPool implements ArrayPool {
   private void evictToSize(int size) {
     while (currentSize > size) {
       Object evicted = groupedMap.removeLast();
-      if (evicted == null) {
-        break;
-      }
+      Preconditions.checkNotNull(evicted);
       ArrayAdapterInterface<Object> arrayAdapter = getAdapterFromObject(evicted);
-      int arrayLength = arrayAdapter.getArrayLength(evicted);
-      currentSize -= arrayLength * arrayAdapter.getElementSizeInBytes();
-      decrementArrayOfSize(arrayLength, evicted.getClass());
+      currentSize -= arrayAdapter.getArrayLength(evicted) * arrayAdapter.getElementSizeInBytes();
+      decrementArrayOfSize(arrayAdapter.getArrayLength(evicted), evicted.getClass());
       if (Log.isLoggable(arrayAdapter.getTag(), Log.VERBOSE)) {
-        Log.v(arrayAdapter.getTag(), "evicted: " + arrayLength);
+        Log.v(arrayAdapter.getTag(), "evicted: " + arrayAdapter.getArrayLength(evicted));
       }
     }
   }
