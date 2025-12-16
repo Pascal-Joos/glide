@@ -430,7 +430,7 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
       // (b/136032534).
       synchronized (cb.getLock()) {
         synchronized (EngineJob.this) {
-          if (cbs.contains(cb) && engineResource != null) {
+          if (cbs.contains(cb)) {
             // Acquire for this particular callback.
             engineResource.acquire();
             callCallbackOnResourceReady(cb);
