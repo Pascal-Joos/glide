@@ -91,10 +91,8 @@ public final class DefaultOnHeaderDecodedListener implements OnHeaderDecodedList
       targetHeight = size.getHeight();
     }
 
-    DownsampleStrategy nonNullStrategy = strategy != null ? strategy : DownsampleStrategy.DEFAULT;
     float scaleFactor =
-        nonNullStrategy.getScaleFactor(
-            size.getWidth(), size.getHeight(), targetWidth, targetHeight);
+        strategy.getScaleFactor(size.getWidth(), size.getHeight(), targetWidth, targetHeight);
 
     int resizeWidth = Math.round(scaleFactor * size.getWidth());
     int resizeHeight = Math.round(scaleFactor * size.getHeight());
