@@ -256,11 +256,7 @@ public class RequestFutureTarget<R> implements FutureTarget<R>, RequestListener<
 
   @Override
   public synchronized boolean onResourceReady(
-      @NonNull R resource,
-      @NonNull Object model,
-      Target<R> target,
-      @NonNull DataSource dataSource,
-      boolean isFirstResource) {
+      R resource, Object model, Target<R> target, DataSource dataSource, boolean isFirstResource) {
     // We might get a null result.
     resultReceived = true;
     this.resource = resource;
