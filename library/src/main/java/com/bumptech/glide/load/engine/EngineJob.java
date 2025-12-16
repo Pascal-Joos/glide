@@ -304,10 +304,6 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
       throw new IllegalArgumentException();
     }
     cbs.clear();
-    decodeJob.release(/* isRemovedFromQueue= */ false);
-    decodeJob = null;
-    exception = null;
-    dataSource = null;
     key = null;
     engineResource = null;
     resource = null;
@@ -315,6 +311,10 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     isCancelled = false;
     hasResource = false;
     isLoadedFromAlternateCacheKey = false;
+    decodeJob.release(/* isRemovedFromQueue= */ false);
+    decodeJob = null;
+    exception = null;
+    dataSource = null;
     pool.release(this);
   }
 
