@@ -92,7 +92,9 @@ public class ModelCache<A, B> {
       return modelKey;
     }
 
-    private ModelKey() {}
+    private ModelKey() {
+      this.model = null;
+    }
 
     private void init(A model, int width, int height) {
       this.model = model;
