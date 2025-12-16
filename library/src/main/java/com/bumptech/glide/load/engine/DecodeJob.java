@@ -183,7 +183,6 @@ class DecodeJob<R>
     options = null;
     priority = null;
     loadKey = null;
-    callback = null;
     stage = null;
     currentGenerator = null;
     currentThread = null;
