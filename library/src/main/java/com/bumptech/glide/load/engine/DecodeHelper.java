@@ -100,7 +100,7 @@ final class DecodeHelper<Transcode> {
   }
 
   DiskCacheStrategy getDiskCacheStrategy() {
-    return diskCacheStrategy != null ? diskCacheStrategy : DiskCacheStrategy.AUTOMATIC;
+    return diskCacheStrategy;
   }
 
   <T> DataRewinder<T> getRewinder(T data) {
