@@ -31,16 +31,20 @@ public final class DrawableBytesTranscoder implements ResourceTranscoder<Drawabl
 
   @Nullable
   @Override
+  @NonNull
   public Resource<byte[]> transcode(
       @NonNull Resource<Drawable> toTranscode, @NonNull Options options) {
     Drawable drawable = toTranscode.get();
     if (drawable instanceof BitmapDrawable) {
-      return bitmapBytesTranscoder.transcode(
-          BitmapResource.obtain(((BitmapDrawable) drawable).getBitmap(), bitmapPool), options);
+      Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+      if (bitmap == null) {
+        throw new NullPointerException("BitmapDrawable contains null Bitmap");
+      }
+      return bitmapBytesTranscoder.transcode(BitmapResource.obtain(bitmap, bitmapPool), options);
     } else if (drawable instanceof GifDrawable) {
       return gifDrawableBytesTranscoder.transcode(toGifDrawableResource(toTranscode), options);
     }
-    return null;
+    throw new IllegalArgumentException("Unsupported Drawable type: " + drawable);
   }
 
   @SuppressWarnings("unchecked")
