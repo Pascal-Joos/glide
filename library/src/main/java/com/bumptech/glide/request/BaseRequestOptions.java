@@ -1219,9 +1219,6 @@ public abstract class BaseRequestOptions<T extends BaseRequestOptions<T>> implem
    * for equality.
    */
   public final boolean isEquivalentTo(@Nullable BaseRequestOptions<?> other) {
-    if (other == null) {
-      return false;
-    }
     return Float.compare(other.sizeMultiplier, sizeMultiplier) == 0
         && errorId == other.errorId
         && Util.bothNullOrEqual(errorPlaceholder, other.errorPlaceholder)
