@@ -187,7 +187,9 @@ class DecodeJob<R>
     stage = null;
     currentGenerator = null;
     currentThread = null;
-    currentSourceKey = null;
+    if (currentSourceKey != null) {
+      currentSourceKey = null;
+    }
     currentData = null;
     currentDataSource = null;
     currentFetcher = null;
