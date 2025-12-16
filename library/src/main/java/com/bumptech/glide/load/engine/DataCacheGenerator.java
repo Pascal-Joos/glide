@@ -60,11 +60,14 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
         // and the actions it performs are much more expensive than a single allocation.
         @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
         Key originalKey = new DataCacheKey(sourceId, helper.getSignature());
-        cacheFile = helper.getDiskCache().get(originalKey);
-        if (cacheFile != null) {
+        File localCacheFile = helper.getDiskCache().get(originalKey);
+        if (localCacheFile != null) {
+          cacheFile = localCacheFile;
           this.sourceKey = sourceId;
           modelLoaders = helper.getModelLoaders(cacheFile);
           modelLoaderIndex = 0;
+        } else {
+          cacheFile = null;
         }
       }
 
