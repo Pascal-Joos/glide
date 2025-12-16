@@ -160,7 +160,8 @@ final class DecodeHelper<Transcode> {
 
   @SuppressWarnings("unchecked")
   <Z> Transformation<Z> getTransformation(Class<Z> resourceClass) {
-    Transformation<Z> result = (Transformation<Z>) transformations.get(resourceClass);
+    Transformation<?> transformation = transformations.get(resourceClass);
+    Transformation<Z> result = transformation != null ? (Transformation<Z>) transformation : null;
     if (result == null) {
       for (Entry<Class<?>, Transformation<?>> entry : transformations.entrySet()) {
         if (entry.getKey().isAssignableFrom(resourceClass)) {
