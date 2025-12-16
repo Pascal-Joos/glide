@@ -69,7 +69,7 @@ final class SizeStrategy implements LruPoolStrategy {
 
   private void decrementBitmapOfSize(Integer size) {
     Integer current = sortedSizes.get(size);
-    if (current == 1) {
+    if (current == null || current == 1) {
       sortedSizes.remove(size);
     } else {
       sortedSizes.put(size, current - 1);
