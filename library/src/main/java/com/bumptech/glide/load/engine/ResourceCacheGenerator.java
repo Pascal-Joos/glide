@@ -88,29 +88,21 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
                 transformation,
                 resourceClass,
                 helper.getOptions());
-        File localCacheFile = helper.getDiskCache().get(currentKey);
-        if (localCacheFile != null) {
-          cacheFile = localCacheFile;
+        cacheFile = helper.getDiskCache().get(currentKey);
+        if (cacheFile != null) {
           sourceKey = sourceId;
           modelLoaders = helper.getModelLoaders(cacheFile);
           modelLoaderIndex = 0;
-        } else {
-          cacheFile = null;
         }
-      }
-
-      if (cacheFile == null) {
-        return false;
       }
 
       loadData = null;
       boolean started = false;
       while (!started && hasNextModelLoader()) {
         ModelLoader<File, ?> modelLoader = modelLoaders.get(modelLoaderIndex++);
-        File nonNullCacheFile = cacheFile;
         loadData =
             modelLoader.buildLoadData(
-                nonNullCacheFile, helper.getWidth(), helper.getHeight(), helper.getOptions());
+                cacheFile, helper.getWidth(), helper.getHeight(), helper.getOptions());
         if (loadData != null && helper.hasLoadPath(loadData.fetcher.getDataClass())) {
           started = true;
           loadData.fetcher.loadData(helper.getPriority(), this);
