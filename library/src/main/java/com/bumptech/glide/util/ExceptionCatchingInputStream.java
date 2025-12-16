@@ -47,13 +47,6 @@ public class ExceptionCatchingInputStream extends InputStream {
   }
 
   ExceptionCatchingInputStream() {
-    wrapped =
-        new InputStream() {
-          @Override
-          public int read() throws IOException {
-            return -1;
-          }
-        };
     // Do nothing.
   }
 
