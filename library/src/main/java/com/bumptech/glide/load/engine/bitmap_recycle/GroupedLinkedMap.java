@@ -67,8 +67,11 @@ class GroupedLinkedMap<K extends Poolable, V> {
         // arbitrarily large
         // sizes.
         removeEntry(last);
-        keyToEntry.remove(last.key);
-        last.key.offer();
+        K key = last.key;
+        keyToEntry.remove(key);
+        if (key != null) {
+          key.offer();
+        }
       }
 
       last = last.prev;
