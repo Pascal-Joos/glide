@@ -14,9 +14,6 @@ public final class IntegerArrayAdapter implements ArrayAdapterInterface<int[]> {
 
   @Override
   public int getArrayLength(@Nullable int[] array) {
-    if (array == null) {
-      return 0;
-    }
     return array.length;
   }
 
