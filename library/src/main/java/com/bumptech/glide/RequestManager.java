@@ -131,8 +131,14 @@ public class RequestManager
             context.getApplicationContext(),
             new RequestManagerConnectivityListener(requestTracker));
 
+    // Order matters, this might be unregistered by teh listeners below, so we need to be sure to
+    // register first to prevent both assertions and memory leaks.
     glide.registerRequestManager(this);
 
+    // If we're the application level request manager, we may be created on a background thread.
+    // In that case we cannot risk synchronously pausing or resuming requests, so we hack around the
+    // issue by delaying adding ourselves as a lifecycle listener by posting to the main thread.
+    // This should be entirely safe.
     if (Util.isOnBackgroundThread()) {
       Util.postOnUiThread(addSelfToLifecycle);
     } else {
@@ -142,8 +148,7 @@ public class RequestManager
 
     defaultRequestListeners =
         new CopyOnWriteArrayList<>(glide.getGlideContext().getDefaultRequestListeners());
-    requestOptions = glide.getGlideContext().getDefaultRequestOptions();
-    setRequestOptions(requestOptions);
+    setRequestOptions(glide.getGlideContext().getDefaultRequestOptions());
   }
 
   protected synchronized void setRequestOptions(@NonNull RequestOptions toSet) {
