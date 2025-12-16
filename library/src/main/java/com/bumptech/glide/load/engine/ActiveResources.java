@@ -106,14 +106,12 @@ final class ActiveResources {
   @SuppressWarnings({"WeakerAccess", "SynchronizeOnNonFinalField"})
   @Synthetic
   void cleanupActiveReference(@NonNull ResourceWeakReference ref) {
-    EngineResource.ResourceListener currentListener;
     synchronized (this) {
       activeEngineResources.remove(ref.key);
 
-      if (!ref.isCacheable || ref.resource == null || listener == null) {
+      if (!ref.isCacheable || ref.resource == null) {
         return;
       }
-      currentListener = listener;
     }
 
     EngineResource<?> newResource =
@@ -122,8 +120,8 @@ final class ActiveResources {
             /* isMemoryCacheable= */ true,
             /* isRecyclable= */ false,
             ref.key,
-            currentListener);
-    currentListener.onResourceReleased(ref.key, newResource);
+            listener);
+    listener.onResourceReleased(ref.key, newResource);
   }
 
   @SuppressWarnings("WeakerAccess")
