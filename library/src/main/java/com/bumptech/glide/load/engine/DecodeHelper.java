@@ -106,6 +106,9 @@ final class DecodeHelper<Transcode> {
   }
 
   Priority getPriority() {
+    if (priority == null) {
+      throw new IllegalStateException("priority is null");
+    }
     return priority;
   }
 
