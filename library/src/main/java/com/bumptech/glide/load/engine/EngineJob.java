@@ -300,7 +300,6 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
       throw new IllegalArgumentException();
     }
     cbs.clear();
-    key = null;
     engineResource = null;
     resource = null;
     hasLoadFailed = false;
