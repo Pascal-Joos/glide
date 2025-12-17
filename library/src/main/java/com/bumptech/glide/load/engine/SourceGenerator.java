@@ -77,7 +77,9 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
     }
     sourceCacheGenerator = null;
 
-    loadData = null;
+    if (loadData != null && loadDataListIndex > 0) {
+      loadData = helper.getLoadData().get(loadDataListIndex - 1);
+    }
     boolean started = false;
     while (!started && hasNextModelLoader()) {
       loadData = helper.getLoadData().get(loadDataListIndex++);
