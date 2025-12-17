@@ -506,7 +506,9 @@ class DecodeJob<R>
       }
       return result;
     } finally {
-      fetcher.cleanup();
+      if (fetcher != null) {
+        fetcher.cleanup();
+      }
     }
   }
 
