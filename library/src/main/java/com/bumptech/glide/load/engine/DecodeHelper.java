@@ -117,6 +117,9 @@ final class DecodeHelper<Transcode> {
   }
 
   Key getSignature() {
+    if (signature == null) {
+      throw new IllegalStateException("signature is null");
+    }
     return signature;
   }
 
