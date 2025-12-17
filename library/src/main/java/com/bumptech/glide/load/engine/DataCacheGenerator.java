@@ -108,6 +108,9 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
 
   @Override
   public void onLoadFailed(@NonNull Exception e) {
-    cb.onDataFetcherFailed(sourceKey, e, loadData.fetcher, DataSource.DATA_DISK_CACHE);
+    LoadData<?> local = loadData;
+    if (local != null) {
+      cb.onDataFetcherFailed(sourceKey, e, local.fetcher, DataSource.DATA_DISK_CACHE);
+    }
   }
 }
