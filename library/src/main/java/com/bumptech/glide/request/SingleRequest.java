@@ -699,7 +699,9 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
   private void onLoadFailed(@Nullable GlideException e, int maxLogLevel) {
     stateVerifier.throwIfRecycled();
     synchronized (requestLock) {
-      e.setOrigin(requestOrigin);
+      if (e != null) {
+        e.setOrigin(requestOrigin);
+      }
       int logLevel = glideContext.getLogLevel();
       if (logLevel <= maxLogLevel) {
         Log.w(
@@ -707,7 +709,9 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
             "Load failed for [" + model + "] with dimensions [" + width + "x" + height + "]",
             e);
         if (logLevel <= Log.INFO) {
-          e.logRootCauses(GLIDE_TAG);
+          if (e != null) {
+            e.logRootCauses(GLIDE_TAG);
+          }
         }
       }
 
