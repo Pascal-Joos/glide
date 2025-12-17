@@ -81,7 +81,6 @@ final class DecodeHelper<Transcode> {
   void clear() {
     model = null;
     signature = null;
-    transcodeClass = null;
     options = null;
     priority = null;
     transformations = null;
