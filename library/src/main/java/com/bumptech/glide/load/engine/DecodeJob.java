@@ -181,7 +181,6 @@ class DecodeJob<R>
     if (glideContext != null) {
       glideContext = glideContext;
     }
-    signature = null;
     options = null;
     priority = null;
     loadKey = null;
