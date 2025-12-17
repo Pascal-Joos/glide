@@ -65,12 +65,14 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
           this.sourceKey = sourceId;
           modelLoaders = helper.getModelLoaders(cacheFile);
           modelLoaderIndex = 0;
+        } else {
+          modelLoaders = null;
         }
       }
 
       loadData = null;
       boolean started = false;
-      while (!started && hasNextModelLoader()) {
+      while (!started && hasNextModelLoader() && cacheFile != null) {
         ModelLoader<File, ?> modelLoader = modelLoaders.get(modelLoaderIndex++);
         loadData =
             modelLoader.buildLoadData(
