@@ -238,9 +238,9 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     synchronized (this) {
       stateVerifier.throwIfRecycled();
       if (isCancelled) {
-        // TODO: Seems like we might as well put this in the memory cache instead of just recycling
-        // it since we've gotten this far...
-        resource.recycle();
+        if (resource != null) {
+          resource.recycle();
+        }
         release();
         return;
       } else if (cbs.isEmpty()) {
@@ -249,10 +249,6 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
         throw new IllegalStateException("Already have resource");
       }
       engineResource = engineResourceFactory.build(resource, isCacheable, key, resourceListener);
-      // Hold on to resource for duration of our callbacks below so we don't recycle it in the
-      // middle of notifying if it synchronously released by one of the callbacks. Acquire it under
-      // a lock here so that any newly added callback that executes before the next locked section
-      // below can't recycle the resource before we call the callbacks.
       hasResource = true;
       copy = cbs.copy();
       incrementPendingCallbacks(copy.size() + 1);
