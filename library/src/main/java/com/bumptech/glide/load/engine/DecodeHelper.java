@@ -95,6 +95,9 @@ final class DecodeHelper<Transcode> {
   }
 
   DiskCacheStrategy getDiskCacheStrategy() {
+    if (diskCacheStrategy == null) {
+      throw new IllegalStateException("diskCacheStrategy is null");
+    }
     return diskCacheStrategy;
   }
 
