@@ -739,7 +739,9 @@ class DecodeJob<R>
     void clear() {
       key = null;
       encoder = null;
-      toEncode = null;
+      if (toEncode != null) {
+        toEncode.unlock();
+      }
     }
   }
 
