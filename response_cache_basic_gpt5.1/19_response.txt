@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  DiskCacheStrategy getDiskCacheStrategy() {
+    return diskCacheStrategy != null ? diskCacheStrategy : DiskCacheStrategy.AUTOMATIC;
+  }
+  ```
+    ]]>
+  </code>
+</response>

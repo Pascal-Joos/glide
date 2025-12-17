@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  SourceGenerator(DecodeHelper<?> helper, FetcherReadyCallback cb) {
+    this.helper = helper;
+    this.cb = cb;
+    this.loadData = null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

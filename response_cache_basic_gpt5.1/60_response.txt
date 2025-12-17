@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public PreFillType remove() {
+    PreFillType result = keyList.get(keyIndex);
+
+    Integer countForResult = bitmapsPerType.get(result);
+    int nonNullCountForResult = countForResult == null ? 0 : countForResult;
+    if (nonNullCountForResult == 1) {
+      bitmapsPerType.remove(result);
+      keyList.remove(keyIndex);
+    } else {
+      bitmapsPerType.put(result, nonNullCountForResult - 1);
+    }
+    bitmapsRemaining--;
+
+    // Avoid divide by 0.
+    keyIndex = keyList.isEmpty() ? 0 : (keyIndex + 1) % keyList.size();
+
+    return result;
+  }
+  ```
+    ]]>
+  </code>
+</response>

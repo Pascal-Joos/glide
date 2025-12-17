@@ -1,0 +1,41 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @NonNull
+  @Override
+  public Resource<Drawable> transform(
+      @NonNull Context context, @NonNull Resource<Drawable> resource, int outWidth, int outHeight) {
+    BitmapPool bitmapPool = Glide.get(context).getBitmapPool();
+    Drawable drawable = resource.get();
+    Resource<Bitmap> bitmapResourceToTransform =
+        DrawableToBitmapConverter.convert(bitmapPool, drawable, outWidth, outHeight);
+    if (bitmapResourceToTransform == null) {
+      if (isRequired) {
+        throw new IllegalArgumentException("Unable to convert " + drawable + " to a Bitmap");
+      } else {
+        return resource;
+      }
+    }
+    Resource<Bitmap> transformedBitmapResource =
+        wrapped.transform(context, bitmapResourceToTransform, outWidth, outHeight);
+
+    if (transformedBitmapResource == null) {
+      return resource;
+    }
+
+    if (transformedBitmapResource.equals(bitmapResourceToTransform)) {
+      transformedBitmapResource.recycle();
+      return resource;
+    } else {
+      Resource<Drawable> drawableResource = newDrawableResource(context, transformedBitmapResource);
+      if (drawableResource == null) {
+        return resource;
+      }
+      return drawableResource;
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

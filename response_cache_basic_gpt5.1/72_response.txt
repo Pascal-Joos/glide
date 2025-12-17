@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  // Public API.
+  @SuppressWarnings("WeakerAccess")
+  public synchronized void fixMarkLimit() {
+    if (buf == null) {
+      return;
+    }
+    marklimit = buf.length;
+  }
+  ```
+    ]]>
+  </code>
+</response>

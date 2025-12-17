@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  ExceptionPassthroughInputStream() {
+    this.wrapped = new InputStream() {
+      @Override
+      public int read() throws IOException {
+        throw new IOException("InputStream not initialized");
+      }
+    };
+  }
+  ```
+    ]]>
+  </code>
+</response>

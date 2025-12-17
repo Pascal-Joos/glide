@@ -1,0 +1,31 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void releaseInternal() {
+    releaseManager.reset();
+    deferredEncodeManager.clear();
+    decodeHelper.clear();
+    isCallbackNotified = false;
+    glideContext = null;
+    signature = null;
+    options = null;
+    priority = null;
+    loadKey = null;
+    stage = null;
+    currentGenerator = null;
+    currentThread = null;
+    currentSourceKey = null;
+    currentData = null;
+    currentDataSource = null;
+    currentFetcher = null;
+    startFetchTime = 0L;
+    isCancelled = false;
+    model = null;
+    throwables.clear();
+    pool.release(this);
+  }
+  ```
+    ]]>
+  </code>
+</response>

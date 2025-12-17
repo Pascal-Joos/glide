@@ -1,0 +1,27 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  // VisibleForTesting
+  int getCurrentSize() {
+    int currentSize = 0;
+    for (Class<?> type : sortedSizes.keySet()) {
+      Map<Integer, Integer> sizesForType = sortedSizes.get(type);
+      if (sizesForType == null) {
+        continue;
+      }
+      for (Integer size : sizesForType.keySet()) {
+        Integer count = sizesForType.get(size);
+        if (count == null) {
+          continue;
+        }
+        ArrayAdapterInterface<?> adapter = getAdapterFromType(type);
+        currentSize += size * count * adapter.getElementSizeInBytes();
+      }
+    }
+    return currentSize;
+  }
+  ```
+    ]]>
+  </code>
+</response>

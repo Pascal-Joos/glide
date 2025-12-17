@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public int getArrayLength(@Nullable int[] array) {
+    if (array == null) {
+      return 0;
+    }
+    return array.length;
+  }
+  ```
+    ]]>
+  </code>
+</response>

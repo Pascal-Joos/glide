@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  void clear() {
+    model = null;
+    signature = null;
+    resourceClass = null;
+    options = null;
+    priority = null;
+    transformations = null;
+    diskCacheStrategy = null;
+
+    loadData.clear();
+    isLoadDataSet = false;
+    cacheKeys.clear();
+    isCacheKeysSet = false;
+  }
+  ```
+    ]]>
+  </code>
+</response>

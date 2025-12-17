@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void release() {
+    Preconditions.checkNotNull(toWrap);
+    POOL.release(this);
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  ExceptionCatchingInputStream() {
+    wrapped = new InputStream() {
+      @Override
+      public int read() throws IOException {
+        return -1;
+      }
+    };
+    // Do nothing.
+  }
+  ```
+    ]]>
+  </code>
+</response>

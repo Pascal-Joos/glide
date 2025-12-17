@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void evictToSize(int size) {
+    while (currentSize > size) {
+      Object evicted = groupedMap.removeLast();
+      if (evicted == null) {
+        break;
+      }
+      ArrayAdapterInterface<Object> arrayAdapter = getAdapterFromObject(evicted);
+      int arrayLength = arrayAdapter.getArrayLength(evicted);
+      currentSize -= arrayLength * arrayAdapter.getElementSizeInBytes();
+      decrementArrayOfSize(arrayLength, evicted.getClass());
+      if (Log.isLoggable(arrayAdapter.getTag(), Log.VERBOSE)) {
+        Log.v(arrayAdapter.getTag(), "evicted: " + arrayLength);
+      }
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

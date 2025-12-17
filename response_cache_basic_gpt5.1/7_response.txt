@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void release() {
+    if (buffer != null) {
+      arrayPool.put(buffer);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

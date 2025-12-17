@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private <Data, ResourceType> Resource<R> runLoadPath(
+      Data data, DataSource dataSource, LoadPath<Data, ResourceType, R> path)
+      throws GlideException {
+    if (path == null) {
+      throw new GlideException("LoadPath must not be null");
+    }
+    Options options = getOptionsWithHardwareConfig(dataSource);
+    DataRewinder<Data> rewinder = glideContext.getRegistry().getRewinder(data);
+    try {
+      // ResourceType in DecodeCallback below is required for compilation to work with gradle.
+      return path.load(
+          rewinder, options, width, height, new DecodeCallback<ResourceType>(dataSource));
+    } finally {
+      rewinder.cleanup();
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

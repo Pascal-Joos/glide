@@ -1,0 +1,25 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public LoadData<InputStream> buildLoadData(
+      @NonNull GlideUrl model, int width, int height, @NonNull Options options) {
+    // GlideUrls memoize parsed URLs so caching them saves a few object instantiations and time
+    // spent parsing urls.
+    GlideUrl url = model;
+    if (modelCache != null) {
+      url = modelCache.get(model, 0, 0);
+      if (url == null) {
+        modelCache.put(model, 0, 0, model);
+        url = model;
+      }
+    }
+    Integer timeoutValue = options.get(TIMEOUT);
+    int timeout = timeoutValue != null ? timeoutValue : 0;
+    return new LoadData<>(url, new HttpUrlFetcher(url, timeout));
+  }
+  ```
+    ]]>
+  </code>
+</response>

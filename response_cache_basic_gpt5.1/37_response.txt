@@ -1,0 +1,47 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings({
+    "WeakerAccess",
+    "PMD.AvoidInstantiatingObjectsInLoops",
+    "PMD.AccessorMethodGeneration"
+  })
+  @Synthetic
+  void notifyCallbacksOfResult() {
+    ResourceCallbacksAndExecutors copy;
+    Key localKey;
+    EngineResource<?> localResource;
+    synchronized (this) {
+      stateVerifier.throwIfRecycled();
+      if (isCancelled) {
+        if (resource != null) {
+          resource.recycle();
+        }
+        release();
+        return;
+      } else if (cbs.isEmpty()) {
+        throw new IllegalStateException("Received a resource without any callbacks to notify");
+      } else if (hasResource) {
+        throw new IllegalStateException("Already have resource");
+      }
+      engineResource = engineResourceFactory.build(resource, isCacheable, key, resourceListener);
+      hasResource = true;
+      copy = cbs.copy();
+      incrementPendingCallbacks(copy.size() + 1);
+
+      localKey = key;
+      localResource = engineResource;
+    }
+
+    engineJobListener.onEngineJobComplete(this, localKey, localResource);
+
+    for (final ResourceCallbackAndExecutor entry : copy) {
+      entry.executor.execute(new CallResourceReady(entry.cb));
+    }
+    decrementPendingCallbacks();
+  }
+  ```
+    ]]>
+  </code>
+</response>

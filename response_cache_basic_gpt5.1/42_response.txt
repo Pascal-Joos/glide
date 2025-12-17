@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings("WeakerAccess")
+  @Synthetic
+  LockedResource() {
+    this.toWrap = null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

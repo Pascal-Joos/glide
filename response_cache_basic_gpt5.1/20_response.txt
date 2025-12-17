@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  Priority getPriority() {
+    return priority == null ? Priority.NORMAL : priority;
+  }
+  ```
+    ]]>
+  </code>
+</response>

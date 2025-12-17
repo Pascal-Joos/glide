@@ -1,0 +1,33 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void onDataFetcherReady(
+      @NonNull Key sourceKey,
+      @NonNull Object data,
+      @NonNull DataFetcher<?> fetcher,
+      @NonNull DataSource dataSource,
+      @NonNull Key attemptedKey) {
+    this.currentSourceKey = sourceKey;
+    this.currentData = data;
+    this.currentFetcher = fetcher;
+    this.currentDataSource = dataSource;
+    this.currentAttemptingKey = attemptedKey;
+    this.isLoadingFromAlternateCacheKey = sourceKey != decodeHelper.getCacheKeys().get(0);
+
+    if (Thread.currentThread() != currentThread) {
+      reschedule(RunReason.DECODE_DATA);
+    } else {
+      GlideTrace.beginSection("DecodeJob.decodeFromRetrievedData");
+      try {
+        decodeFromRetrievedData();
+      } finally {
+        GlideTrace.endSection();
+      }
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    void clear() {
+      key = null;
+      encoder = null;
+      if (toEncode != null) {
+        toEncode.unlock();
+        toEncode = null;
+      }
+    }
+  ```
+    ]]>
+  </code>
+</response>

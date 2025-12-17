@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public V removeLast() {
+      final int valueSize = size();
+      if (valueSize == 0 || values == null) {
+        return null;
+      }
+      return values.remove(valueSize - 1);
+    }
+  ```
+    ]]>
+  </code>
+</response>

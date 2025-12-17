@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @androidx.annotation.NonNull
+  Key getSignature() {
+    if (signature == null) {
+      throw new NullPointerException("signature is null");
+    }
+    return signature;
+  }
+  ```
+    ]]>
+  </code>
+</response>

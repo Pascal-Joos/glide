@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private boolean isSkipMemoryCacheWithCompletePreviousRequest(
+      BaseRequestOptions<?> options, Request previous) {
+    return previous != null && !options.isMemoryCacheable() && previous.isComplete();
+  }
+  ```
+    ]]>
+  </code>
+</response>

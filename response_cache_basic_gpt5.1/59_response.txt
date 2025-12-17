@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public Resource<?> put(@NonNull Key key, Resource<?> resource) {
+    if (resource != null && listener != null) {
+      listener.onResourceRemoved(resource);
+    }
+    return null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings("unchecked")
+  private <T> ArrayAdapterInterface<T> getAdapterFromObject(T object) {
+    if (object == null) {
+      throw new IllegalArgumentException("object must not be null");
+    }
+    return (ArrayAdapterInterface<T>) getAdapterFromType(object.getClass());
+  }
+  ```
+    ]]>
+  </code>
+</response>

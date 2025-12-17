@@ -1,0 +1,41 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
+  RequestManager(
+      Glide glide,
+      Lifecycle lifecycle,
+      RequestManagerTreeNode treeNode,
+      RequestTracker requestTracker,
+      ConnectivityMonitorFactory factory,
+      Context context) {
+    this.glide = glide;
+    this.lifecycle = lifecycle;
+    this.treeNode = treeNode;
+    this.requestTracker = requestTracker;
+    this.context = context;
+
+    connectivityMonitor =
+        factory.build(
+            context.getApplicationContext(),
+            new RequestManagerConnectivityListener(requestTracker));
+
+    glide.registerRequestManager(this);
+
+    if (Util.isOnBackgroundThread()) {
+      Util.postOnUiThread(addSelfToLifecycle);
+    } else {
+      lifecycle.addListener(this);
+    }
+    lifecycle.addListener(connectivityMonitor);
+
+    defaultRequestListeners =
+        new CopyOnWriteArrayList<>(glide.getGlideContext().getDefaultRequestListeners());
+    requestOptions = glide.getGlideContext().getDefaultRequestOptions();
+    setRequestOptions(requestOptions);
+  }
+  ```
+    ]]>
+  </code>
+</response>
