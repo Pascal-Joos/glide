@@ -8,6 +8,7 @@ import android.util.Log;
 import com.bumptech.glide.disklrucache.DiskLruCache;
 import com.bumptech.glide.disklrucache.DiskLruCache.Value;
 import com.bumptech.glide.load.Key;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.File;
 import java.io.IOException;
 import javax.annotation.Nullable;
@@ -111,7 +112,7 @@ public class DiskLruCacheWrapper implements DiskCache {
   public void put(@Nullable Key key, Writer writer) {
     // We want to make sure that puts block so that data is available when put completes. We may
     // actually not write any data if we find that data is written by the time we acquire the lock.
-    String safeKey = safeKeyGenerator.getSafeKey(key);
+    String safeKey = safeKeyGenerator.getSafeKey(Nullability.castToNonnull(key));
     writeLocker.acquire(safeKey);
     try {
       if (Log.isLoggable(TAG, Log.VERBOSE)) {
