@@ -67,7 +67,7 @@ public class DecodePath<DataType, ResourceType, Transcode> {
   private Resource<ResourceType> decodeResource(
       DataRewinder<DataType> rewinder, int width, int height, @NonNull Options options)
       throws GlideException {
-    List<Throwable> exceptions = Preconditions.checkNotNull(listPool.acquire());
+    List<Throwable> exceptions = Preconditions.checkNotNull(listPool).acquire();
     try {
       return decodeResourceWithList(rewinder, width, height, options, exceptions);
     } finally {
