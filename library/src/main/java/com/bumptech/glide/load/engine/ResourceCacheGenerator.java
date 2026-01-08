@@ -8,6 +8,7 @@ import com.bumptech.glide.load.data.DataFetcher;
 import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.load.model.ModelLoader.LoadData;
 import com.bumptech.glide.util.pool.GlideTrace;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.File;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -105,7 +106,7 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
                 cacheFile, helper.getWidth(), helper.getHeight(), helper.getOptions());
         if (loadData != null && helper.hasLoadPath(loadData.fetcher.getDataClass())) {
           started = true;
-          loadData.fetcher.loadData(helper.getPriority(), this);
+          loadData.fetcher.loadData(Nullability.castToNonnull(helper.getPriority()), this);
         }
       }
 
