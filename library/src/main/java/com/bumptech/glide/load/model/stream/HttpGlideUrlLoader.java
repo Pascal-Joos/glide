@@ -10,6 +10,7 @@ import com.bumptech.glide.load.model.ModelCache;
 import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.load.model.ModelLoaderFactory;
 import com.bumptech.glide.load.model.MultiModelLoaderFactory;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.InputStream;
 
 /**
@@ -51,7 +52,7 @@ public class HttpGlideUrlLoader implements ModelLoader<GlideUrl, InputStream> {
         url = model;
       }
     }
-    int timeout = options.get(TIMEOUT);
+    int timeout = Nullability.castToNonnull(options.get(TIMEOUT));
     return new LoadData<>(url, new HttpUrlFetcher(url, timeout));
   }
 
