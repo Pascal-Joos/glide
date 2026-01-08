@@ -36,7 +36,6 @@ import com.bumptech.glide.signature.EmptySignature;
 import com.bumptech.glide.util.CachedHashCodeArrayMap;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Util;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Map;
 
 /**
@@ -1220,28 +1219,27 @@ public abstract class BaseRequestOptions<T extends BaseRequestOptions<T>> implem
    * for equality.
    */
   public final boolean isEquivalentTo(@Nullable BaseRequestOptions<?> other) {
-    BaseRequestOptions<?> nonNullOther = Nullability.castToNonnull(other);
-    return Float.compare(nonNullOther.sizeMultiplier, sizeMultiplier) == 0
-        && errorId == nonNullOther.errorId
-        && Util.bothNullOrEqual(errorPlaceholder, nonNullOther.errorPlaceholder)
-        && placeholderId == nonNullOther.placeholderId
-        && Util.bothNullOrEqual(placeholderDrawable, nonNullOther.placeholderDrawable)
-        && fallbackId == nonNullOther.fallbackId
-        && Util.bothNullOrEqual(fallbackDrawable, nonNullOther.fallbackDrawable)
-        && isCacheable == nonNullOther.isCacheable
-        && overrideHeight == nonNullOther.overrideHeight
-        && overrideWidth == nonNullOther.overrideWidth
-        && isTransformationRequired == nonNullOther.isTransformationRequired
-        && isTransformationAllowed == nonNullOther.isTransformationAllowed
-        && useUnlimitedSourceGeneratorsPool == nonNullOther.useUnlimitedSourceGeneratorsPool
-        && onlyRetrieveFromCache == nonNullOther.onlyRetrieveFromCache
-        && diskCacheStrategy.equals(nonNullOther.diskCacheStrategy)
-        && priority == nonNullOther.priority
-        && options.equals(nonNullOther.options)
-        && transformations.equals(nonNullOther.transformations)
-        && resourceClass.equals(nonNullOther.resourceClass)
-        && Util.bothNullOrEqual(signature, nonNullOther.signature)
-        && Util.bothNullOrEqual(theme, nonNullOther.theme);
+    return Float.compare(other.sizeMultiplier, sizeMultiplier) == 0
+        && errorId == other.errorId
+        && Util.bothNullOrEqual(errorPlaceholder, other.errorPlaceholder)
+        && placeholderId == other.placeholderId
+        && Util.bothNullOrEqual(placeholderDrawable, other.placeholderDrawable)
+        && fallbackId == other.fallbackId
+        && Util.bothNullOrEqual(fallbackDrawable, other.fallbackDrawable)
+        && isCacheable == other.isCacheable
+        && overrideHeight == other.overrideHeight
+        && overrideWidth == other.overrideWidth
+        && isTransformationRequired == other.isTransformationRequired
+        && isTransformationAllowed == other.isTransformationAllowed
+        && useUnlimitedSourceGeneratorsPool == other.useUnlimitedSourceGeneratorsPool
+        && onlyRetrieveFromCache == other.onlyRetrieveFromCache
+        && diskCacheStrategy.equals(other.diskCacheStrategy)
+        && priority == other.priority
+        && options.equals(other.options)
+        && transformations.equals(other.transformations)
+        && resourceClass.equals(other.resourceClass)
+        && Util.bothNullOrEqual(signature, other.signature)
+        && Util.bothNullOrEqual(theme, other.theme);
   }
 
   @Override
