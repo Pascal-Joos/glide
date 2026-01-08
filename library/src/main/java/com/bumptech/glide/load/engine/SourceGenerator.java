@@ -37,7 +37,7 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
   private volatile int loadDataListIndex;
   @Nullable private volatile DataCacheGenerator sourceCacheGenerator;
   @Nullable private volatile Object dataToCache;
-  @Nullable private volatile ModelLoader.LoadData<?> loadData;
+  private volatile ModelLoader.LoadData<?> loadData;
   @Nullable private volatile DataCacheKey originalKey;
 
   SourceGenerator(DecodeHelper<?> helper, FetcherReadyCallback cb) {
@@ -92,15 +92,11 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
   }
 
   private void startNextLoad(final LoadData<?> toStart) {
-    LoadData<?> local = loadData;
-    if (local == null) {
-      return;
-    }
-    local.fetcher.loadData(
+    loadData.fetcher.loadData(
         helper.getPriority(),
         new DataCallback<Object>() {
           @Override
-          public void onDataReady(Object data) {
+          public void onDataReady(@Nullable Object data) {
             if (isCurrentRequest(toStart)) {
               onDataReadyInternal(toStart, data);
             }
@@ -135,16 +131,12 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
   private boolean cacheData(Object dataToCache) throws IOException {
     long startTime = LogTime.getLogTime();
     boolean isLoadingFromSourceData = false;
-    LoadData<?> local = loadData;
-    if (local == null) {
-      return false;
-    }
     try {
       DataRewinder<Object> rewinder = helper.getRewinder(dataToCache);
       Object data = rewinder.rewindAndGet();
       Encoder<Object> encoder = helper.getSourceEncoder(data);
       DataCacheWriter<Object> writer = new DataCacheWriter<>(encoder, data, helper.getOptions());
-      DataCacheKey newOriginalKey = new DataCacheKey(local.sourceKey, helper.getSignature());
+      DataCacheKey newOriginalKey = new DataCacheKey(loadData.sourceKey, helper.getSignature());
       DiskCache diskCache = helper.getDiskCache();
       diskCache.put(newOriginalKey, writer);
       if (Log.isLoggable(TAG, Log.VERBOSE)) {
@@ -164,7 +156,7 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
       if (diskCache.get(newOriginalKey) != null) {
         originalKey = newOriginalKey;
         sourceCacheGenerator =
-            new DataCacheGenerator(Collections.singletonList(local.sourceKey), helper, this);
+            new DataCacheGenerator(Collections.singletonList(loadData.sourceKey), helper, this);
         // We were able to write the data to cache.
         return true;
       } else {
@@ -182,17 +174,17 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
 
         isLoadingFromSourceData = true;
         cb.onDataFetcherReady(
-            local.sourceKey,
+            loadData.sourceKey,
             rewinder.rewindAndGet(),
-            local.fetcher,
-            local.fetcher.getDataSource(),
-            local.sourceKey);
+            loadData.fetcher,
+            loadData.fetcher.getDataSource(),
+            loadData.sourceKey);
       }
       // We failed to write the data to cache.
       return false;
     } finally {
-      if (!isLoadingFromSourceData && local != null) {
-        local.fetcher.cleanup();
+      if (!isLoadingFromSourceData) {
+        loadData.fetcher.cleanup();
       }
     }
   }
@@ -246,17 +238,14 @@ class SourceGenerator implements DataFetcherGenerator, DataFetcherGenerator.Fetc
       DataFetcher<?> fetcher,
       DataSource dataSource,
       @Nullable Key attemptedKey) {
-    LoadData<?> local = loadData;
-    if (local != null) {
-      cb.onDataFetcherReady(sourceKey, data, fetcher, local.fetcher.getDataSource(), sourceKey);
-    }
+    // This data fetcher will be loading from a File and provide the wrong data source, so override
+    // with the data source of the original fetcher
+    cb.onDataFetcherReady(sourceKey, data, fetcher, loadData.fetcher.getDataSource(), sourceKey);
   }
 
   @Override
   public void onDataFetcherFailed(
       @Nullable Key sourceKey, Exception e, DataFetcher<?> fetcher, DataSource dataSource) {
-    LoadData<?> local = loadData;
-    cb.onDataFetcherFailed(
-        sourceKey, e, fetcher, local != null ? local.fetcher.getDataSource() : dataSource);
+    cb.onDataFetcherFailed(sourceKey, e, fetcher, loadData.fetcher.getDataSource());
   }
 }
