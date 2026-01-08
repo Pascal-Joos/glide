@@ -43,8 +43,7 @@ public class DrawableTransformation implements Transformation<Drawable> {
     return (Transformation<BitmapDrawable>) (Transformation<?>) this;
   }
 
-  @Nullable
-  @CheckForNull
+  @NonNull
   @Override
   public Resource<Drawable> transform(
       @NonNull Context context, @NonNull Resource<Drawable> resource, int outWidth, int outHeight) {
@@ -62,9 +61,7 @@ public class DrawableTransformation implements Transformation<Drawable> {
     Resource<Bitmap> transformedBitmapResource =
         wrapped.transform(context, bitmapResourceToTransform, outWidth, outHeight);
 
-    if (transformedBitmapResource == null) {
-      return null;
-    } else if (transformedBitmapResource.equals(bitmapResourceToTransform)) {
+    if (transformedBitmapResource.equals(bitmapResourceToTransform)) {
       transformedBitmapResource.recycle();
       return resource;
     } else {
