@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.load.engine.Resource;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
+import javax.annotation.Nullable;
 
 /**
  * A class for performing an arbitrary transformation on a resource that implements {@link
@@ -61,6 +62,7 @@ public interface Transformation<T> extends Key {
    *     height.
    * @return The transformed resource.
    */
+  @Nullable
   @NonNull
   Resource<T> transform(
       @NonNull Context context, @NonNull Resource<T> resource, int outWidth, int outHeight);
