@@ -3,7 +3,6 @@ package com.bumptech.glide.util;
 import androidx.annotation.GuardedBy;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Queue;
@@ -27,7 +26,7 @@ public final class ExceptionPassthroughInputStream extends InputStream {
   @GuardedBy("POOL")
   private static final Queue<ExceptionPassthroughInputStream> POOL = Util.createQueue(0);
 
-  @Nullable private InputStream wrapped;
+  private InputStream wrapped;
   @Nullable private IOException exception;
 
   @NonNull
@@ -62,36 +61,28 @@ public final class ExceptionPassthroughInputStream extends InputStream {
 
   @Override
   public int available() throws IOException {
-    return wrapped != null ? Nullability.castToNonnull(wrapped).available() : 0;
+    return wrapped.available();
   }
 
   @Override
   public void close() throws IOException {
-    if (wrapped != null) {
-      Nullability.castToNonnull(wrapped).close();
-    }
+    wrapped.close();
   }
 
   @Override
   public void mark(int readLimit) {
-    if (wrapped != null) {
-      Nullability.castToNonnull(wrapped).mark(readLimit);
-    }
+    wrapped.mark(readLimit);
   }
 
   @Override
   public boolean markSupported() {
-    return Nullability.castToNonnull(wrapped).markSupported();
+    return wrapped.markSupported();
   }
 
   @Override
   public int read() throws IOException {
-    InputStream localWrapped = wrapped;
-    if (localWrapped == null) {
-      throw new IOException("Stream closed");
-    }
     try {
-      return localWrapped.read();
+      return wrapped.read();
     } catch (IOException e) {
       exception = e;
       throw e;
@@ -100,9 +91,6 @@ public final class ExceptionPassthroughInputStream extends InputStream {
 
   @Override
   public int read(byte[] buffer) throws IOException {
-    if (wrapped == null) {
-      throw new IOException("Stream is closed");
-    }
     try {
       return wrapped.read(buffer);
     } catch (IOException e) {
@@ -114,7 +102,7 @@ public final class ExceptionPassthroughInputStream extends InputStream {
   @Override
   public int read(byte[] buffer, int byteOffset, int byteCount) throws IOException {
     try {
-      return getWrapped().read(buffer, byteOffset, byteCount);
+      return wrapped.read(buffer, byteOffset, byteCount);
     } catch (IOException e) {
       exception = e;
       throw e;
@@ -123,16 +111,11 @@ public final class ExceptionPassthroughInputStream extends InputStream {
 
   @Override
   public synchronized void reset() throws IOException {
-    if (wrapped != null) {
-      wrapped.reset();
-    }
+    wrapped.reset();
   }
 
   @Override
   public long skip(long byteCount) throws IOException {
-    if (wrapped == null) {
-      throw new IOException("Stream is closed");
-    }
     try {
       return wrapped.skip(byteCount);
     } catch (IOException e) {
