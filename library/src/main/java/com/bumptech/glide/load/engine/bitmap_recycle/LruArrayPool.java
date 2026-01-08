@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Synthetic;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -156,9 +155,7 @@ public final class LruArrayPool implements ArrayPool {
       Preconditions.checkNotNull(evicted);
       ArrayAdapterInterface<Object> arrayAdapter = getAdapterFromObject(evicted);
       currentSize -= arrayAdapter.getArrayLength(evicted) * arrayAdapter.getElementSizeInBytes();
-      decrementArrayOfSize(
-          arrayAdapter.getArrayLength(Nullability.castToNonnull(evicted)),
-          Nullability.castToNonnull(evicted).getClass());
+      decrementArrayOfSize(arrayAdapter.getArrayLength(evicted), evicted.getClass());
       if (Log.isLoggable(arrayAdapter.getTag(), Log.VERBOSE)) {
         Log.v(arrayAdapter.getTag(), "evicted: " + arrayAdapter.getArrayLength(evicted));
       }
