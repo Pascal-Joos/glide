@@ -70,7 +70,7 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
 
       loadData = null;
       boolean started = false;
-      while (!started && hasNextModelLoader()) {
+      while (!started && hasNextModelLoader() && cacheFile != null) {
         ModelLoader<File, ?> modelLoader = modelLoaders.get(modelLoaderIndex++);
         loadData =
             modelLoader.buildLoadData(
@@ -87,7 +87,7 @@ class DataCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCallba
   }
 
   private boolean hasNextModelLoader() {
-    return modelLoaderIndex < modelLoaders.size();
+    return modelLoaders != null && modelLoaderIndex < modelLoaders.size();
   }
 
   @Override
