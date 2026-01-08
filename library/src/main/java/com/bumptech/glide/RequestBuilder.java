@@ -38,6 +38,7 @@ import com.bumptech.glide.signature.AndroidResourceSignature;
 import com.bumptech.glide.util.Executors;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Util;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -849,7 +850,7 @@ public class RequestBuilder<TranscodeType> extends BaseRequestOptions<RequestBui
         // Use the previous request rather than the new one to allow for optimizations like skipping
         // setting placeholders, tracking and un-tracking Targets, and obtaining View dimensions
         // that are done in the individual Request.
-        previous.begin();
+        Nullability.castToNonnull(previous).begin();
       }
       return target;
     }
