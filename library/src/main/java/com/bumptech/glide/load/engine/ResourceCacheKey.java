@@ -26,7 +26,7 @@ final class ResourceCacheKey implements Key {
   ResourceCacheKey(
       ArrayPool arrayPool,
       Key sourceKey,
-      @Nullable Key signature,
+      Key signature,
       int width,
       int height,
       @Nullable Transformation<?> appliedTransformation,

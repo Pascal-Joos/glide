@@ -53,7 +53,7 @@ class DecodeJob<R>
   private final ReleaseManager releaseManager = new ReleaseManager();
 
   private GlideContext glideContext;
-  @Nullable private Key signature;
+  private Key signature;
   @Nullable private Priority priority;
   @Nullable private EngineKey loadKey;
   private int width;
