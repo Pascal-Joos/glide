@@ -151,11 +151,7 @@ final class DecodeHelper<Transcode> {
 
   @Nullable
   <Data> LoadPath<Data, ?, Transcode> getLoadPath(Class<Data> dataClass) {
-    GlideContext localGlideContext = glideContext;
-    if (localGlideContext == null) {
-      return null;
-    }
-    return localGlideContext.getRegistry().getLoadPath(dataClass, resourceClass, transcodeClass);
+    return glideContext.getRegistry().getLoadPath(dataClass, resourceClass, transcodeClass);
   }
 
   boolean isScaleOnlyOrNoTransform() {
