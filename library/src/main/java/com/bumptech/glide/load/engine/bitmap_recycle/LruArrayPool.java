@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Synthetic;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -187,7 +188,8 @@ public final class LruArrayPool implements ArrayPool {
 
   @SuppressWarnings("unchecked")
   private <T> ArrayAdapterInterface<T> getAdapterFromObject(@Nullable T object) {
-    return (ArrayAdapterInterface<T>) getAdapterFromType(object.getClass());
+    return (ArrayAdapterInterface<T>)
+        getAdapterFromType(Nullability.castToNonnull(object).getClass());
   }
 
   @SuppressWarnings("unchecked")
