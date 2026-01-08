@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Synthetic;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -33,9 +32,7 @@ public class FixedSizeDrawable extends Drawable {
   // Public API.
   @SuppressWarnings("WeakerAccess")
   public FixedSizeDrawable(@Nullable Drawable wrapped, int width, int height) {
-    this(
-        new State(Nullability.castToNonnull(wrapped).getConstantState(), width, height),
-        Nullability.castToNonnull(wrapped));
+    this(new State(wrapped.getConstantState(), width, height), wrapped);
   }
 
   FixedSizeDrawable(State state, Drawable wrapped) {
