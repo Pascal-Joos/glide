@@ -24,7 +24,6 @@ import com.bumptech.glide.util.LogTime;
 import com.bumptech.glide.util.Util;
 import com.bumptech.glide.util.pool.GlideTrace;
 import com.bumptech.glide.util.pool.StateVerifier;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -700,15 +699,15 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
   private void onLoadFailed(@Nullable GlideException e, int maxLogLevel) {
     stateVerifier.throwIfRecycled();
     synchronized (requestLock) {
-      Nullability.castToNonnull(e).setOrigin(requestOrigin);
+      e.setOrigin(requestOrigin);
       int logLevel = glideContext.getLogLevel();
       if (logLevel <= maxLogLevel) {
         Log.w(
             GLIDE_TAG,
             "Load failed for [" + model + "] with dimensions [" + width + "x" + height + "]",
-            Nullability.castToNonnull(e));
+            e);
         if (logLevel <= Log.INFO) {
-          Nullability.castToNonnull(e).logRootCauses(GLIDE_TAG);
+          e.logRootCauses(GLIDE_TAG);
         }
       }
 
@@ -724,14 +723,12 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
         if (requestListeners != null) {
           for (RequestListener<R> listener : requestListeners) {
             anyListenerHandledUpdatingTarget |=
-                listener.onLoadFailed(
-                    Nullability.castToNonnull(e), model, target, isFirstReadyResource());
+                listener.onLoadFailed(e, model, target, isFirstReadyResource());
           }
         }
         anyListenerHandledUpdatingTarget |=
             targetListener != null
-                && targetListener.onLoadFailed(
-                    Nullability.castToNonnull(e), model, target, isFirstReadyResource());
+                && targetListener.onLoadFailed(e, model, target, isFirstReadyResource());
 
         if (!anyListenerHandledUpdatingTarget) {
           setErrorPlaceholder();
