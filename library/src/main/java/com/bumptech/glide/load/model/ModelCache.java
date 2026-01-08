@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import com.bumptech.glide.util.LruCache;
 import com.bumptech.glide.util.Util;
+import com.uber.nullaway.annotations.Initializer;
 import java.util.Queue;
 
 /**
@@ -76,6 +77,8 @@ public class ModelCache<A, B> {
 
     private int height;
     private int width;
+
+    @SuppressWarnings("NullAway.Init")
     private A model;
 
     @SuppressWarnings("unchecked")
@@ -94,6 +97,7 @@ public class ModelCache<A, B> {
 
     private ModelKey() {}
 
+    @Initializer
     private void init(A model, int width, int height) {
       this.model = model;
       this.width = width;
