@@ -20,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.Downsampler;
 import com.bumptech.glide.load.resource.bitmap.HardwareConfigState;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.util.Synthetic;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -50,7 +51,7 @@ public final class DefaultOnHeaderDecodedListener implements OnHeaderDecodedList
     decodeFormat = options.get(Downsampler.DECODE_FORMAT);
     strategy = options.get(DownsampleStrategy.OPTION);
     isHardwareConfigAllowed =
-        options.get(Downsampler.ALLOW_HARDWARE_CONFIG) != null
+        Nullability.castToNonnull(options.get(Downsampler.ALLOW_HARDWARE_CONFIG)) != null
             && options.get(Downsampler.ALLOW_HARDWARE_CONFIG);
     preferredColorSpace = options.get(Downsampler.PREFERRED_COLOR_SPACE);
   }
