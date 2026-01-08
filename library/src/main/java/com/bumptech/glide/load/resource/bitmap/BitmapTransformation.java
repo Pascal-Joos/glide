@@ -9,7 +9,6 @@ import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.util.Util;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 
@@ -77,7 +76,7 @@ public abstract class BitmapTransformation implements Transformation<Bitmap> {
               + outHeight
               + " less than or equal to zero and not Target.SIZE_ORIGINAL");
     }
-    BitmapPool bitmapPool = Nullability.castToNonnull(Glide.get(context)).getBitmapPool();
+    BitmapPool bitmapPool = Glide.get(context).getBitmapPool();
     Bitmap toTransform = resource.get();
     int targetWidth = outWidth == Target.SIZE_ORIGINAL ? toTransform.getWidth() : outWidth;
     int targetHeight = outHeight == Target.SIZE_ORIGINAL ? toTransform.getHeight() : outHeight;

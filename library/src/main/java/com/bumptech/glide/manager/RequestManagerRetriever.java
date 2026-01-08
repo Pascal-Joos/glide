@@ -21,7 +21,6 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.resource.bitmap.HardwareConfigState;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Util;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Collection;
 import java.util.Map;
 
@@ -74,7 +73,7 @@ public class RequestManagerRetriever implements Handler.Callback {
           Glide glide = Glide.get(context.getApplicationContext());
           applicationManager =
               factory.build(
-                  Nullability.castToNonnull(glide),
+                  glide,
                   new ApplicationLifecycle(),
                   new EmptyRequestManagerTreeNode(),
                   context.getApplicationContext());

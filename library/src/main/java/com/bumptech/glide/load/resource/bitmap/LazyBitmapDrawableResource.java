@@ -11,7 +11,6 @@ import com.bumptech.glide.load.engine.Initializable;
 import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.util.Preconditions;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 
 /**
  * Lazily allocates a {@link android.graphics.drawable.BitmapDrawable} from a given {@link
@@ -32,8 +31,7 @@ public final class LazyBitmapDrawableResource implements Resource<BitmapDrawable
     return (LazyBitmapDrawableResource)
         obtain(
             context.getResources(),
-            BitmapResource.obtain(
-                bitmap, Nullability.castToNonnull(Glide.get(context)).getBitmapPool()));
+            BitmapResource.obtain(bitmap, Glide.get(context).getBitmapPool()));
   }
 
   /**

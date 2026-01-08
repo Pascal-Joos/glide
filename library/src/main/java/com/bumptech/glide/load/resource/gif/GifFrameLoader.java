@@ -28,7 +28,6 @@ import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Synthetic;
 import com.bumptech.glide.util.Util;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,11 +70,11 @@ class GifFrameLoader {
       Transformation<Bitmap> transformation,
       Bitmap firstFrame) {
     this(
-        Nullability.castToNonnull(glide).getBitmapPool(),
-        Glide.with(Nullability.castToNonnull(glide).getContext()),
+        glide.getBitmapPool(),
+        Glide.with(glide.getContext()),
         gifDecoder,
         null /*handler*/,
-        getRequestBuilder(Glide.with(Nullability.castToNonnull(glide).getContext()), width, height),
+        getRequestBuilder(Glide.with(glide.getContext()), width, height),
         transformation,
         firstFrame);
   }
