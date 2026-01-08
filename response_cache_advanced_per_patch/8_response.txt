@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings("unused")
+  public VideoBitmapDecoder(Context context) {
+    this(Nullability.castToNonnull(Glide.get(context)).getBitmapPool());
+  }
+  ```
+    ]]>
+  </code>
+</response>

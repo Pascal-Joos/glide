@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings("WeakerAccess")
+  public synchronized void fixMarkLimit() {
+    if (buf == null) {
+      throw streamClosed();
+    }
+    marklimit = buf.length;
+  }
+  ```
+    ]]>
+  </code>
+</response>

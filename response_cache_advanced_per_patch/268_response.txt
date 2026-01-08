@@ -1,0 +1,34 @@
+```xml
+<response>
+    <reason><![CDATA[
+The potentially-null expression in question is the receiver object at the call site, i.e., `wrapped` in `wrapped.skip(byteCount)`.
+
+Control flow analysis:
+
+1. The method begins with:
+   ```java
+   if (wrapped == null) {
+     return 0;
+   }
+   ```
+   This is an explicit null check that returns immediately if `wrapped` is null.
+
+2. The call site:
+   ```java
+   skipped = wrapped.skip(byteCount);
+   ```
+   is only reachable if the `if (wrapped == null)` condition is false. Therefore, along all code paths that reach this line, `wrapped` is guaranteed to be non-null.
+
+3. The variable `skipped` is of primitive type `long`, which itself cannot be null. Any value assigned to `skipped` is thus a non-null primitive, regardless of what `wrapped.skip(byteCount)` returns in terms of content (it can only return a `long`, not null).
+
+4. The contract of `InputStream.skip(long)` or similar `skip` methods in Java APIs returns a primitive `long`; primitives cannot be null by the language specification.
+
+Therefore, given:
+- The explicit null guard on `wrapped`, and
+- The primitive return type of `skip(long)`,
+
+the expression at the line `skipped = wrapped.skip(byteCount);` cannot be null along any reachable code path. If `wrapped` were null, execution would have already returned before reaching that line.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

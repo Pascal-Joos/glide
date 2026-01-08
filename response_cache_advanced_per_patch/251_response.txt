@@ -1,0 +1,20 @@
+<response>
+    <reason><![CDATA[
+The constructor parameter `wrapped` is used immediately as `wrapped.getConstantState()` and then passed on to another constructor. There are no intermediate methods in this constructor that could change or validate `wrapped`; the only relevant caller in the provided call chain is:
+
+```java
+Drawable result = getDrawable(resource);
+...
+result = new FixedSizeDrawable(result, layoutParams.width, layoutParams.height);
+```
+
+From this code alone, `result` (and thus `wrapped`) may be null because:
+- There is no null check on `result` before it is passed to `new FixedSizeDrawable(...)`.
+- We do not see the implementation of `getDrawable(resource)`; it may return null for some inputs.
+- Callers of `setResource` could supply a `resource` that causes `getDrawable` to return null.
+- The `FixedSizeDrawable` constructor itself does not guard against null and would throw a `NullPointerException` when calling `wrapped.getConstantState()` if `wrapped` is null.
+
+Given that a caller can construct a scenario where `result` is null (since there are no visible constraints or checks here), and there is no evidence that `getDrawable` is guaranteed to return a non-null `Drawable`, `wrapped` can in fact be null at this constructor call site, ignoring any annotations.
+    ]]></reason>
+    <value>YES</value>
+</response>

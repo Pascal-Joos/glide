@@ -1,0 +1,27 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, `resource` is never assigned, checked for null, or modified; it is only used:
+
+- In the `isCancelled` branch: `resource.recycle();`
+- When building `engineResource`: `engineResourceFactory.build(resource, ...)`
+
+Whether `resource` can be null at `resource.recycle();` depends entirely on how the field/variable `resource` is initialized and used elsewhere in the class and on the calling contract of `notifyCallbacksOfResult()`.
+
+From the snippet alone, there is no explicit guarantee:
+- No prior null-check on `resource` in this method.
+- No assignment to `resource` in this method.
+- No assertion or contract in the method body that would prevent `resource` from being null when `isCancelled` is true.
+- The call `engineResourceFactory.build(resource, ...)` also does not establish non-nullness for the earlier `resource.recycle()` call; that call is in a different branch and may not execute if `isCancelled` is false.
+
+Therefore, based solely on this method’s body, it is not possible to prove that `resource` is always non-null when `resource.recycle()` is invoked. That guarantee, if it exists, must come from class invariants or from the lifecycle of the enclosing object (e.g., `resource` is always set by some `onResourceReady(...)` before `notifyCallbacksOfResult()` is ever invoked, and never cleared).
+
+Since that information is not provided, we cannot conclusively say whether `resource` is or is not null at that line.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the declaration of the field/variable `resource` (its type, where it is initialized, and any assignments).]]></request>
+        <request><![CDATA[Provide the class and method(s) responsible for setting `resource` and for calling `notifyCallbacksOfResult()`, including any documented invariants or comments about `resource`'s lifecycle.]]></request>
+    </requests>
+</response>
+```

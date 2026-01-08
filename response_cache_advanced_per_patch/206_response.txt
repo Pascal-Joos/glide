@@ -1,0 +1,26 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the provided method alone, there is no information about:
+
+- How `listener` is declared (e.g., as a field, constructor parameter, or local variable).
+- Whether `listener` is annotated as @NonNull.
+- Whether there are any prior null checks or initialization guarantees for `listener`.
+- Any class or framework contracts that would guarantee `listener` is never null.
+
+The only null check in the method is for `resource`, not for `listener`. The call `listener.onResourceRemoved(resource);` is guarded solely by `if (resource != null)`, which does nothing to ensure that `listener` itself is non-null.
+
+Because we lack:
+- The declaration of `listener`
+- The constructor(s) or initialization path of the containing class
+- Any annotations or framework guarantees about `listener`
+
+we cannot safely determine whether `listener` can be null at this call site. It might be guaranteed non-null elsewhere (e.g., set in all constructors and never reassigned), or it might be left nullable. The snippet by itself is insufficient to conclude either way.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the declaration of `listener` (field or local), including its type and any annotations (e.g., @NonNull, @Nullable).]]></request>
+        <request><![CDATA[Provide the constructors and any methods that assign a value to `listener`, or any relevant class/framework documentation that describes guarantees for `listener`.]]></request>
+    </requests>
+</response>
+```

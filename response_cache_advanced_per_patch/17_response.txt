@@ -1,0 +1,34 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @NonNull
+  @Override
+  public Resource<GifDrawable> transform(
+      @NonNull Context context,
+      @NonNull Resource<GifDrawable> resource,
+      int outWidth,
+      int outHeight) {
+    GifDrawable drawable = resource.get();
+
+    // The drawable needs to be initialized with the correct width and height in order for a view
+    // displaying it to end up with the right dimensions. Since our transformations may arbitrarily
+    // modify the dimensions of our GIF, here we create a stand in for a frame and pass it to the
+    // transformation to see what the final transformed dimensions will be so that our drawable can
+    // report the correct intrinsic width and height.
+    BitmapPool bitmapPool = Nullability.castToNonnull(Glide.get(context)).getBitmapPool();
+    Bitmap firstFrame = drawable.getFirstFrame();
+    Resource<Bitmap> bitmapResource = new BitmapResource(firstFrame, bitmapPool);
+    Resource<Bitmap> transformed = wrapped.transform(context, bitmapResource, outWidth, outHeight);
+    if (!bitmapResource.equals(transformed)) {
+      bitmapResource.recycle();
+    }
+    Bitmap transformedFrame = transformed.get();
+
+    drawable.setFrameTransformation(wrapped, transformedFrame);
+    return resource;
+  }
+  ```
+    ]]>
+  </code>
+</response>

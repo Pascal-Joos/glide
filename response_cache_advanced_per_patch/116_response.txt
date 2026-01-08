@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private DataFetcherGenerator getNextGenerator() {
+    switch (Nullability.castToNonnull(stage)) {
+      case RESOURCE_CACHE:
+        return new ResourceCacheGenerator(decodeHelper, this);
+      case DATA_CACHE:
+        return new DataCacheGenerator(decodeHelper, this);
+      case SOURCE:
+        return new SourceGenerator(decodeHelper, this);
+      case FINISHED:
+        return null;
+      default:
+        throw new IllegalStateException("Unrecognized stage: " + stage);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

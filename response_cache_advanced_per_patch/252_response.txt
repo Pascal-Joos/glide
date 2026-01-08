@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings("WeakerAccess")
+  public FixedSizeDrawable( Drawable wrapped, int width, int height) {
+    this(new State(Nullability.castToNonnull(wrapped).getConstantState(), width, height), Nullability.castToNonnull(wrapped));
+  }
+  ```
+    ]]>
+  </code>
+</response>

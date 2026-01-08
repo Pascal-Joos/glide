@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+@Override
+    public void close() throws IOException {
+      if (wrapped != null) {
+        Nullability.castToNonnull(wrapped).close();
+      }
+}
+  ```
+    ]]>
+  </code>
+</response>

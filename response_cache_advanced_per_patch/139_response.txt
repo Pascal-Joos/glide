@@ -1,0 +1,36 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the provided snippet alone, there is no visible guarantee that `callback` is non-null when `notifyComplete` is invoked. The method:
+
+private void notifyComplete(
+      Resource<R> resource,
+      DataSource dataSource,
+      boolean isLoadedFromAlternateCacheKey) {
+    setNotifiedOrThrow();
+    callback.onResourceReady(resource, dataSource, isLoadedFromAlternateCacheKey);
+}
+
+does not:
+- Initialize `callback`
+- Check `callback` for null
+- Rely on any explicit annotation (@NonNull) or contract visible here
+
+Whether `callback` can be null depends on:
+1. How `callback` is declared (field/parameter), including any annotations.
+2. How and where `callback` is assigned before `notifyComplete` is called.
+3. Whether `setNotifiedOrThrow()` enforces a non-null `callback` invariant (e.g., throws if `callback == null`).
+
+Without those details, we cannot soundly conclude that `callback` is always non-null, nor that it can be null. There is simply not enough information about the broader class, constructor(s), or the contract of `setNotifiedOrThrow()`.
+
+Therefore, with only the given method, the nullability of `callback` is indeterminate.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the declaration of the `callback` field or parameter (its type, annotations, and where it’s defined).]]></request>
+        <request><![CDATA[Provide all constructors and any setters or methods that assign to `callback`.]]></request>
+        <request><![CDATA[Provide the implementation (or contract) of `setNotifiedOrThrow()` to see if it checks or guarantees the non-nullity of `callback`.]]></request>
+        <request><![CDATA[If available, provide any class- or method-level annotations (e.g., @NonNull, @Nullable, @NotNull) related to `callback` or `notifyComplete`.]]></request>
+    </requests>
+</response>
+```

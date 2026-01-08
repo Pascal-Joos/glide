@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public int read(byte[] buffer) {
+    if (wrapped == null) {
+      return -1;
+    }
+    int read;
+    try {
+      read = wrapped.read(buffer);
+    } catch (IOException e) {
+      exception = e;
+      read = -1;
+    }
+    return read;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,28 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shown method body, there is no null check or reassignment of the parameter `downsampleStrategy`. It’s used directly:
+
+    final float exactScaleFactor =
+        downsampleStrategy.getScaleFactor(
+            orientedSourceWidth, orientedSourceHeight, targetWidth, targetHeight);
+
+Java allows object parameters to be null unless they are:
+- Explicitly checked for null in the method, or
+- Guaranteed non-null by some external contract (e.g., annotated with @NonNull and enforced by callers, or always constructed non-null before calling).
+
+In this snippet:
+- `downsampleStrategy` is a plain method parameter.
+- There is no `if (downsampleStrategy == null)` or any other defensive check.
+- No local assignment is made to `downsampleStrategy` before use.
+- The method’s internal logic doesn’t guarantee non-nullity.
+
+Therefore, from the perspective of this method *alone*, the JVM can receive a null for `downsampleStrategy`, and in that case `downsampleStrategy.getScaleFactor(...)` will throw a `NullPointerException`.
+
+Whether that *actually* happens at runtime depends on the calling code and any external contracts (e.g., Glide may guarantee that a non-null DownsampleStrategy is always passed, and tools like static analysis may rely on annotations). But since those contracts are not part of the provided code, and there is no local guard, the expression is *potentially* null in general Java terms.
+
+Thus, considering only the given method and normal Java semantics, `downsampleStrategy` can be null at that call site.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

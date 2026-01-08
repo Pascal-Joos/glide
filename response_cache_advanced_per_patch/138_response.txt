@@ -1,0 +1,35 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based solely on the provided method body:
+
+    private void notifyFailed() {
+        setNotifiedOrThrow();
+        GlideException e = new GlideException("Failed to load resource", new ArrayList<>(throwables));
+        callback.onLoadFailed(e);
+        onLoadFailed();
+    }
+
+there is no visible null-check, assignment, or guarantee in this snippet that ensures `callback` is non-null before `callback.onLoadFailed(e)` is invoked.
+
+Whether `callback` can be null depends on:
+
+1. How `callback` is declared (field vs local variable vs parameter).
+2. How and where `callback` is initialized.
+3. Whether the class enforces a non-null contract (e.g., via constructor requiring non-null, annotations like @NonNull, or validation in setters).
+4. Whether `setNotifiedOrThrow()` or other prior logic guarantees `callback` is non-null (for example, by throwing if `callback` is null or by ensuring it's set).
+
+Because that information is not provided, it is impossible to soundly conclude that `callback` can or cannot be null from this snippet alone. Both are plausible:
+- If the class constructor always sets `callback` to a non-null value and never allows reassignment to null, `callback` is effectively guaranteed non-null.
+- If `callback` can be left unset, changed to null, or is conditionally assigned, then `callback` may be null at this call site.
+
+In absence of those surrounding details, the nullability of `callback` at `callback.onLoadFailed(e);` cannot be determined.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show where and how the `callback` field/variable is declared (its type, annotations, and visibility).]]></request>
+        <request><![CDATA[Show all constructors and any setters or methods that assign to `callback`.]]></request>
+        <request><![CDATA[Show the implementation (or contract/documentation) of `setNotifiedOrThrow()` to see if it validates `callback`.]]></request>
+    </requests>
+</response>
+```

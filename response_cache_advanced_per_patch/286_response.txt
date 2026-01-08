@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public int read(byte[] buffer, int byteOffset, int byteCount) throws IOException {
+    try {
+      return getWrapped().read(buffer, byteOffset, byteCount);
+    } catch (IOException e) {
+      exception = e;
+      throw e;
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

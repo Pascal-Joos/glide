@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  List<Class<?>> getRegisteredResourceClasses() {
+      return glideContext
+          .getRegistry()
+          .getRegisteredResourceClasses(model.getClass(), resourceClass, Nullability.castToNonnull(transcodeClass));
+  }
+  ```
+    ]]>
+  </code>
+</response>

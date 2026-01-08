@@ -1,0 +1,53 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings({
+    "WeakerAccess",
+    "PMD.AvoidInstantiatingObjectsInLoops",
+    "PMD.AccessorMethodGeneration"
+  })
+  @Synthetic
+  void notifyCallbacksOfResult() {
+    ResourceCallbacksAndExecutors copy;
+    Key localKey;
+    EngineResource<?> localResource;
+    synchronized (this) {
+      stateVerifier.throwIfRecycled();
+      if (isCancelled) {
+        // TODO: Seems like we might as well put this in the memory cache instead of just recycling
+        // it since we've gotten this far...
+        if (resource != null) {
+          resource.recycle();
+        }
+        release();
+        return;
+      } else if (cbs.isEmpty()) {
+        throw new IllegalStateException("Received a resource without any callbacks to notify");
+      } else if (hasResource) {
+        throw new IllegalStateException("Already have resource");
+      }
+      engineResource = engineResourceFactory.build(resource, isCacheable, key, resourceListener);
+      // Hold on to resource for duration of our callbacks below so we don't recycle it in the
+      // middle of notifying if it synchronously released by one of the callbacks. Acquire it under
+      // a lock here so that any newly added callback that executes before the next locked section
+      // below can't recycle the resource before we call the callbacks.
+      hasResource = true;
+      copy = cbs.copy();
+      incrementPendingCallbacks(copy.size() + 1);
+
+      localKey = key;
+      localResource = engineResource;
+    }
+
+    engineJobListener.onEngineJobComplete(this, localKey, localResource);
+
+    for (final ResourceCallbackAndExecutor entry : copy) {
+      entry.executor.execute(new CallResourceReady(entry.cb));
+    }
+    decrementPendingCallbacks();
+  }
+  ```
+    ]]>
+  </code>
+</response>

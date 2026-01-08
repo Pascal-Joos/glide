@@ -1,0 +1,24 @@
+```xml
+<response>
+    <reason><![CDATA[
+Given only the provided constructor:
+
+@SuppressWarnings("WeakerAccess")
+public FixedSizeDrawable(Drawable wrapped, int width, int height) {
+    this(new State(wrapped.getConstantState(), width, height), wrapped);
+}
+
+we have no guarantees that the parameter `wrapped` is non-null. There is:
+- No null check on `wrapped` in this constructor.
+- No indication (e.g., annotations like @NonNull) or documented contract here that forbids passing null.
+- The expression passed as the second argument in the this(...) call is exactly the parameter `wrapped` itself.
+
+Thus:
+- If the caller passes null as the `wrapped` argument, then the expression `wrapped` in `this(new State(wrapped.getConstantState(), width, height), wrapped);` will indeed be null.
+- In that case, the preceding subexpression `wrapped.getConstantState()` would throw a NullPointerException before the call is completed, but from a pure data-flow perspective, the value of the second argument `wrapped` can still be null at that site.
+
+Because there is no prior check or guarantee shown that `wrapped` is non-null, the expression can be null along some call paths (specifically, when the caller passes null).
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

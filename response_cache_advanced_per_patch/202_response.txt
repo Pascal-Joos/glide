@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings("unchecked")
+  private <T> ArrayAdapterInterface<T> getAdapterFromObject( T object) {
+    return (ArrayAdapterInterface<T>) getAdapterFromType(Nullability.castToNonnull(object).getClass());
+  }
+  ```
+    ]]>
+  </code>
+</response>

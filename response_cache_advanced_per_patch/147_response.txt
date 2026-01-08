@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name `start` does not match any of the recognized initializer patterns (such as lifecycle methods like `onCreate`, `init`, `initialize`, or methods whose names start with `init`/`initialize`). It also appears to represent a control/action entry point that both sets a field and immediately starts execution (`executor.execute(decodeJob)`), rather than a dedicated setup/initialization phase that is guaranteed to run before all other non-constructor methods. Therefore, it should not be treated as an initializer method for NullAway’s purposes.]]></reason>
+    <value>NO</value>
+</response>

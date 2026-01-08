@@ -1,0 +1,28 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private synchronized void release() {
+    if (key == null) {
+      throw new IllegalArgumentException();
+    }
+    cbs.clear();
+    key = null;
+    engineResource = null;
+    resource = null;
+    hasLoadFailed = false;
+    isCancelled = false;
+    hasResource = false;
+    isLoadedFromAlternateCacheKey = false;
+    if (decodeJob != null) {
+      decodeJob.release(/* isRemovedFromQueue= */ false);
+    }
+    decodeJob = null;
+    exception = null;
+    dataSource = null;
+    pool.release(this);
+}
+  ```
+    ]]>
+  </code>
+</response>

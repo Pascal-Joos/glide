@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method is named `init`, which matches the naming convention (“init” / “initialize”) that NullAway treats as an initializer method rather than a normal setter. It takes many parameters and sets a corresponding set of internal fields in one shot, which is a typical initializer pattern rather than a fine‑grained property setter. It is also explicitly annotated with `@Initializer`, strongly indicating that it is intended to be treated as an initializer method in the sense you describe (always called before other regular methods and used to establish required non-null state). There is no indication that this is a simple setter for a single property; instead it configures the entire object.
+    ]]></reason>
+    <value>YES</value>
+</response>
