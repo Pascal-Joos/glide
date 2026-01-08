@@ -99,13 +99,18 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
       loadData = null;
       boolean started = false;
       while (!started && hasNextModelLoader()) {
-        ModelLoader<File, ?> modelLoader = modelLoaders.get(modelLoaderIndex++);
-        loadData =
-            modelLoader.buildLoadData(
-                cacheFile, helper.getWidth(), helper.getHeight(), helper.getOptions());
-        if (loadData != null && helper.hasLoadPath(loadData.fetcher.getDataClass())) {
-          started = true;
-          loadData.fetcher.loadData(helper.getPriority(), this);
+        File localCacheFile = cacheFile;
+        if (localCacheFile != null) {
+          ModelLoader<File, ?> modelLoader = modelLoaders.get(modelLoaderIndex++);
+          loadData =
+              modelLoader.buildLoadData(
+                  localCacheFile, helper.getWidth(), helper.getHeight(), helper.getOptions());
+          if (loadData != null && helper.hasLoadPath(loadData.fetcher.getDataClass())) {
+            started = true;
+            loadData.fetcher.loadData(helper.getPriority(), this);
+          }
+        } else {
+          modelLoaderIndex++;
         }
       }
 
@@ -129,12 +134,18 @@ class ResourceCacheGenerator implements DataFetcherGenerator, DataFetcher.DataCa
 
   @Override
   public void onDataReady(@Nullable Object data) {
-    cb.onDataFetcherReady(
-        sourceKey, data, loadData.fetcher, DataSource.RESOURCE_DISK_CACHE, currentKey);
+    LoadData<?> local = loadData;
+    if (local != null) {
+      cb.onDataFetcherReady(
+          sourceKey, data, local.fetcher, DataSource.RESOURCE_DISK_CACHE, currentKey);
+    }
   }
 
   @Override
   public void onLoadFailed(@NonNull Exception e) {
-    cb.onDataFetcherFailed(currentKey, e, loadData.fetcher, DataSource.RESOURCE_DISK_CACHE);
+    LoadData<?> local = loadData;
+    if (local != null) {
+      cb.onDataFetcherFailed(currentKey, e, local.fetcher, DataSource.RESOURCE_DISK_CACHE);
+    }
   }
 }
