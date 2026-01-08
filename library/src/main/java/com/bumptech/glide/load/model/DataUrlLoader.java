@@ -7,6 +7,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.Options;
 import com.bumptech.glide.load.data.DataFetcher;
 import com.bumptech.glide.signature.ObjectKey;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -150,7 +151,7 @@ public final class DataUrlLoader<Model, Data> implements ModelLoader<Model, Data
 
             @Override
             public void close(@Nullable InputStream inputStream) throws IOException {
-              inputStream.close();
+              Nullability.castToNonnull(inputStream).close();
             }
 
             @Override
