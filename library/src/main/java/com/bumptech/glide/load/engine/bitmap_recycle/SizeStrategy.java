@@ -7,7 +7,6 @@ import androidx.annotation.RequiresApi;
 import androidx.annotation.VisibleForTesting;
 import com.bumptech.glide.util.Synthetic;
 import com.bumptech.glide.util.Util;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.NavigableMap;
 
 /**
@@ -70,10 +69,10 @@ final class SizeStrategy implements LruPoolStrategy {
 
   private void decrementBitmapOfSize(Integer size) {
     Integer current = sortedSizes.get(size);
-    if (Nullability.castToNonnull(current) == 1) {
+    if (current == 1) {
       sortedSizes.remove(size);
     } else {
-      sortedSizes.put(size, Nullability.castToNonnull(current) - 1);
+      sortedSizes.put(size, current - 1);
     }
   }
 
