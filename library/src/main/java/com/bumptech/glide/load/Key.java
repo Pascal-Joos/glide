@@ -3,7 +3,6 @@ package com.bumptech.glide.load;
 import androidx.annotation.NonNull;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
-import javax.annotation.Nullable;
 
 /**
  * An interface that uniquely identifies some put of data. Implementations must implement {@link
@@ -30,7 +29,7 @@ public interface Key {
    * #hashCode()}.
    */
   @Override
-  boolean equals(@Nullable Object o);
+  boolean equals(Object o);
 
   /**
    * For caching to work correctly, implementations <em>must</em> implement this method and {@link
