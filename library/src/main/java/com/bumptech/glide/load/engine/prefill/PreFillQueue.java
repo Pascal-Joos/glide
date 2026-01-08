@@ -1,6 +1,5 @@
 package com.bumptech.glide.load.engine.prefill;
 
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ final class PreFillQueue {
     PreFillType result = keyList.get(keyIndex);
 
     Integer countForResult = bitmapsPerType.get(result);
-    if (Nullability.castToNonnull(countForResult) == 1) {
+    if (countForResult == 1) {
       bitmapsPerType.remove(result);
       keyList.remove(keyIndex);
     } else {
