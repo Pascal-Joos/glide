@@ -23,6 +23,7 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.UnitTransformation;
 import com.bumptech.glide.util.LogTime;
 import com.bumptech.glide.util.Util;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
@@ -48,9 +49,9 @@ public class ByteBufferGifDecoder implements ResourceDecoder<ByteBuffer, GifDraw
   public ByteBufferGifDecoder(Context context) {
     this(
         context,
-        Glide.get(context).getRegistry().getImageHeaderParsers(),
-        Glide.get(context).getBitmapPool(),
-        Glide.get(context).getArrayPool());
+        Nullability.castToNonnull(Glide.get(context)).getRegistry().getImageHeaderParsers(),
+        Nullability.castToNonnull(Glide.get(context)).getBitmapPool(),
+        Nullability.castToNonnull(Glide.get(context)).getArrayPool());
   }
 
   public ByteBufferGifDecoder(
