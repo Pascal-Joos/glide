@@ -38,6 +38,7 @@ import com.bumptech.glide.signature.AndroidResourceSignature;
 import com.bumptech.glide.util.Executors;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Util;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -1121,25 +1122,27 @@ public class RequestBuilder<TranscodeType> extends BaseRequestOptions<RequestBui
       return mainRequest;
     }
 
-    int errorOverrideWidth = errorBuilder.getOverrideWidth();
-    int errorOverrideHeight = errorBuilder.getOverrideHeight();
-    if (Util.isValidDimensions(overrideWidth, overrideHeight) && !errorBuilder.isValidOverride()) {
+    int errorOverrideWidth = Nullability.castToNonnull(errorBuilder).getOverrideWidth();
+    int errorOverrideHeight = Nullability.castToNonnull(errorBuilder).getOverrideHeight();
+    if (Util.isValidDimensions(overrideWidth, overrideHeight)
+        && !Nullability.castToNonnull(errorBuilder).isValidOverride()) {
       errorOverrideWidth = requestOptions.getOverrideWidth();
       errorOverrideHeight = requestOptions.getOverrideHeight();
     }
 
     Request errorRequest =
-        errorBuilder.buildRequestRecursive(
-            requestLock,
-            target,
-            targetListener,
-            errorRequestCoordinator,
-            errorBuilder.transitionOptions,
-            errorBuilder.getPriority(),
-            errorOverrideWidth,
-            errorOverrideHeight,
-            errorBuilder,
-            callbackExecutor);
+        Nullability.castToNonnull(errorBuilder)
+            .buildRequestRecursive(
+                requestLock,
+                target,
+                targetListener,
+                errorRequestCoordinator,
+                Nullability.castToNonnull(errorBuilder).transitionOptions,
+                Nullability.castToNonnull(errorBuilder).getPriority(),
+                errorOverrideWidth,
+                errorOverrideHeight,
+                Nullability.castToNonnull(errorBuilder),
+                callbackExecutor);
     errorRequestCoordinator.setRequests(mainRequest, errorRequest);
     return errorRequestCoordinator;
   }
