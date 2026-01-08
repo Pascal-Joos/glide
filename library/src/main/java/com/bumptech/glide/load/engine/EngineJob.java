@@ -15,7 +15,6 @@ import com.bumptech.glide.util.Synthetic;
 import com.bumptech.glide.util.pool.FactoryPools.Poolable;
 import com.bumptech.glide.util.pool.StateVerifier;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -45,9 +44,7 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
   private final GlideExecutor animationExecutor;
   private final AtomicInteger pendingCallbacks = new AtomicInteger();
 
-  @SuppressWarnings("NullAway.Init")
   private Key key;
-
   private boolean isCacheable;
   private boolean useUnlimitedSourceGeneratorPool;
   private boolean useAnimationPool;
@@ -73,7 +70,7 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
   @Synthetic
   EngineResource<?> engineResource;
 
-  @Nullable private DecodeJob<R> decodeJob;
+  private DecodeJob<R> decodeJob;
 
   // Checked primarily on the main thread, but also on other threads in reschedule.
   private volatile boolean isCancelled;
@@ -118,7 +115,6 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     this.engineResourceFactory = engineResourceFactory;
   }
 
-  @Initializer
   @VisibleForTesting
   synchronized EngineJob<R> init(
       Key key,
@@ -214,9 +210,7 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     }
 
     isCancelled = true;
-    if (decodeJob != null) {
-      Nullability.castToNonnull(decodeJob).cancel();
-    }
+    decodeJob.cancel();
     engineJobListener.onEngineJobCancelled(this, key);
   }
 
@@ -317,9 +311,7 @@ class EngineJob<R> implements DecodeJob.Callback<R>, Poolable {
     isCancelled = false;
     hasResource = false;
     isLoadedFromAlternateCacheKey = false;
-    if (decodeJob != null) {
-      decodeJob.release(/* isRemovedFromQueue= */ false);
-    }
+    decodeJob.release(/* isRemovedFromQueue= */ false);
     decodeJob = null;
     exception = null;
     dataSource = null;
