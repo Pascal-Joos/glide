@@ -31,7 +31,7 @@ final class ResourceCacheKey implements Key {
       int height,
       @Nullable Transformation<?> appliedTransformation,
       Class<?> decodedResourceClass,
-      Options options) {
+      @Nullable Options options) {
     this.arrayPool = arrayPool;
     this.sourceKey = sourceKey;
     this.signature = signature;

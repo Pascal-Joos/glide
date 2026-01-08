@@ -23,6 +23,7 @@ import com.bumptech.glide.util.pool.FactoryPools.Poolable;
 import com.bumptech.glide.util.pool.GlideTrace;
 import com.bumptech.glide.util.pool.StateVerifier;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,7 @@ class DecodeJob<R>
   private int width;
   private int height;
   private DiskCacheStrategy diskCacheStrategy;
-  private Options options;
+  @Nullable private Options options;
   private Callback<R> callback;
   private int order;
   private Stage stage;
@@ -517,7 +518,7 @@ class DecodeJob<R>
     return runLoadPath(data, dataSource, path);
   }
 
-  @NonNull
+  @Nullable
   private Options getOptionsWithHardwareConfig(@Nullable DataSource dataSource) {
     Options options = this.options;
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
@@ -526,6 +527,9 @@ class DecodeJob<R>
 
     boolean isHardwareConfigSafe =
         dataSource == DataSource.RESOURCE_DISK_CACHE || decodeHelper.isScaleOnlyOrNoTransform();
+    if (options == null) {
+      return null;
+    }
     Boolean isHardwareConfigAllowed = options.get(Downsampler.ALLOW_HARDWARE_CONFIG);
 
     // If allow hardware config is defined, we can use it if it's set to false or if it's safe to
@@ -537,7 +541,7 @@ class DecodeJob<R>
     // If allow hardware config is undefined or is set to true but it's unsafe for us to use the
     // hardware config for this request, we need to override the config.
     options = new Options();
-    options.putAll(this.options);
+    options.putAll(Nullability.castToNonnull(this.options));
     options.set(Downsampler.ALLOW_HARDWARE_CONFIG, isHardwareConfigSafe);
 
     return options;
@@ -550,8 +554,13 @@ class DecodeJob<R>
     DataRewinder<Data> rewinder = glideContext.getRegistry().getRewinder(data);
     try {
       // ResourceType in DecodeCallback below is required for compilation to work with gradle.
-      return path.load(
-          rewinder, options, width, height, new DecodeCallback<ResourceType>(dataSource));
+      return Nullability.castToNonnull(path)
+          .load(
+              rewinder,
+              Nullability.castToNonnull(options),
+              width,
+              height,
+              new DecodeCallback<ResourceType>(dataSource));
     } finally {
       rewinder.cleanup();
     }
@@ -600,7 +609,7 @@ class DecodeJob<R>
     final ResourceEncoder<Z> encoder;
     if (decodeHelper.isResourceEncoderAvailable(transformed)) {
       encoder = decodeHelper.getResultEncoder(transformed);
-      encodeStrategy = encoder.getEncodeStrategy(options);
+      encodeStrategy = encoder.getEncodeStrategy(Nullability.castToNonnull(options));
     } else {
       encoder = null;
       encodeStrategy = EncodeStrategy.NONE;
@@ -715,7 +724,7 @@ class DecodeJob<R>
       this.toEncode = (LockedResource<Z>) toEncode;
     }
 
-    void encode(DiskCacheProvider diskCacheProvider, Options options) {
+    void encode(DiskCacheProvider diskCacheProvider, @Nullable Options options) {
       GlideTrace.beginSection("DecodeJob.encode");
       try {
         diskCacheProvider
