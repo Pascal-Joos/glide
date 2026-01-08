@@ -16,7 +16,6 @@ import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.load.model.ModelLoader.LoadData;
 import com.bumptech.glide.load.resource.UnitTransformation;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ final class DecodeHelper<Transcode> {
   private DecodeJob.DiskCacheProvider diskCacheProvider;
   private Options options;
   @Nullable private Map<Class<?>, Transformation<?>> transformations;
-  @Nullable private Class<Transcode> transcodeClass;
+  private Class<Transcode> transcodeClass;
   private boolean isLoadDataSet;
   private boolean isCacheKeysSet;
   @Nullable private Key signature;
@@ -132,7 +131,6 @@ final class DecodeHelper<Transcode> {
     return glideContext.getArrayPool();
   }
 
-  @Nullable
   Class<?> getTranscodeClass() {
     return transcodeClass;
   }
@@ -144,8 +142,7 @@ final class DecodeHelper<Transcode> {
   List<Class<?>> getRegisteredResourceClasses() {
     return glideContext
         .getRegistry()
-        .getRegisteredResourceClasses(
-            model.getClass(), resourceClass, Nullability.castToNonnull(transcodeClass));
+        .getRegisteredResourceClasses(model.getClass(), resourceClass, transcodeClass);
   }
 
   boolean hasLoadPath(Class<?> dataClass) {
@@ -154,9 +151,7 @@ final class DecodeHelper<Transcode> {
 
   @Nullable
   <Data> LoadPath<Data, ?, Transcode> getLoadPath(Class<Data> dataClass) {
-    return glideContext
-        .getRegistry()
-        .getLoadPath(dataClass, resourceClass, Nullability.castToNonnull(transcodeClass));
+    return glideContext.getRegistry().getLoadPath(dataClass, resourceClass, transcodeClass);
   }
 
   boolean isScaleOnlyOrNoTransform() {
