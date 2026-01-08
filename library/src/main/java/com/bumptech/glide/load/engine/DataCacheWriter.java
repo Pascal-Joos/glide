@@ -20,7 +20,7 @@ class DataCacheWriter<DataType> implements DiskCache.Writer {
   private final DataType data;
   private final Options options;
 
-  DataCacheWriter(@Nullable Encoder<DataType> encoder, @Nullable DataType data, Options options) {
+  DataCacheWriter(@Nullable Encoder<DataType> encoder, DataType data, Options options) {
     this.encoder = encoder;
     this.data = data;
     this.options = options;
