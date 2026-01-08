@@ -9,7 +9,6 @@ import com.bumptech.glide.load.Options;
 import com.bumptech.glide.load.ResourceDecoder;
 import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.ArrayPool;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,7 +39,7 @@ public class StreamGifDecoder implements ResourceDecoder<InputStream, GifDrawabl
 
   @Override
   public boolean handles(@NonNull InputStream source, @NonNull Options options) throws IOException {
-    return !Nullability.castToNonnull(options.get(GifOptions.DISABLE_ANIMATION))
+    return !options.get(GifOptions.DISABLE_ANIMATION)
         && ImageHeaderParserUtils.getType(parsers, source, byteArrayPool) == ImageType.GIF;
   }
 
