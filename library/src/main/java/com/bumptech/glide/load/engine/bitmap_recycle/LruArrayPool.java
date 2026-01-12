@@ -190,7 +190,8 @@ public final class LruArrayPool implements ArrayPool {
 
   @SuppressWarnings("unchecked")
   private <T> ArrayAdapterInterface<T> getAdapterFromObject(@Nullable T object) {
-    return (ArrayAdapterInterface<T>) getAdapterFromType(object.getClass());
+    return (ArrayAdapterInterface<T>)
+        getAdapterFromType(Nullability.castToNonnull(object).getClass());
   }
 
   @SuppressWarnings("unchecked")
