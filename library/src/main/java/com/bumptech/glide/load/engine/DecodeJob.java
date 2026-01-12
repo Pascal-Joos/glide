@@ -555,8 +555,8 @@ class DecodeJob<R>
         Nullability.castToNonnull(glideContext).getRegistry().getRewinder(data);
     try {
       // ResourceType in DecodeCallback below is required for compilation to work with gradle.
-      return path.load(
-          rewinder, options, width, height, new DecodeCallback<ResourceType>(dataSource));
+      return Nullability.castToNonnull(path)
+          .load(rewinder, options, width, height, new DecodeCallback<ResourceType>(dataSource));
     } finally {
       rewinder.cleanup();
     }
