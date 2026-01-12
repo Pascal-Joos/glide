@@ -37,7 +37,7 @@ final class DecodeHelper<Transcode> {
   private DecodeJob.DiskCacheProvider diskCacheProvider;
   private Options options;
   @Nullable private Map<Class<?>, Transformation<?>> transformations;
-  private Class<Transcode> transcodeClass;
+  @Nullable private Class<Transcode> transcodeClass;
   private boolean isLoadDataSet;
   private boolean isCacheKeysSet;
   @Nullable private Key signature;
@@ -132,6 +132,7 @@ final class DecodeHelper<Transcode> {
     return glideContext.getArrayPool();
   }
 
+  @Nullable
   Class<?> getTranscodeClass() {
     return transcodeClass;
   }
@@ -144,7 +145,9 @@ final class DecodeHelper<Transcode> {
     return glideContext
         .getRegistry()
         .getRegisteredResourceClasses(
-            model.getClass(), Nullability.castToNonnull(resourceClass), transcodeClass);
+            model.getClass(),
+            Nullability.castToNonnull(resourceClass),
+            Nullability.castToNonnull(transcodeClass));
   }
 
   boolean hasLoadPath(Class<?> dataClass) {
@@ -155,7 +158,10 @@ final class DecodeHelper<Transcode> {
   <Data> LoadPath<Data, ?, Transcode> getLoadPath(Class<Data> dataClass) {
     return glideContext
         .getRegistry()
-        .getLoadPath(dataClass, Nullability.castToNonnull(resourceClass), transcodeClass);
+        .getLoadPath(
+            dataClass,
+            Nullability.castToNonnull(resourceClass),
+            Nullability.castToNonnull(transcodeClass));
   }
 
   boolean isScaleOnlyOrNoTransform() {
