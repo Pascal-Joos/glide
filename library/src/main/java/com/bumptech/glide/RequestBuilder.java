@@ -102,7 +102,7 @@ public class RequestBuilder<TranscodeType> extends BaseRequestOptions<RequestBui
     this.glideContext = glide.getGlideContext();
 
     initRequestListeners(requestManager.getDefaultRequestListeners());
-    apply(requestManager.getDefaultRequestOptions());
+    apply(Nullability.castToNonnull(requestManager.getDefaultRequestOptions()));
   }
 
   RequestManager getRequestManager() {
