@@ -2,6 +2,7 @@ package com.bumptech.glide.util;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Queue;
@@ -23,7 +24,7 @@ public class ExceptionCatchingInputStream extends InputStream {
 
   private static final Queue<ExceptionCatchingInputStream> QUEUE = Util.createQueue(0);
 
-  private InputStream wrapped;
+  @Nullable private InputStream wrapped;
   @Nullable private IOException exception;
 
   @NonNull
@@ -56,26 +57,36 @@ public class ExceptionCatchingInputStream extends InputStream {
 
   @Override
   public int available() throws IOException {
-    return wrapped.available();
+    if (wrapped == null) {
+      return 0;
+    }
+    return Nullability.castToNonnull(wrapped).available();
   }
 
   @Override
   public void close() throws IOException {
-    wrapped.close();
+    if (wrapped != null) {
+      Nullability.castToNonnull(wrapped).close();
+    }
   }
 
   @Override
   public void mark(int readLimit) {
-    wrapped.mark(readLimit);
+    if (wrapped != null) {
+      Nullability.castToNonnull(wrapped).mark(readLimit);
+    }
   }
 
   @Override
   public boolean markSupported() {
-    return wrapped.markSupported();
+    return Nullability.castToNonnull(wrapped).markSupported();
   }
 
   @Override
   public int read(byte[] buffer) {
+    if (wrapped == null) {
+      return -1;
+    }
     int read;
     try {
       read = wrapped.read(buffer);
@@ -90,7 +101,8 @@ public class ExceptionCatchingInputStream extends InputStream {
   public int read(byte[] buffer, int byteOffset, int byteCount) {
     int read;
     try {
-      read = wrapped.read(buffer, byteOffset, byteCount);
+      InputStream localWrapped = wrapped;
+      read = localWrapped != null ? localWrapped.read(buffer, byteOffset, byteCount) : -1;
     } catch (IOException e) {
       exception = e;
       read = -1;
@@ -100,14 +112,19 @@ public class ExceptionCatchingInputStream extends InputStream {
 
   @Override
   public synchronized void reset() throws IOException {
-    wrapped.reset();
+    if (wrapped != null) {
+      wrapped.reset();
+    }
   }
 
   @Override
   public long skip(long byteCount) {
+    if (wrapped == null) {
+      return 0;
+    }
     long skipped;
     try {
-      skipped = wrapped.skip(byteCount);
+      skipped = Nullability.castToNonnull(wrapped).skip(byteCount);
     } catch (IOException e) {
       exception = e;
       skipped = 0;
@@ -119,7 +136,11 @@ public class ExceptionCatchingInputStream extends InputStream {
   public int read() {
     int result;
     try {
-      result = wrapped.read();
+      if (wrapped == null) {
+        result = -1;
+      } else {
+        result = Nullability.castToNonnull(wrapped).read();
+      }
     } catch (IOException e) {
       exception = e;
       result = -1;
