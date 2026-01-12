@@ -171,6 +171,18 @@ final class DecodeHelper<Transcode> {
 
   @SuppressWarnings("unchecked")
   <Z> Transformation<Z> getTransformation(Class<Z> resourceClass) {
+    if (transformations == null) {
+      if (isTransformationRequired) {
+        throw new IllegalArgumentException(
+            "Missing transformation for "
+                + resourceClass
+                + ". If you wish to"
+                + " ignore unknown resource types, use the optional transformation methods.");
+      } else {
+        return UnitTransformation.get();
+      }
+    }
+
     Transformation<Z> result = (Transformation<Z>) transformations.get(resourceClass);
     if (result == null) {
       for (Entry<Class<?>, Transformation<?>> entry : transformations.entrySet()) {
