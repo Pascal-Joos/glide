@@ -3,8 +3,10 @@ package com.bumptech.glide.load.data;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import com.bumptech.glide.load.engine.bitmap_recycle.ArrayPool;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.io.OutputStream;
+import javax.annotation.Nullable;
 
 /**
  * An {@link OutputStream} implementation that recycles and re-uses {@code byte[]}s using the
@@ -12,7 +14,7 @@ import java.io.OutputStream;
  */
 public final class BufferedOutputStream extends OutputStream {
   @NonNull private final OutputStream out;
-  private byte[] buffer;
+  @Nullable private byte[] buffer;
   private ArrayPool arrayPool;
   private int index;
 
@@ -29,6 +31,9 @@ public final class BufferedOutputStream extends OutputStream {
 
   @Override
   public void write(int b) throws IOException {
+    if (buffer == null) {
+      throw new IOException("Buffer has been released");
+    }
     buffer[index++] = (byte) b;
     maybeFlushBuffer();
   }
@@ -40,21 +45,26 @@ public final class BufferedOutputStream extends OutputStream {
 
   @Override
   public void write(@NonNull byte[] b, int initialOffset, int length) throws IOException {
+    byte[] localBuffer = buffer;
+    if (localBuffer == null) {
+      out.write(b, initialOffset, length);
+      return;
+    }
     int writtenSoFar = 0;
     do {
       int remainingToWrite = length - writtenSoFar;
       int currentOffset = initialOffset + writtenSoFar;
       // If we still need to write at least the buffer size worth of bytes, we might as well do so
       // directly and avoid the overhead of copying to the buffer first.
-      if (index == 0 && remainingToWrite >= buffer.length) {
+      if (index == 0 && remainingToWrite >= localBuffer.length) {
         out.write(b, currentOffset, remainingToWrite);
         return;
       }
 
-      int remainingSpaceInBuffer = buffer.length - index;
+      int remainingSpaceInBuffer = Nullability.castToNonnull(buffer).length - index;
       int totalBytesToWriteToBuffer = Math.min(remainingToWrite, remainingSpaceInBuffer);
 
-      System.arraycopy(b, currentOffset, buffer, index, totalBytesToWriteToBuffer);
+      System.arraycopy(b, currentOffset, localBuffer, index, totalBytesToWriteToBuffer);
 
       index += totalBytesToWriteToBuffer;
       writtenSoFar += totalBytesToWriteToBuffer;
@@ -77,7 +87,7 @@ public final class BufferedOutputStream extends OutputStream {
   }
 
   private void maybeFlushBuffer() throws IOException {
-    if (index == buffer.length) {
+    if (buffer != null && index == buffer.length) {
       flushBuffer();
     }
   }
