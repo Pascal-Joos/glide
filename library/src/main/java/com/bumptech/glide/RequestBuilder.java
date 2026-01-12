@@ -850,7 +850,7 @@ public class RequestBuilder<TranscodeType> extends BaseRequestOptions<RequestBui
         // Use the previous request rather than the new one to allow for optimizations like skipping
         // setting placeholders, tracking and un-tracking Targets, and obtaining View dimensions
         // that are done in the individual Request.
-        previous.begin();
+        Nullability.castToNonnull(previous).begin();
       }
       return target;
     }
