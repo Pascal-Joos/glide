@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method is named `init`, which matches the documented heuristic (“any method that has a name that starts with 'init' or 'initialize' and is not a setter method”). It is not a setter method: it sets multiple fields at once and does not follow the typical single-field setter pattern (e.g., `setX(...)`). Furthermore, it is explicitly annotated with `@Initializer`, which strongly indicates it is intended to be treated as an initializer by the codebase and by tools like NullAway. Therefore, according to the given criteria, this method should be considered an initializer method.
+    ]]></reason>
+    <value>YES</value>
+</response>

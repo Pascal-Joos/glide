@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private boolean hasNextModelLoader() {
+      return modelLoaders != null && modelLoaderIndex < modelLoaders.size();
+  }
+  ```
+    ]]>
+  </code>
+</response>

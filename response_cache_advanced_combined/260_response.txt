@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public synchronized void reset() throws IOException {
+    if (wrapped != null) {
+      wrapped.reset();
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

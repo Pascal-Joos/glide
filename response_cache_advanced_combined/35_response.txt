@@ -1,0 +1,7 @@
+<response>
+  <success>false</success>
+  <methods>
+    <method>getRequest</method>
+    <method>isEquivalentTo</method>
+  </methods>
+</response>

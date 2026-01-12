@@ -1,0 +1,12 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based solely on the provided method, `wrapped` is dereferenced only inside the conditional expression `wrapped != null ? wrapped.available() : 0;`. The expression `wrapped.available()` is evaluated only when `wrapped != null` is true.
+
+Therefore, along all code paths where `wrapped.available()` is invoked, `wrapped` has been checked for null and is guaranteed to be non-null at that point. There is no path in this method by which `wrapped.available()` could be called with `wrapped == null`.
+
+(What *could* still be null in some broader context is `wrapped` itself as a field or variable, but the question concerns specifically whether it can be null at the line `return wrapped.available();`—and at that point in the expression, it cannot.)
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

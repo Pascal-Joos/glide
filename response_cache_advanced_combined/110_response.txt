@@ -1,0 +1,29 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Nullable
+  private <Data> Resource<R> decodeFromData(
+       DataFetcher<?> fetcher,  Data data,  DataSource dataSource)
+      throws GlideException {
+    try {
+      if (data == null) {
+        return null;
+      }
+      long startTime = LogTime.getLogTime();
+      Resource<R> result = decodeFromFetcher(data, dataSource);
+      if (Log.isLoggable(TAG, Log.VERBOSE)) {
+        logWithTimeAndKey("Decoded result " + result, startTime);
+      }
+      return result;
+    } finally {
+      if (fetcher == null) {
+        return null;
+      }
+      fetcher.cleanup();
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

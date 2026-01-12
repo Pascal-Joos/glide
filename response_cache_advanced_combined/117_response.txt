@@ -1,0 +1,15 @@
+<response>
+    <reason><![CDATA[
+Based on the description of initializer methods for NullAway, they are:
+- Special lifecycle/setup methods known to be called before any other non-constructor methods (e.g., `onCreate`, `init`, servlet `init`), or
+- Methods whose names start with `init` / `initialize` and are not setters.
+
+The given method:
+- Is named `onDataFetcherReady`, which does not match the `onCreate` / `init*` / `initialize*` naming patterns.
+- Is a callback-like method that both assigns fields *and* triggers further processing (`reschedule(...)` or `decodeFromRetrievedData()`), not a pure setup method that NullAway would conventionally treat as a class initializer.
+- There is no indication it is a known framework lifecycle method that NullAway would specially recognize similar to the examples (Activity, Processor, Servlet/Filter).
+
+Even though it assigns multiple fields, by your own criteria you “do not want to consider a setter method as an initializer method,” and this method effectively behaves like a multi-field setter plus follow-up work, not like a designated lifecycle initializer. Therefore, it should not be treated as an initializer method for NullAway’s purposes.
+    ]]></reason>
+    <value>NO</value>
+</response>

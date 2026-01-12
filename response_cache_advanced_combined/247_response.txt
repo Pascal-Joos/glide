@@ -1,0 +1,32 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public final boolean isEquivalentTo( BaseRequestOptions<?> other) {
+      BaseRequestOptions<?> nonNullOther = Nullability.castToNonnull(other);
+      return Float.compare(nonNullOther.sizeMultiplier, sizeMultiplier) == 0
+          && errorId == nonNullOther.errorId
+          && Util.bothNullOrEqual(errorPlaceholder, nonNullOther.errorPlaceholder)
+          && placeholderId == nonNullOther.placeholderId
+          && Util.bothNullOrEqual(placeholderDrawable, nonNullOther.placeholderDrawable)
+          && fallbackId == nonNullOther.fallbackId
+          && Util.bothNullOrEqual(fallbackDrawable, nonNullOther.fallbackDrawable)
+          && isCacheable == nonNullOther.isCacheable
+          && overrideHeight == nonNullOther.overrideHeight
+          && overrideWidth == nonNullOther.overrideWidth
+          && isTransformationRequired == nonNullOther.isTransformationRequired
+          && isTransformationAllowed == nonNullOther.isTransformationAllowed
+          && useUnlimitedSourceGeneratorsPool == nonNullOther.useUnlimitedSourceGeneratorsPool
+          && onlyRetrieveFromCache == nonNullOther.onlyRetrieveFromCache
+          && diskCacheStrategy.equals(nonNullOther.diskCacheStrategy)
+          && priority == nonNullOther.priority
+          && options.equals(nonNullOther.options)
+          && transformations.equals(nonNullOther.transformations)
+          && resourceClass.equals(nonNullOther.resourceClass)
+          && Util.bothNullOrEqual(signature, nonNullOther.signature)
+          && Util.bothNullOrEqual(theme, nonNullOther.theme);
+  }
+  ```
+    ]]>
+  </code>
+</response>

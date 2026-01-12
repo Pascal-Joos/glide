@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name is `init`, which matches NullAway’s heuristic of “name starts with init or initialize and is not a setter,” and it initializes multiple fields in a single call. It is `synchronized` and returns `this`, suggesting it is intended to (re)initialize an existing `EngineJob` instance before use, not to behave as a conventional single-field setter. It also resembles known framework-style initialization methods (e.g., `Processor.init`). Therefore, under NullAway’s definition, it should be treated as an initializer method rather than a mere setter.
+    ]]></reason>
+    <value>YES</value>
+</response>

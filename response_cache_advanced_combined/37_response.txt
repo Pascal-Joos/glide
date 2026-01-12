@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name is setRequestOptions, which follows the standard JavaBeans setter naming convention (“setX”). You explicitly stated that setter methods should not be considered initializer methods. The method name does not start with "init" or "initialize", nor is it one of the known framework lifecycle/init methods (e.g., onCreate, init). Even though it assigns a field, by your definition it should be treated as a setter, not as an initializer method for NullAway’s purposes.
+    ]]></reason>
+    <value>NO</value>
+</response>

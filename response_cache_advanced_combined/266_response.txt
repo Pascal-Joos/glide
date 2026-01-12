@@ -1,0 +1,20 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is `wrapped.markSupported()` at the line:
+
+    return wrapped != null && wrapped.markSupported();
+
+In Java, the `&&` operator uses short-circuit evaluation and is left-associative. That means:
+
+1. `wrapped != null` is evaluated first.
+2. If and only if `wrapped != null` is `true`, then `wrapped.markSupported()` is evaluated.
+3. If `wrapped` is `null`, the second operand (`wrapped.markSupported()`) is never evaluated.
+
+Therefore, on every code path where `wrapped.markSupported()` is actually invoked, `wrapped` is guaranteed to be non-null at that point. The expression `wrapped` at line `return wrapped.markSupported();` (i.e., as used in the second operand of `&&`) cannot be null when evaluated, because the evaluation is guarded by the explicit null check in the first operand.
+
+There is no need for additional information: this guarantee follows purely from Java's language semantics for `&&`, regardless of how `wrapped` is assigned elsewhere.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

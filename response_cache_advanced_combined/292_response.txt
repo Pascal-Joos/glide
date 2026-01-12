@@ -1,0 +1,21 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the provided method alone, we only see a call to getWrapped().read(...). There is no information about:
+
+- How the field or object backing getWrapped() is initialized
+- Whether getWrapped() can ever return null
+- Whether there are prior null checks or invariants guaranteeing a non-null wrapped object
+- Any documented contract (e.g., @NonNull annotations, constructor guarantees, or framework guarantees) that getWrapped() must return a non-null value
+
+Because the nullability of the expression depends entirely on the implementation and contract of getWrapped(), which is not shown, we cannot soundly conclude that the result is always non-null or that it can be null. Both possibilities are consistent with the given code snippet.
+
+Therefore, with the information given, it is impossible to determine whether the expression at "return getWrapped().read(...)" can be null.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the implementation of getWrapped() (including its field, constructor, or initialization logic).]]></request>
+        <request><![CDATA[Provide any annotations, documentation, or contracts (e.g., @NonNull, @Nullable, or framework docs) that describe whether getWrapped() may return null.]]></request>
+    </requests>
+</response>
+```

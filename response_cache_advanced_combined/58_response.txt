@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void onDataReady(Object data) {
+    LoadData<?> local = loadData;
+    if (local != null) {
+      cb.onDataFetcherReady(sourceKey, data, local.fetcher, DataSource.DATA_DISK_CACHE, sourceKey);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[By your own criteria, initializer methods are special lifecycle/setup methods (like onCreate or init*) or any method whose name starts with "init" or "initialize" and is *not* a setter. The given method is named `setInputStream`, clearly following the setter naming convention (`setX`). Even though it assigns a field, it is semantically a typical setter, not a designated initialization/lifecycle method that NullAway should treat as an initializer. Therefore, it should not be considered an initializer method.]]></reason>
+    <value>NO</value>
+</response>

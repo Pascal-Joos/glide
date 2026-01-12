@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public int available() throws IOException {
+      return wrapped != null ? Nullability.castToNonnull(wrapped).available() : 0;
+  }
+  ```
+    ]]>
+  </code>
+</response>

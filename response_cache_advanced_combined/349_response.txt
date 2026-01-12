@@ -1,0 +1,28 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void onDataFetcherReady(
+       Key sourceKey,
+       Object data,
+      DataFetcher<?> fetcher,
+      DataSource dataSource,
+       Key attemptedKey) {
+    LoadData<?> local = loadData;
+    if (local != null) {
+      // This data fetcher will be loading from a File and provide the wrong data source, so
+      // override
+      // with the data source of the original fetcher
+      cb.onDataFetcherReady(
+          sourceKey,
+          data,
+          fetcher,
+          local.fetcher.getDataSource(),
+          sourceKey);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

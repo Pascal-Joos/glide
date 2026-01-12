@@ -1,0 +1,23 @@
+<response>
+    <reason><![CDATA[
+By NullAway’s definition, an initializer method is one that is *assumed* to always run before any other non-constructor methods and is typically part of a framework-driven lifecycle (e.g., `Activity.onCreate`, `Servlet.init`), or any method whose name starts with `init`/`initialize` and is not a simple setter.
+
+Here, the method:
+
+```java
+private void init(Resource<Z> toWrap) {
+    isRecycled = false;
+    isLocked = true;
+    this.toWrap = toWrap;
+}
+```
+
+- Has a name starting with `init`, which fits the naming heuristic.
+- Is `private`, so it is not a framework lifecycle callback method.
+- Takes a single parameter and assigns it directly to a field (`this.toWrap = toWrap;`), which strongly resembles a setter pattern, even though it also toggles some boolean fields.
+- Nothing in the signature or description indicates it is guaranteed to be called before *all* other non-constructor methods or that it is part of an external framework’s initialization contract.
+
+Since you explicitly do *not* want to treat setter-like methods as initializer methods, and this method is effectively a small internal setup/setter helper rather than a lifecycle or framework-driven initialization entry point, it should not be considered an initializer method for NullAway’s purposes.
+    ]]></reason>
+    <value>NO</value>
+</response>

@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings("unused")
+    public ByteBufferGifDecoder(Context context) {
+      this(
+          context,
+          Glide.get(context).getRegistry().getImageHeaderParsers(),
+          Nullability.castToNonnull(Glide.get(context)).getBitmapPool(),
+          Nullability.castToNonnull(Glide.get(context)).getArrayPool());
+    }
+  ```
+    ]]>
+  </code>
+</response>

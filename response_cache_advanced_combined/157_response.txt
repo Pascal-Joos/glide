@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Resource<Transcode> load(
+      DataRewinder<Data> rewinder,
+      @NonNull Options options,
+      int width,
+      int height,
+      DecodePath.DecodeCallback<ResourceType> decodeCallback)
+      throws GlideException {
+    List<Throwable> throwables = Preconditions.checkNotNull(listPool).acquire();
+    try {
+      return loadWithExceptionList(rewinder, options, width, height, decodeCallback, throwables);
+    } finally {
+      Preconditions.checkNotNull(listPool).release(throwables);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

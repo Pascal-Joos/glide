@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public long skip(long byteCount) {
+    InputStream localWrapped = wrapped;
+    if (localWrapped == null) {
+      return 0;
+    }
+    long skipped;
+    try {
+      skipped = Nullability.castToNonnull(localWrapped).skip(byteCount);
+    } catch (IOException e) {
+      exception = e;
+      skipped = 0;
+    }
+    return skipped;
+  }
+  ```
+    ]]>
+  </code>
+</response>

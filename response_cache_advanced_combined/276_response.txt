@@ -1,0 +1,23 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based solely on the provided method:
+
+@Override
+public void close() throws IOException {
+  if (wrapped != null) {
+    wrapped.close();
+  }
+}
+
+the expression `wrapped` is explicitly checked for null before `wrapped.close()` is invoked. Along this code path:
+
+1. The condition `if (wrapped != null)` is evaluated.
+2. The body `wrapped.close();` executes only when that condition is true.
+3. Therefore, at the point of the call `wrapped.close();`, the expression `wrapped` is guaranteed (by this check) to be non-null in this method's control flow.
+
+However, whether `wrapped` can *ever* be null in the object’s lifetime (e.g., due to constructor initialization, field assignments, or other methods mutating it) is not relevant to the nullability of the expression at this exact call site; the if-guard ensures that if it were null, the call would not be executed. Thus, the expression evaluated at the call site cannot be null on any executed path.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

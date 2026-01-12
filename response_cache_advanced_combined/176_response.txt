@@ -1,0 +1,30 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the single overridden method shown:
+
+@Override
+public void onLoadFailed(@NonNull Exception e) {
+    cb.onDataFetcherFailed(currentKey, e, loadData.fetcher, DataSource.RESOURCE_DISK_CACHE);
+}
+
+we only know that `e` is annotated `@NonNull`. There is no information about:
+
+- Where `loadData` is declared (field, local, captured variable);
+- How or when `loadData` is initialized;
+- Whether there are prior null checks on `loadData`;
+- Any guarantees from the class or framework that `loadData` is always non-null at this point;
+- Whether control flow allows this callback to be invoked before `loadData` is set.
+
+Without the surrounding class, constructor(s), other methods, and any framework contracts (e.g., if this is Glide’s `LoadData` and how/when it is created/assigned), we cannot soundly conclude that `loadData` is always non-null, nor that it can be null.
+
+Therefore, based solely on the provided snippet, the nullability of `loadData` at this call site cannot be determined.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the declaration of `loadData` (field or local), including its type and any annotations (@NonNull/@Nullable).]]></request>
+        <request><![CDATA[Provide the constructor and any methods where `loadData` is assigned or modified, including any relevant control flow (if/else, early returns).]]></request>
+        <request><![CDATA[If this is part of a known framework (e.g., Glide), include the surrounding class or a link/snippet showing how and when this callback is created and invoked.]]></request>
+    </requests>
+</response>
+```

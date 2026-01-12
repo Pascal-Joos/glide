@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private int getPriority() {
+      return priority != null ? priority.ordinal() : 0;
+  }
+  ```
+    ]]>
+  </code>
+</response>

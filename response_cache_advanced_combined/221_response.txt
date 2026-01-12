@@ -1,0 +1,26 @@
+<response>
+  <reason><![CDATA[
+From the provided call chain:
+
+- `calculateScaling(...)` takes `DownsampleStrategy downsampleStrategy` as a parameter and uses it directly without any null check:
+  - `downsampleStrategy.getScaleFactor(...)`
+  - `downsampleStrategy.getSampleSizeRounding(...)`
+- If `downsampleStrategy` is null, the very first call to `downsampleStrategy.getScaleFactor(...)` would cause a `NullPointerException`. There is no reassignment or modification of `downsampleStrategy` inside `calculateScaling`.
+- In the immediate caller `decodeFromWrappedStreams(...)`, `downsampleStrategy` is passed straight through from its own parameter to `calculateScaling(...)` with no null checks or substitutions.
+- In the higher-level caller `decode(...)`, `downsampleStrategy` is obtained via:
+  ```java
+  DownsampleStrategy downsampleStrategy = options.get(DownsampleStrategy.OPTION);
+  ```
+  and then passed directly to `decodeFromWrappedStreams(...)` without any validation or defaulting.
+
+Since:
+- Callers can, in principle, supply an `Options` object where `options.get(DownsampleStrategy.OPTION)` returns null.
+- There is no visible guarantee in the shown code that `options.get(DownsampleStrategy.OPTION)` will never return null.
+- There are no further methods in the shown chain that might enforce non-nullity or replace null with a default before reaching `calculateScaling`.
+
+It is therefore possible for `calculateScaling` to receive a null `downsampleStrategy` and crash with a `NullPointerException`.
+
+Thus, based solely on the provided code and ignoring annotations, `downsampleStrategy` can be null at `calculateScaling`.
+  ]]></reason>
+  <value>YES</value>
+</response>

@@ -1,0 +1,18 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shown method, `e` is a non-null formal parameter: `private void onLoadFailed(GlideException e, int maxLogLevel)`.
+
+At the call site inside this method, `e` is used repeatedly without any null checks:
+- `e.setOrigin(requestOrigin);`
+- `e.logRootCauses(GLIDE_TAG);`
+- passed to `Log.w(...)` as a throwable
+- passed to `listener.onLoadFailed(e, ...)` and `targetListener.onLoadFailed(e, ...)`
+
+The method body never reassigns `e`, never performs a null check, and treats it uniformly as a valid `GlideException` instance. In idiomatic Java and in Glide's own codebase, an `onLoadFailed(GlideException e, ...)` callback is documented and implemented with the expectation that the library always passes a non-null exception object representing the failure, not `null`.
+
+Unless a caller explicitly violates this contract by invoking `onLoadFailed(null, ...)` (which would be against the design/use of Glide's internal request pipeline), `e` cannot be null here. Within the intended and documented usage of this method in Glide, `e` is guaranteed non-null when `e.setOrigin(requestOrigin);` is executed.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

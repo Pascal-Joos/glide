@@ -1,0 +1,7 @@
+<response>
+  <success>false</success>
+  <methods>
+    <method>getLoadPath</method>
+    <method>load</method>
+  </methods>
+</response>

@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public Resource<byte[]> transcode(
+      @NonNull Resource<Drawable> toTranscode, @NonNull Options options) {
+    Drawable drawable = toTranscode.get();
+    if (drawable instanceof BitmapDrawable) {
+      return bitmapBytesTranscoder.transcode(
+          Nullability.castToNonnull(BitmapResource.obtain(((BitmapDrawable) drawable).getBitmap(), bitmapPool)), options);
+    } else if (drawable instanceof GifDrawable) {
+      return gifDrawableBytesTranscoder.transcode(toGifDrawableResource(toTranscode), options);
+    }
+    return null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

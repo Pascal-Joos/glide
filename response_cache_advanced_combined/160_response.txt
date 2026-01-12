@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @NonNull
+  @Override
+  public Class<Z> getResourceClass() {
+    return toWrap != null ? toWrap.getResourceClass() : Object.class;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @NonNull
+  @Override
+  public Z get() {
+    Resource<Z> local = toWrap;
+    if (local == null) {
+      throw new IllegalStateException("Already released");
+    }
+    return local.get();
+  }
+  ```
+    ]]>
+  </code>
+</response>

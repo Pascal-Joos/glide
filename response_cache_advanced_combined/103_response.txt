@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public int hashCode() {
+    int result = sourceKey.hashCode();
+    result = 31 * result + (signature == null ? 1 : signature.hashCode());
+    result = 31 * result + width;
+    result = 31 * result + height;
+    if (transformation != null) {
+      result = 31 * result + transformation.hashCode();
+    }
+    result = 31 * result + decodedResourceClass.hashCode();
+    result = 31 * result + options.hashCode();
+    return result;
+  }
+  ```
+    ]]>
+  </code>
+</response>

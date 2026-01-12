@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name `init` matches the naming convention ("init"/"initialize") that NullAway treats as indicating an initializer method, and it is not a typical JavaBean-style setter (it does not start with "set" nor set a single property; instead it initializes multiple fields at once). Under the given rules—“any method that has a name that starts with `init` or `initialize` and is not a setter method”—this method qualifies as an initializer method, regardless of it being `private`.
+    ]]></reason>
+    <value>YES</value>
+</response>

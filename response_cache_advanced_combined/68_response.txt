@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Nullable
+  <Data> LoadPath<Data, ?, Transcode> getLoadPath(Class<Data> dataClass) {
+    GlideContext localGlideContext = glideContext;
+    if (localGlideContext == null) {
+      return null;
+    }
+    return localGlideContext.getRegistry().getLoadPath(dataClass, resourceClass, transcodeClass);
+  }
+  ```
+    ]]>
+  </code>
+</response>

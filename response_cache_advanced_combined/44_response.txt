@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void write(int b) throws IOException {
+    if (buffer == null) {
+      throw new IOException("Buffer has been released");
+    }
+    buffer[index++] = (byte) b;
+    maybeFlushBuffer();
+  }
+  ```
+    ]]>
+  </code>
+</response>

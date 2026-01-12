@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+@Override
+            public void close( InputStream inputStream) throws IOException {
+              Nullability.castToNonnull(inputStream).close();
+}
+  ```
+    ]]>
+  </code>
+</response>

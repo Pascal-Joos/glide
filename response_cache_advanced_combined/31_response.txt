@@ -1,0 +1,66 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private Request buildRequestRecursive(
+      Object requestLock,
+      Target<TranscodeType> target,
+       RequestListener<TranscodeType> targetListener,
+       RequestCoordinator parentCoordinator,
+      TransitionOptions<?, ? super TranscodeType> transitionOptions,
+      Priority priority,
+      int overrideWidth,
+      int overrideHeight,
+      BaseRequestOptions<?> requestOptions,
+      Executor callbackExecutor) {
+
+    // Build the ErrorRequestCoordinator first if necessary so we can update parentCoordinator.
+    ErrorRequestCoordinator errorRequestCoordinator = null;
+    if (errorBuilder != null) {
+      errorRequestCoordinator = new ErrorRequestCoordinator(requestLock, parentCoordinator);
+      parentCoordinator = errorRequestCoordinator;
+    }
+
+    Request mainRequest =
+        buildThumbnailRequestRecursive(
+            requestLock,
+            target,
+            targetListener,
+            parentCoordinator,
+            transitionOptions,
+            priority,
+            overrideWidth,
+            overrideHeight,
+            requestOptions,
+            callbackExecutor);
+
+    if (errorRequestCoordinator == null) {
+      return mainRequest;
+    }
+
+    int errorOverrideWidth = Nullability.castToNonnull(errorBuilder).getOverrideWidth();
+    int errorOverrideHeight = Nullability.castToNonnull(errorBuilder).getOverrideHeight();
+    if (Util.isValidDimensions(overrideWidth, overrideHeight) && !Nullability.castToNonnull(errorBuilder).isValidOverride()) {
+      errorOverrideWidth = requestOptions.getOverrideWidth();
+      errorOverrideHeight = requestOptions.getOverrideHeight();
+    }
+
+    Request errorRequest =
+        Nullability.castToNonnull(errorBuilder).buildRequestRecursive(
+            requestLock,
+            target,
+            targetListener,
+            errorRequestCoordinator,
+            Nullability.castToNonnull(errorBuilder).transitionOptions,
+            Nullability.castToNonnull(errorBuilder).getPriority(),
+            errorOverrideWidth,
+            errorOverrideHeight,
+            Nullability.castToNonnull(errorBuilder),
+            callbackExecutor);
+    errorRequestCoordinator.setRequests(mainRequest, errorRequest);
+    return errorRequestCoordinator;
+}
+  ```
+    ]]>
+  </code>
+</response>

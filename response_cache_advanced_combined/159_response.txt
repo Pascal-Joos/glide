@@ -1,0 +1,33 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based solely on the provided method:
+
+@NonNull
+@Override
+public Class<Z> getResourceClass() {
+  return toWrap.getResourceClass();
+}
+
+there is not enough context to determine whether `toWrap` can be null at the point of this call.
+
+To decide this, we would need to analyze:
+- Where and how `toWrap` is declared (field vs. local variable).
+- All assignments to `toWrap` (e.g., in constructors, setters, or other methods).
+- Any null checks on `toWrap` prior to calling `getResourceClass()` (e.g., `Objects.requireNonNull`, explicit `if (toWrap == null)` checks, annotations like `@NonNull` on the field/parameter).
+- The class’s invariants or documented contracts that might guarantee `toWrap` is never null after construction.
+
+The `@NonNull` annotation on `getResourceClass()` only asserts (by convention or tooling contract) that the *return value* must not be null. It does not by itself prove that `toWrap` is non-null. Also, we cannot infer the nullability of `toWrap.getResourceClass()` without knowing:
+- Whether `toWrap` itself is guaranteed non-null.
+- Whether `toWrap.getResourceClass()` is annotated or documented as non-null.
+
+Because none of that surrounding context is provided, it is not possible to soundly conclude whether `toWrap` can be null on this line.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the declaration of `toWrap` (its field/variable declaration including annotations and type).]]></request>
+        <request><![CDATA[Provide all constructors and any methods that assign to `toWrap`.]]></request>
+        <request><![CDATA[Provide the class/interface definition of the type of `toWrap`, including the signature (and any nullability annotations) of its `getResourceClass()` method.]]></request>
+    </requests>
+</response>
+```

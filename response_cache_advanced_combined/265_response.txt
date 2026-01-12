@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public int read() {
+      int result;
+      try {
+        if (wrapped == null) {
+          result = -1;
+        } else {
+          result = Nullability.castToNonnull(wrapped).read();
+        }
+      } catch (IOException e) {
+        exception = e;
+        result = -1;
+      }
+      return result;
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,28 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the provided snippet, we only know that `glideContext` is an instance field or variable referenced inside the method:
+
+boolean isResourceEncoderAvailable(Resource<?> resource) {
+    return glideContext.getRegistry().isResourceEncoderAvailable(resource);
+}
+
+To determine if `glideContext` can be null at this call site, we need to know:
+
+- How `glideContext` is declared (field/local/parameter).
+- Where and how `glideContext` is initialized.
+- Whether the class guarantees non-nullity via constructor logic, dependency injection, or annotations (e.g., @NonNull).
+- Whether there are any code paths that can set `glideContext` to null.
+
+None of that information is available in the snippet. Without details on its initialization and lifecycle, we cannot soundly conclude that `glideContext` is always non-null, nor can we definitively say it can become null.
+
+Therefore, based solely on the given method, the nullability of `glideContext` at this line is indeterminate.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show the declaration of `glideContext` (including any annotations) and the class it belongs to.]]></request>
+        <request><![CDATA[Show all constructors, setters, or other methods that assign a value to `glideContext`.]]></request>
+        <request><![CDATA[Indicate whether any framework or DI container (e.g., Dagger, Spring) is responsible for injecting `glideContext` and whether it guarantees non-null.]]></request>
+    </requests>
+</response>
+```

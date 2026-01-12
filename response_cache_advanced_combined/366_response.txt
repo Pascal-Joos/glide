@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void mark(int readLimit) {
+    InputStream localWrapped = wrapped;
+    if (localWrapped != null) {
+      localWrapped.mark(readLimit);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

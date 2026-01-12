@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public int read(byte[] buffer) throws IOException {
+    if (wrapped == null) {
+      throw new IOException("Stream is closed");
+    }
+    try {
+      return wrapped.read(buffer);
+    } catch (IOException e) {
+      exception = e;
+      throw e;
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

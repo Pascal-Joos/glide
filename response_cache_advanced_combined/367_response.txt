@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public synchronized void reset() throws IOException {
+    InputStream local = wrapped;
+    if (local != null) {
+      local.reset();
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

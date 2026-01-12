@@ -1,0 +1,34 @@
+<response>
+  <reason><![CDATA[
+The implementation of GifDrawable.getFirstFrame() is:
+
+```java
+public Bitmap getFirstFrame() {
+    return state.frameLoader.getFirstFrame();
+}
+```
+
+The return value is exactly whatever `state.frameLoader.getFirstFrame()` returns. We are not given the declaration or implementation of `frameLoader.getFirstFrame()`, nor any @NonNull/@Nullable annotations on it, nor any guarantees about `state` or `frameLoader`.
+
+At the specific call site `((GifDrawable) drawable).getFirstFrame()`, there is no additional information (such as prior null checks or invariants) that would constrain `frameLoader.getFirstFrame()` to be non-null. Other usages you provided show both:
+
+- A direct call used without a null check:
+  ```java
+  Bitmap firstFrame = drawable.getFirstFrame();
+  Resource<Bitmap> bitmapResource =
+      new BitmapResource(Nullability.castToNonnull(firstFrame), bitmapPool);
+  ```
+- A call with an explicit null check:
+  ```java
+  Bitmap firstFrame = drawable.getFirstFrame();
+  if (firstFrame != null) {
+    firstFrame.prepareToDraw();
+  }
+  ```
+
+The fact that the library itself sometimes checks for null strongly suggests that `getFirstFrame()` can return null in at least some situations. Since the code path for the specific call site does not impose any extra constraints that would rule out those situations, the possibility of a null return remains.
+
+Because the top-level method is just a pass-through and we lack the implementation/contract of `frameLoader.getFirstFrame()`, we must treat the return value as potentially null at this call site.
+  ]]></reason>
+  <value>YES</value>
+</response>

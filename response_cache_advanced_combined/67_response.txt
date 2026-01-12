@@ -1,0 +1,32 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based solely on the provided method:
+
+  <Data> LoadPath<Data, ?, Transcode> getLoadPath(Class<Data> dataClass) {
+    return glideContext.getRegistry().getLoadPath(dataClass, resourceClass, transcodeClass);
+  }
+
+there is no information about:
+
+- Where or how `glideContext` is declared (field, parameter, local)
+- How `glideContext` is initialized
+- Whether there are constructor or setter guarantees that `glideContext` is non-null
+- Any preceding null checks on `glideContext`
+
+The nullability of `glideContext` depends entirely on code and contracts that are not shown here. For example:
+
+- If `glideContext` is a field that is always initialized in the constructor and never reassigned to null, then it cannot be null at this point (under normal operation).
+- If `glideContext` is a method parameter without explicit nullability guarantees or checks, then it might be null.
+- If there are framework or library contracts (e.g., Glide's API ensuring that a particular context instance is never null when this class is used), those guarantees are not visible in the snippet.
+
+Without the declaration and initialization of `glideContext` or explicit API contracts stating it is never null, we cannot definitively conclude whether it can be null at the point of use.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show the declaration of `glideContext` (field/parameter/local) and its type.]]></request>
+        <request><![CDATA[Show the constructor(s) or any setter methods where `glideContext` is assigned.]]></request>
+        <request><![CDATA[Indicate whether there are any nullability annotations (e.g., @NonNull/@Nullable) or documented contracts for `glideContext`'s type.]]></request>
+    </requests>
+</response>
+```

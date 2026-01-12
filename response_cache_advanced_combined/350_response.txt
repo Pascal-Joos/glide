@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void onDataFetcherFailed(
+       Key sourceKey, Exception e, DataFetcher<?> fetcher, DataSource dataSource) {
+    LoadData<?> local = loadData;
+    cb.onDataFetcherFailed(
+        sourceKey, e, fetcher, local != null ? local.fetcher.getDataSource() : dataSource);
+  }
+  ```
+    ]]>
+  </code>
+</response>

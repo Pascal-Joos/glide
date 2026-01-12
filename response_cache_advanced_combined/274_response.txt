@@ -1,0 +1,17 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the body of the available() method, the only reference to "wrapped" at the line "return wrapped.available();" is guarded by a preceding null check:
+
+    if (wrapped == null) {
+        return 0;
+    }
+    return wrapped.available();
+
+Control flow ensures that execution reaches "return wrapped.available();" only when the condition (wrapped == null) is false. Therefore, at that point, wrapped is guaranteed to be non-null along that code path.
+
+Under standard Java semantics (no concurrency-related data races or unsafe mutations bypassing this check inside the same method body), the expression "wrapped" at the line "return wrapped.available();" cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

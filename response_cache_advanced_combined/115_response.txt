@@ -1,0 +1,31 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void runGenerators() {
+      currentThread = Thread.currentThread();
+      startFetchTime = LogTime.getLogTime();
+      boolean isStarted = false;
+      while (!isCancelled
+          && currentGenerator != null
+          && !(isStarted = currentGenerator.startNext())) {
+        stage = getNextStage(Nullability.castToNonnull(stage));
+        currentGenerator = getNextGenerator();
+
+        if (stage == Stage.SOURCE) {
+          reschedule(RunReason.SWITCH_TO_SOURCE_SERVICE);
+          return;
+        }
+      }
+      // We've run out of stages and generators, give up.
+      if ((stage == Stage.FINISHED || isCancelled) && !isStarted) {
+        notifyFailed();
+      }
+
+      // Otherwise a generator started a new load and we expect to be called back in
+      // onDataFetcherReady.
+    }
+  ```
+    ]]>
+  </code>
+</response>

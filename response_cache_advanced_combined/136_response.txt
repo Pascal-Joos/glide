@@ -1,0 +1,33 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based only on the provided method:
+
+    private void reschedule(RunReason runReason) {
+        this.runReason = runReason;
+        callback.reschedule(this);
+    }
+
+there is no information about:
+
+- Where and how `callback` is declared (field, parameter, local).
+- How/where `callback` is initialized.
+- Whether there are any null checks on `callback` before this method is called.
+- Whether any constructor or factory method guarantees a non-null assignment to `callback`.
+- Any annotations (e.g., @NonNull, @Nullable) or contracts on `callback`.
+
+Because of this, a static analysis restricted to the given snippet cannot prove either:
+
+- That `callback` is always non-null on all possible object instances and all call paths, or
+- That `callback` may be left null on some path.
+
+Therefore, from the available code, we cannot determine whether `callback` at `callback.reschedule(this);` can be null.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show the declaration of the `callback` variable (field/parameter) and its type, including any annotations.]]></request>
+        <request><![CDATA[Show all constructors and initialization logic for the class containing `reschedule`, including where `callback` is assigned.]]></request>
+        <request><![CDATA[If relevant, provide interfaces or classes that define/implement the type of `callback`, especially any documented non-null guarantees.]]></request>
+    </requests>
+</response>
+```
