@@ -120,7 +120,7 @@ class DecodeJob<R>
     this.model = model;
     decodeHelper.init(
         this.glideContext,
-        this.model,
+        Nullability.castToNonnull(this.model),
         this.signature,
         this.width,
         this.height,
