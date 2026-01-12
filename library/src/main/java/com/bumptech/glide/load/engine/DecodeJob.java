@@ -53,7 +53,7 @@ class DecodeJob<R>
   private final DeferredEncodeManager<?> deferredEncodeManager = new DeferredEncodeManager<>();
   private final ReleaseManager releaseManager = new ReleaseManager();
 
-  private GlideContext glideContext;
+  @Nullable private GlideContext glideContext;
   private Key signature;
   @Nullable private Priority priority;
   @Nullable private EngineKey loadKey;
@@ -551,7 +551,8 @@ class DecodeJob<R>
       Data data, @Nullable DataSource dataSource, @Nullable LoadPath<Data, ResourceType, R> path)
       throws GlideException {
     Options options = getOptionsWithHardwareConfig(dataSource);
-    DataRewinder<Data> rewinder = glideContext.getRegistry().getRewinder(data);
+    DataRewinder<Data> rewinder =
+        Nullability.castToNonnull(glideContext).getRegistry().getRewinder(data);
     try {
       // ResourceType in DecodeCallback below is required for compilation to work with gradle.
       return path.load(
@@ -593,7 +594,9 @@ class DecodeJob<R>
     Resource<Z> transformed = decoded;
     if (dataSource != DataSource.RESOURCE_DISK_CACHE) {
       appliedTransformation = decodeHelper.getTransformation(resourceSubClass);
-      transformed = appliedTransformation.transform(glideContext, decoded, width, height);
+      transformed =
+          appliedTransformation.transform(
+              Nullability.castToNonnull(glideContext), decoded, width, height);
     }
     // TODO: Make this the responsibility of the Transformation.
     if (!decoded.equals(transformed)) {
