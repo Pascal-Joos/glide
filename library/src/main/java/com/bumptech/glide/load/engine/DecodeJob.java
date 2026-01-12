@@ -104,21 +104,6 @@ class DecodeJob<R>
       Options options,
       Callback<R> callback,
       int order) {
-    decodeHelper.init(
-        glideContext,
-        model,
-        signature,
-        width,
-        height,
-        diskCacheStrategy,
-        resourceClass,
-        transcodeClass,
-        priority,
-        options,
-        transformations,
-        isTransformationRequired,
-        isScaleOnlyOrNoTransform,
-        diskCacheProvider);
     this.glideContext = glideContext;
     this.signature = signature;
     this.priority = priority;
@@ -132,6 +117,21 @@ class DecodeJob<R>
     this.order = order;
     this.runReason = RunReason.INITIALIZE;
     this.model = model;
+    decodeHelper.init(
+        this.glideContext,
+        this.model,
+        this.signature,
+        this.width,
+        this.height,
+        this.diskCacheStrategy,
+        resourceClass,
+        transcodeClass,
+        this.priority,
+        this.options,
+        transformations,
+        isTransformationRequired,
+        isScaleOnlyOrNoTransform,
+        diskCacheProvider);
     return this;
   }
 
@@ -208,7 +208,7 @@ class DecodeJob<R>
   }
 
   private int getPriority() {
-    return priority.ordinal();
+    return priority != null ? priority.ordinal() : 0;
   }
 
   public void cancel() {
