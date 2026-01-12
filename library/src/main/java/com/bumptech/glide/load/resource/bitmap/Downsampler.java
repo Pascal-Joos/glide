@@ -28,6 +28,7 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.util.LogTime;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Util;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -505,15 +506,15 @@ public final class Downsampler {
     }
 
     final float exactScaleFactor =
-        downsampleStrategy.getScaleFactor(
-            orientedSourceWidth, orientedSourceHeight, targetWidth, targetHeight);
+        Nullability.castToNonnull(downsampleStrategy)
+            .getScaleFactor(orientedSourceWidth, orientedSourceHeight, targetWidth, targetHeight);
 
     if (exactScaleFactor <= 0f) {
       throw new IllegalArgumentException(
           "Cannot scale with factor: "
               + exactScaleFactor
               + " from: "
-              + downsampleStrategy
+              + Nullability.castToNonnull(downsampleStrategy)
               + ", source: ["
               + sourceWidth
               + "x"
@@ -527,8 +528,9 @@ public final class Downsampler {
     }
 
     SampleSizeRounding rounding =
-        downsampleStrategy.getSampleSizeRounding(
-            orientedSourceWidth, orientedSourceHeight, targetWidth, targetHeight);
+        Nullability.castToNonnull(downsampleStrategy)
+            .getSampleSizeRounding(
+                orientedSourceWidth, orientedSourceHeight, targetWidth, targetHeight);
     if (rounding == null) {
       throw new IllegalArgumentException("Cannot round with null rounding");
     }
@@ -608,8 +610,8 @@ public final class Downsampler {
     }
 
     double adjustedScaleFactor =
-        downsampleStrategy.getScaleFactor(
-            powerOfTwoWidth, powerOfTwoHeight, targetWidth, targetHeight);
+        Nullability.castToNonnull(downsampleStrategy)
+            .getScaleFactor(powerOfTwoWidth, powerOfTwoHeight, targetWidth, targetHeight);
 
     // Density scaling is only supported if inBitmap is null prior to KitKat. Avoid setting
     // densities here so we calculate the final Bitmap size correctly.
