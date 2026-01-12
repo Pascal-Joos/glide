@@ -286,7 +286,8 @@ public final class Downsampler {
     DownsampleStrategy downsampleStrategy = options.get(DownsampleStrategy.OPTION);
     boolean fixBitmapToRequestedDimensions = options.get(FIX_BITMAP_SIZE_TO_REQUESTED_DIMENSIONS);
     boolean isHardwareConfigAllowed =
-        options.get(ALLOW_HARDWARE_CONFIG) != null && options.get(ALLOW_HARDWARE_CONFIG);
+        options.get(ALLOW_HARDWARE_CONFIG) != null
+            && Nullability.castToNonnull(options.get(ALLOW_HARDWARE_CONFIG));
 
     try {
       Bitmap result =
